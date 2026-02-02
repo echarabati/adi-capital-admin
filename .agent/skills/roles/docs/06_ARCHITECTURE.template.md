@@ -50,48 +50,48 @@
 
 ## Stack Tecnológico
 
-| Capa | Tecnología | Versión | Justificación |
-|------|------------|---------|---------------|
-| **Framework** | Next.js | 16.0.7+ | App Router, RSC, Server Actions |
-| **Runtime** | Node.js | 20+ | LTS, compatible Vercel |
-| **Language** | TypeScript | 5.x | Strict mode obligatorio |
-| **Database** | Neon Postgres | - | Serverless, branching para dev |
-| **ORM** | Drizzle | Latest | Type-safe, ligero, SQL-like |
-| **Auth** | NextAuth v5 | 5.x | OAuth providers, Magic Link |
-| **UI** | shadcn/ui | Latest | Componentes accesibles, customizables |
-| **Styling** | Tailwind CSS | 3.x | Utility-first, design system |
-| **Validation** | Zod | 3.x | Schema validation, type inference |
+| Capa           | Tecnología    | Versión | Justificación                         |
+| -------------- | ------------- | ------- | ------------------------------------- |
+| **Framework**  | Next.js       | 16.0.7+ | App Router, RSC, Server Actions       |
+| **Runtime**    | Node.js       | 20+     | LTS, compatible Vercel                |
+| **Language**   | TypeScript    | 5.x     | Strict mode obligatorio               |
+| **Database**   | Neon Postgres | -       | Serverless, branching para dev        |
+| **ORM**        | Drizzle       | Latest  | Type-safe, ligero, SQL-like           |
+| **Auth**       | NextAuth v5   | 5.x     | OAuth providers, Magic Link           |
+| **UI**         | shadcn/ui     | Latest  | Componentes accesibles, customizables |
+| **Styling**    | Tailwind CSS  | 3.x     | Utility-first, design system          |
+| **Validation** | Zod           | 3.x     | Schema validation, type inference     |
 
 ---
 
 ## Integraciones Externas
 
-| Servicio | Propósito | Criticidad | Fallback |
-|----------|-----------|------------|----------|
-| {{Servicio 1}} | {{Para qué}} | 🔴 Crítico | {{Plan B}} |
-| {{Servicio 2}} | {{Para qué}} | 🟡 Importante | {{Plan B}} |
-| {{Servicio 3}} | {{Para qué}} | 🟢 Nice to have | N/A |
+| Servicio       | Propósito    | Criticidad      | Fallback   |
+| -------------- | ------------ | --------------- | ---------- |
+| {{Servicio 1}} | {{Para qué}} | 🔴 Crítico      | {{Plan B}} |
+| {{Servicio 2}} | {{Para qué}} | 🟡 Importante   | {{Plan B}} |
+| {{Servicio 3}} | {{Para qué}} | 🟢 Nice to have | N/A        |
 
 ---
 
 ## Environments
 
-| Environment | URL | Branch | Propósito |
-|-------------|-----|--------|-----------|
-| Production | `{{url}}.vercel.app` | main | Usuarios reales |
-| Preview | `{{url}}-*.vercel.app` | PRs | Review de cambios |
-| Development | `localhost:3000` | - | Desarrollo local |
+| Environment | URL                    | Branch | Propósito         |
+| ----------- | ---------------------- | ------ | ----------------- |
+| Production  | `{{url}}.vercel.app`   | main   | Usuarios reales   |
+| Preview     | `{{url}}-*.vercel.app` | PRs    | Review de cambios |
+| Development | `localhost:3000`       | -      | Desarrollo local  |
 
 ### Variables de Entorno
 
-| Variable | Descripción | Requerido | Ejemplo |
-|----------|-------------|-----------|---------|
-| `DATABASE_URL` | Connection string Neon | ✅ | `postgres://...` |
-| `NEXTAUTH_SECRET` | Secret para JWT | ✅ | `openssl rand -base64 32` |
-| `NEXTAUTH_URL` | URL de la app | ✅ | `https://...` |
-| `GOOGLE_CLIENT_ID` | OAuth Google | ✅ | `xxx.apps.googleusercontent.com` |
-| `GOOGLE_CLIENT_SECRET` | OAuth Google | ✅ | `GOCSPX-xxx` |
-| `{{CUSTOM_VAR}}` | {{Descripción}} | {{✅/❌}} | {{ejemplo}} |
+| Variable               | Descripción            | Requerido | Ejemplo                          |
+| ---------------------- | ---------------------- | --------- | -------------------------------- |
+| `DATABASE_URL`         | Connection string Neon | ✅        | `postgres://...`                 |
+| `NEXTAUTH_SECRET`      | Secret para JWT        | ✅        | `openssl rand -base64 32`        |
+| `NEXTAUTH_URL`         | URL de la app          | ✅        | `https://...`                    |
+| `GOOGLE_CLIENT_ID`     | OAuth Google           | ✅        | `xxx.apps.googleusercontent.com` |
+| `GOOGLE_CLIENT_SECRET` | OAuth Google           | ✅        | `GOCSPX-xxx`                     |
+| `{{CUSTOM_VAR}}`       | {{Descripción}}        | {{✅/❌}} | {{ejemplo}}                      |
 
 ---
 
@@ -99,11 +99,11 @@
 
 ### ADR-001: {{Título de la decisión}}
 
-| Atributo | Valor |
-|----------|-------|
-| **Fecha** | {{YYYY-MM-DD}} |
-| **Estado** | Aceptado / Rechazado / Superseded |
-| **Decider** | {{Nombre}} |
+| Atributo    | Valor                             |
+| ----------- | --------------------------------- |
+| **Fecha**   | {{YYYY-MM-DD}}                    |
+| **Estado**  | Aceptado / Rechazado / Superseded |
+| **Decider** | {{Nombre}}                        |
 
 **Contexto:**
 {{Situación que requirió decisión}}
@@ -112,13 +112,56 @@
 {{Qué decidimos hacer}}
 
 **Alternativas consideradas:**
+
 1. {{Alternativa 1}} — ❌ {{Por qué no}}
 2. {{Alternativa 2}} — ❌ {{Por qué no}}
 
 **Consecuencias:**
+
 - ✅ {{Beneficio 1}}
 - ✅ {{Beneficio 2}}
 - ⚠️ {{Trade-off}}
+
+---
+
+## RBAC — Matriz de Permisos
+
+### Roles del Sistema
+
+| Rol           | Descripción                       | Nivel       |
+| ------------- | --------------------------------- | ----------- |
+| `SUPER_ADMIN` | Acceso total al sistema           | Global      |
+| `FUND_ADMIN`  | Administrador de fondo específico | Fund-scoped |
+| `MEMBER`      | Participante con acceso limitado  | Fund-scoped |
+| `VIEWER`      | Solo lectura                      | Fund-scoped |
+
+### Matriz de Permisos por Módulo
+
+#### Módulo: [Fondos]
+
+| Acción   | SUPER_ADMIN | FUND_ADMIN | MEMBER | VIEWER |
+| -------- | :---------: | :--------: | :----: | :----: |
+| Crear    |     ✅      |     ❌     |   ❌   |   ❌   |
+| Editar   |     ✅      |     ✅     |   ❌   |   ❌   |
+| Ver      |     ✅      |     ✅     |   ✅   |   ✅   |
+| Eliminar |     ✅      |     ❌     |   ❌   |   ❌   |
+
+#### Módulo: [Movimientos]
+
+| Acción      | SUPER_ADMIN | FUND_ADMIN | MEMBER | VIEWER |
+| ----------- | :---------: | :--------: | :----: | :----: |
+| Crear       |     ✅      |     ✅     |   ❌   |   ❌   |
+| Aprobar     |     ✅      |     ✅     |   ❌   |   ❌   |
+| Ver propios |     ✅      |     ✅     |   ✅   |   ✅   |
+| Exportar    |     ✅      |     ✅     |   ❌   |   ❌   |
+
+### Permisos Especiales
+
+| Permiso         | Descripción             | Roles       |
+| --------------- | ----------------------- | ----------- |
+| `BYPASS_LIMITS` | Ignorar límites de rate | SUPER_ADMIN |
+| `VIEW_AUDIT`    | Ver audit logs          | SUPER_ADMIN |
+| `IMPERSONATE`   | Impersonar usuarios     | SUPER_ADMIN |
 
 ---
 
@@ -154,12 +197,12 @@
 
 ### Capas de Protección
 
-| Capa | Implementación | Qué protege |
-|------|----------------|-------------|
-| Edge | Middleware | Rate limiting, geo-blocking |
-| Auth | NextAuth | Sesiones, tokens |
-| API | Zod validation | Input malicioso |
-| DB | Row-level security | Acceso a datos |
+| Capa | Implementación     | Qué protege                 |
+| ---- | ------------------ | --------------------------- |
+| Edge | Middleware         | Rate limiting, geo-blocking |
+| Auth | NextAuth           | Sesiones, tokens            |
+| API  | Zod validation     | Input malicioso             |
+| DB   | Row-level security | Acceso a datos              |
 
 ### Headers de Seguridad
 
@@ -169,7 +212,7 @@ headers: [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-XSS-Protection', value: '1; mode=block' },
-]
+];
 ```
 
 ---
@@ -178,31 +221,31 @@ headers: [
 
 ### Estrategia de Caching
 
-| Recurso | Estrategia | TTL |
-|---------|------------|-----|
-| Static assets | CDN | 1 year |
+| Recurso       | Estrategia      | TTL     |
+| ------------- | --------------- | ------- |
+| Static assets | CDN             | 1 year  |
 | API responses | `Cache-Control` | {{TTL}} |
-| DB queries | React cache() | Request |
+| DB queries    | React cache()   | Request |
 
 ### Métricas Target
 
-| Métrica | Target | Cómo medir |
-|---------|--------|------------|
-| LCP | < 2.5s | Vercel Analytics |
-| FID | < 100ms | Vercel Analytics |
-| CLS | < 0.1 | Vercel Analytics |
-| TTFB | < 200ms | Vercel Analytics |
+| Métrica | Target  | Cómo medir       |
+| ------- | ------- | ---------------- |
+| LCP     | < 2.5s  | Vercel Analytics |
+| FID     | < 100ms | Vercel Analytics |
+| CLS     | < 0.1   | Vercel Analytics |
+| TTFB    | < 200ms | Vercel Analytics |
 
 ---
 
 ## Monitoring & Observability
 
-| Herramienta | Propósito |
-|-------------|-----------|
+| Herramienta      | Propósito                    |
+| ---------------- | ---------------------------- |
 | Vercel Analytics | Performance, Core Web Vitals |
-| Vercel Logs | Server-side logs |
-| {{Herramienta}} | {{Propósito}} |
+| Vercel Logs      | Server-side logs             |
+| {{Herramienta}}  | {{Propósito}}                |
 
 ---
 
-*Generado con TimeKast Factory*
+_Generado con TimeKast Factory_
