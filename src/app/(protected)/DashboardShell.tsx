@@ -1,0 +1,38 @@
+'use client';
+
+import { Header } from '@/components/layout/Header';
+import { Sidebar } from '@/components/layout/Sidebar';
+import { PwaInstallToast, IosA2hsHint } from '@/components/pwa';
+
+interface User {
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+}
+
+interface DashboardShellProps {
+  children: React.ReactNode;
+  user: User;
+}
+
+export function DashboardShell({ children, user }: DashboardShellProps) {
+  return (
+    <div className="bg-background min-h-screen">
+      <Header user={user} />
+
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block">
+        <Sidebar />
+      </div>
+
+      {/* Main content area */}
+      <main className="pt-16 lg:ml-60">
+        <div className="p-4 lg:p-6">{children}</div>
+      </main>
+
+      {/* PWA Install prompts - only in protected pages */}
+      <PwaInstallToast />
+      <IosA2hsHint />
+    </div>
+  );
+}

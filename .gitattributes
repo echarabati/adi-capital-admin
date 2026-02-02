@@ -1,0 +1,4 @@
+docs/backlog/** merge=ours
+docs/audit/** merge=ours
+.agent/project-config.md merge=ours
+.github/workflows/e2e.yml merge=ours

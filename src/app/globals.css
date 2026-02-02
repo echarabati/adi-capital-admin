@@ -1,0 +1,334 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* ===== DESIGN TOKENS ===== */
+/* Theme: Light */
+:root,
+.light {
+  /* Base */
+  --background: #ffffff;
+  --foreground: #0f172a;
+
+  /* Cards & Surfaces */
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --card-border: #e2e8f0;
+
+  /* Sidebar */
+  --sidebar-bg: #f1f5f9;
+  --sidebar-foreground: #334155;
+  --sidebar-active: #1e40af;
+  --sidebar-active-foreground: #ffffff;
+  --sidebar-border: #e2e8f0;
+
+  /* Header */
+  --header-bg: #ffffff;
+  --header-foreground: #0f172a;
+  --header-border: #e2e8f0;
+
+  /* Primary (Brand Blue) */
+  --primary: #1e40af;
+  --primary-foreground: #ffffff;
+  --primary-hover: #1e3a8a;
+
+  /* Secondary */
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --secondary-hover: #e2e8f0;
+
+  /* Muted */
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+
+  /* Accent */
+  --accent: #e0e7ff;
+  --accent-foreground: #1e40af;
+
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-focus: #3b82f6;
+
+  /* Tables */
+  --table-header-bg: #f1f5f9;
+  --table-header-foreground: #475569;
+  --table-row-bg: #ffffff;
+  --table-row-hover: #f8fafc;
+  --table-border: #e5e7eb;
+
+  /* Status Colors */
+  --success: #10b981;
+  --success-foreground: #ffffff;
+  --error: #ef4444;
+  --error-foreground: #ffffff;
+  --warning: #f59e0b;
+  --warning-foreground: #000000;
+  --info: #3b82f6;
+  --info-foreground: #ffffff;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+  /* shadcn/ui compatibility tokens */
+  --border: #e2e8f0;
+  --ring: #3b82f6;
+  --radius: 0.5rem;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* Toast (high contrast - dark on light) */
+  --toast-bg: #1e293b;
+  --toast-fg: #f1f5f9;
+  --toast-border: #334155;
+}
+
+/* Theme: Midnight (Deep Blue) */
+.midnight {
+  /* Base */
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+
+  /* Cards & Surfaces */
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
+  --card-border: #334155;
+
+  /* Sidebar */
+  --sidebar-bg: #1e293b;
+  --sidebar-foreground: #94a3b8;
+  --sidebar-active: #3b82f6;
+  --sidebar-active-foreground: #ffffff;
+  --sidebar-border: #334155;
+
+  /* Header */
+  --header-bg: #0f172a;
+  --header-foreground: #f1f5f9;
+  --header-border: #334155;
+
+  /* Primary (Bright Blue) */
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --primary-hover: #2563eb;
+
+  /* Secondary */
+  --secondary: #334155;
+  --secondary-foreground: #f1f5f9;
+  --secondary-hover: #475569;
+
+  /* Muted */
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+
+  /* Accent */
+  --accent: #1e3a8a;
+  --accent-foreground: #93c5fd;
+
+  /* Inputs */
+  --input-bg: #1e293b;
+  --input-border: #475569;
+  --input-focus: #3b82f6;
+
+  /* Tables */
+  --table-header-bg: #334155;
+  --table-header-foreground: #e2e8f0;
+  --table-row-bg: #1e293b;
+  --table-row-hover: #334155;
+  --table-border: #475569;
+
+  /* Status Colors */
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+  --error: #f87171;
+  --error-foreground: #ffffff;
+  --warning: #fbbf24;
+  --warning-foreground: #000000;
+  --info: #60a5fa;
+  --info-foreground: #ffffff;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+
+  /* shadcn/ui compatibility tokens */
+  --border: #334155;
+  --ring: #3b82f6;
+  --radius: 0.5rem;
+  --popover: #1e293b;
+  --popover-foreground: #f1f5f9;
+  --destructive: #f87171;
+  --destructive-foreground: #ffffff;
+
+  /* Toast (high contrast - silver/gray on midnight blue) */
+  --toast-bg: #e2e8f0;
+  --toast-fg: #1e293b;
+  --toast-border: #cbd5e1;
+}
+
+/* Theme: Dark (Pure Black & Silver) */
+.dark {
+  /* Base */
+  --background: #09090b;
+  --foreground: #e4e4e7;
+
+  /* Cards & Surfaces */
+  --card: #18181b;
+  --card-foreground: #e4e4e7;
+  --card-border: #27272a;
+
+  /* Sidebar */
+  --sidebar-bg: #18181b;
+  --sidebar-foreground: #a1a1aa;
+  --sidebar-active: #52525b;
+  --sidebar-active-foreground: #ffffff;
+  --sidebar-border: #27272a;
+
+  /* Header */
+  --header-bg: #09090b;
+  --header-foreground: #e4e4e7;
+  --header-border: #27272a;
+
+  /* Primary (Silver) */
+  --primary: #71717a;
+  --primary-foreground: #ffffff;
+  --primary-hover: #52525b;
+
+  /* Secondary */
+  --secondary: #27272a;
+  --secondary-foreground: #e4e4e7;
+  --secondary-hover: #3f3f46;
+
+  /* Muted */
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+
+  /* Accent */
+  --accent: #3f3f46;
+  --accent-foreground: #d4d4d8;
+
+  /* Inputs */
+  --input-bg: #18181b;
+  --input-border: #3f3f46;
+  --input-focus: #a1a1aa;
+
+  /* Tables */
+  --table-header-bg: #27272a;
+  --table-header-foreground: #e4e4e7;
+  --table-row-bg: #18181b;
+  --table-row-hover: #27272a;
+  --table-border: #3f3f46;
+
+  /* Status Colors */
+  --success: #4ade80;
+  --success-foreground: #000000;
+  --error: #f87171;
+  --error-foreground: #000000;
+  --warning: #fcd34d;
+  --warning-foreground: #000000;
+  --info: #93c5fd;
+  --info-foreground: #000000;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.7);
+
+  /* shadcn/ui compatibility tokens */
+  --border: #27272a;
+  --ring: #a1a1aa;
+  --radius: 0.5rem;
+  --popover: #18181b;
+  --popover-foreground: #e4e4e7;
+  --destructive: #f87171;
+  --destructive-foreground: #000000;
+
+  /* Toast (high contrast - light silver on dark) */
+  --toast-bg: #d4d4d8;
+  --toast-fg: #18181b;
+  --toast-border: #a1a1aa;
+}
+
+/* ===== TAILWIND THEME MAPPING ===== */
+/* stylelint-disable at-rule-no-unknown */
+@theme inline {
+  /* Spacing tokens for min-width and min-height */
+  --spacing-10: 2.5rem; /* 40px */
+  --spacing-50: 12.5rem; /* 200px */
+
+  /* Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ===== BASE STYLES ===== */
+* {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.1s ease;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  min-height: 100vh;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground);
+}
+
+/* ===== UTILITY CLASSES ===== */
+.glass {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.midnight .glass,
+.dark .glass {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Focus ring utility */
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--primary);
+}
