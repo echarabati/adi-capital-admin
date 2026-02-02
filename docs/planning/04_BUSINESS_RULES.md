@@ -39,6 +39,21 @@ pref_pagado = SUM(pagos de pref en DIS)
 
 **Invariante:** Un movimiento confirmado NUNCA se elimina, solo se cancela.
 
+### BR-002b: Reverse Movement (Cancelación)
+**Severidad:** P0
+**Descripción:** Al cancelar un movimiento confirmado:
+
+1. Marcar estado = `cancelado`
+2. Registrar `cancelled_at`, `cancelled_by`
+3. **Opción A:** Generar movimiento inverso (monto negativo) → ledger append-only
+4. **Opción B:** Revertir caches directamente → más simple pero mutante
+
+> ❗ **Recomendación:** Opción A para mejor auditoría. Campo `movimiento_reverso_id` apunta al original.
+
+**Efecto en Sync:**
+- Marcar `sincronizado_firebase = false` en entidades afectadas
+- Job de sync actualizará Firebase con datos corregidos
+
 ---
 
 ## Reglas de Cascada
@@ -252,9 +267,20 @@ Si retorno > hurdle → Success Fee solo sobre excedente
 
 - Cada entidad tiene campo `sincronizado_firebase: boolean`
 - Al confirmar movimiento → marcar entidades afectadas como `false`
+- Al **cancelar** movimiento → también marcar entidades afectadas como `false`
 - Job de sync actualiza Firebase y marca `true`
 
 **Invariante:** App móvil solo ve datos con `sincronizado_firebase = true`.
+
+### BR-014: Firebase Users = Catálogo Inversionista
+**Severidad:** P1
+**Descripción:** En Firebase, todas las personas (admins, inversionistas, agentes) están en el catálogo de inversionistas con campos de rol.
+
+- `isAdmin`: bitmask "00", "01", "10", "11" (por fondo)
+- `isAgent`: mismo formato
+- Todo se amarra por **email**
+
+> Esta estructura legacy se mantiene para compatibilidad con app móvil.
 
 ---
 
@@ -264,7 +290,9 @@ Si retorno > hurdle → Success Fee solo sobre excedente
 |---|----------|---------|-------|--------|
 | OQ-01 | ~~Admin de Fondo puede confirmar movimientos~~ | ~~Alto~~ | Cliente | ✅ Sí, de su fondo |
 | OQ-02 | ~~Cálculo de pref: cron o tiempo real~~ | ~~Alto~~ | Dev | ✅ Cron nocturno |
-| OQ-03 | ¿Movimientos cancelados revierten sync Firebase? | Med | Dev | Pendiente |
+| OQ-03 | ~~Movimientos cancelados revierten sync Firebase~~ | ~~Med~~ | Dev | ✅ Sí + reverse movement |
+| OQ-04 | ~~Inversionista en múltiples fondos~~ | ~~Alto~~ | Cliente | ✅ Sí, por email (ver E-003) |
+| OQ-05 | ~~Auditoría de movimientos~~ | ~~Med~~ | Dev | ✅ cancelled_by/at agregados |
 
 ---
 

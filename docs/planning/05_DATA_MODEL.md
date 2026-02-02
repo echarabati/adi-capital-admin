@@ -95,12 +95,17 @@
 
 **Descripción:** Persona que invierte en proyectos
 
+> ❗ **Multi-fondo:** Un inversionista puede tener registros en múltiples fondos.
+> El **email** es el identificador unificador para ver histórico agrupado.
+> Admin de Fondo solo ve/gestiona inversiones de su fondo asignado.
+> Super Admin puede ver histórico agrupado por inversionista (todos los fondos).
+
 | Campo | Tipo | Constraints | Notas |
 |-------|------|-------------|-------|
 | id | uuid | PK | — |
-| fondo_id | uuid | FK → E-001, NOT NULL | Fondo principal |
+| fondo_id | uuid | FK → E-001, NOT NULL | Fondo de este registro |
 | nombre | varchar(200) | NOT NULL | — |
-| email | varchar(255) | NOT NULL | — |
+| email | varchar(255) | NOT NULL | **Unificador cross-fondo** |
 | telefono | varchar(30) | NULL | — |
 | es_fundador | boolean | DEFAULT false | Para movimientos APS/RPS |
 | porcentaje_propiedad | decimal(5,2) | NULL | Solo fundadores |
@@ -112,7 +117,7 @@
 | updated_at | timestamp | NOT NULL | — |
 | **deleted_at** | timestamp | NULL | Soft-delete |
 
-**Índices:** `fondo_id`, `email`, `es_fundador`
+**Índices:** `fondo_id`, `email` (para agrupación cross-fondo), `es_fundador`
 
 ---
 
@@ -199,11 +204,19 @@
 | sincronizado_firebase | boolean | DEFAULT false | BR-013 |
 | created_at | timestamp | NOT NULL, DEFAULT now() | — |
 | updated_at | timestamp | NOT NULL | — |
-| confirmed_at | timestamp | NULL | — |
-| confirmed_by | uuid | FK → users, NULL | — |
+| **Auditoría** | | | |
+| confirmed_at | timestamp | NULL | Cuándo se confirmó |
+| confirmed_by | uuid | FK → users, NULL | Quién confirmó |
+| cancelled_at | timestamp | NULL | Cuándo se canceló |
+| cancelled_by | uuid | FK → users, NULL | Quién canceló |
+| movimiento_reverso_id | uuid | FK → E-006, NULL | Si aplica reverse movement |
 | **deleted_at** | timestamp | NULL | Soft-delete |
 
 **Índices:** `fondo_id`, `concepto`, `estado`, `fecha_movimiento`, `inversionista_id`, `proyecto_id`
+
+> ❗ **Reverse Movement:** Al cancelar un movimiento confirmado, considerar generar
+> un movimiento inverso (con monto negativo) en lugar de solo marcar cancelado.
+> Esto mantiene el ledger como append-only y facilita auditoría.
 
 ---
 
@@ -335,8 +348,8 @@ export const estadoPagoEnum = pgEnum('estado_pago', ['pendiente', 'parcial', 'co
 | # | Pregunta | Impacto | Owner | Estado |
 |---|----------|---------|-------|--------|
 | OQ-01 | ~~Soft-delete necesario~~ | ~~Alto~~ | Dev | ✅ Sí, agregado |
-| OQ-02 | ¿Inversionista puede estar en múltiples fondos con el mismo registro? | **Alto** | Cliente | Pendiente |
-| OQ-03 | ¿Movimientos requieren auditoría detallada (quién, cuándo, qué cambió)? | Med | Dev | Pendiente |
+| OQ-02 | ~~Inversionista en múltiples fondos~~ | ~~Alto~~ | Cliente | ✅ Sí, por email (ver nota E-003) |
+| OQ-03 | ~~Auditoría de movimientos~~ | ~~Med~~ | Dev | ✅ cancelled_by/at agregados |
 
 ---
 
