@@ -32,10 +32,10 @@ type [ActionName]Input = {
 };
 ```
 
-| Field   | Type     | Required | Validation  |
-| ------- | -------- | :------: | ----------- |
-| fieldId | `string` |    ✅    | UUID format |
-| amount  | `number` |    ✅    | > 0         |
+| Field | Type | Required | Validation |
+|-------|------|:--------:|------------|
+| fieldId | `string` | ✅ | UUID format |
+| amount | `number` | ✅ | > 0 |
 
 ##### Output
 
@@ -56,13 +56,13 @@ type [ActionName]Output = {
 
 ##### Errors
 
-| Code               | HTTP | Reason                  | Recovery                 |
-| ------------------ | :--: | ----------------------- | ------------------------ |
-| `UNAUTHENTICATED`  | 401  | Sin sesión válida       | Redirigir a login        |
-| `FORBIDDEN`        | 403  | Sin permiso para acción | Mostrar mensaje          |
-| `VALIDATION_ERROR` | 400  | Campo inválido          | Mostrar errores de campo |
-| `NOT_FOUND`        | 404  | Recurso no existe       | Redirigir o refresh      |
-| `CONFLICT`         | 409  | Conflicto de versión    | Retry con refresh        |
+| Code | HTTP | Reason | Recovery |
+|------|:----:|--------|----------|
+| `UNAUTHENTICATED` | 401 | Sin sesión válida | Redirigir a login |
+| `FORBIDDEN` | 403 | Sin permiso para acción | Mostrar mensaje |
+| `VALIDATION_ERROR` | 400 | Campo inválido | Mostrar errores de campo |
+| `NOT_FOUND` | 404 | Recurso no existe | Redirigir o refresh |
+| `CONFLICT` | 409 | Conflicto de versión | Retry con refresh |
 
 ##### Side Effects
 
@@ -73,8 +73,8 @@ type [ActionName]Output = {
 
 ##### RBAC
 
-| Permission        | Scope           |
-| ----------------- | --------------- |
+| Permission | Scope |
+|------------|-------|
 | `[MODULE]_CREATE` | resource.fundId |
 
 > **Roles con permiso:** SUPER_ADMIN, FUND_ADMIN
@@ -97,14 +97,14 @@ Todas las Server Actions usan este patrón:
 
 ### Códigos de Error Estándar
 
-| Code               | Descripción                   |
-| ------------------ | ----------------------------- |
-| `UNAUTHENTICATED`  | Sesión no válida o expirada   |
-| `FORBIDDEN`        | Usuario no tiene permiso      |
-| `VALIDATION_ERROR` | Input no pasa validación Zod  |
-| `NOT_FOUND`        | Recurso no existe             |
-| `CONFLICT`         | Conflicto de versión/estado   |
-| `INTERNAL_ERROR`   | Error inesperado del servidor |
+| Code | Descripción |
+|------|-------------|
+| `UNAUTHENTICATED` | Sesión no válida o expirada |
+| `FORBIDDEN` | Usuario no tiene permiso |
+| `VALIDATION_ERROR` | Input no pasa validación Zod |
+| `NOT_FOUND` | Recurso no existe |
+| `CONFLICT` | Conflicto de versión/estado |
+| `INTERNAL_ERROR` | Error inesperado del servidor |
 
 ### Validación con Zod
 
@@ -118,7 +118,7 @@ const schema = z.object({
 
 const parsed = schema.safeParse(input);
 if (!parsed.success) {
-  return { success: false, error: 'Datos inválidos', code: 'VALIDATION_ERROR' };
+  return { success: false, error: "Datos inválidos", code: "VALIDATION_ERROR" };
 }
 ```
 
@@ -126,18 +126,18 @@ if (!parsed.success) {
 
 ## Open Questions
 
-| #     | Pregunta             | Impacto           | Owner       |
-| ----- | -------------------- | ----------------- | ----------- |
+| # | Pregunta | Impacto | Owner |
+|---|----------|---------|-------|
 | OQ-01 | [Pregunta pendiente] | **Alto**/Med/Bajo | Cliente/Dev |
 
 ---
 
 ## Assumptions
 
-| #    | Supuesto           | Si es incorrecto         |
-| ---- | ------------------ | ------------------------ |
+| # | Supuesto | Si es incorrecto |
+|---|----------|------------------|
 | A-01 | [Supuesto asumido] | Impacto: [qué cambiaría] |
 
 ---
 
-_Generado por TimeKast Factory — /docs_
+*Generado por TimeKast Factory — /docs*

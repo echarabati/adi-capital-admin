@@ -9,12 +9,12 @@
 
 Invocar validación **antes** de generar output en cada workflow:
 
-| Workflow     | Validar contra         | Archivo        |
-| ------------ | ---------------------- | -------------- |
-| `/proposal`  | Discovery Brief        | `proposal.md`  |
-| `/docs`      | Discovery + Proposal   | `docs.md`      |
-| `/design`    | Docs 01-05             | `design.md`    |
-| `/backlog`   | Design 06              | `backlog.md`   |
+| Workflow | Validar contra | Archivo |
+|----------|----------------|---------|
+| `/proposal` | Discovery Brief | `proposal.md` |
+| `/docs` | Discovery + Proposal | `docs.md` |
+| `/design` | Docs 01-08 | `design.md` |
+| `/backlog` | Design 09 + Docs | `backlog.md` |
 | `/implement` | Issue + Backlog + Docs | `implement.md` |
 
 ---
@@ -26,9 +26,9 @@ Discovery Brief  → Input del usuario
          ↓
 Proposal         → Valida contra Discovery
          ↓
-Docs (01-05)     → Valida contra Discovery + Proposal
+Docs (01-08)     → Valida contra Discovery + Proposal
          ↓
-Design (06)      → Valida contra docs anteriores
+Design (09)      → Valida contra docs anteriores
          ↓
 Backlog          → Issues cubren todo el design
          ↓
@@ -41,19 +41,16 @@ Implement        → Issue alineado con docs + backlog
 
 ### En workflows
 
-````markdown
+```markdown
 ## Phase X: Validation
 
 // turbo
-
 ```bash
 cat ./.agent/skills/domains/validation/{phase}.md
 ```
-````
 
 Ejecutar checklist de validación. Si hay ❌, reportar gaps antes de continuar.
-
-````
+```
 
 ### Output de validación
 
@@ -80,30 +77,65 @@ Ejecutar checklist de validación. Si hay ❌, reportar gaps antes de continuar.
 
 - [ ] Corregir [X] antes de continuar
 - [ ] Agregar [Y] a documento [Z]
-````
+```
 
 ---
 
 ## Severidad de Gaps
 
-| Severidad   | Acción                                  |
-| ----------- | --------------------------------------- |
-| 🔴 Critical | STOP — No continuar sin resolver        |
-| 🟡 Warning  | Documentar en Open Questions, continuar |
-| 🟢 Info     | Nota para mejora futura                 |
+| Severidad | Acción |
+|-----------|--------|
+| 🔴 Critical | STOP — No continuar sin resolver |
+| 🟡 Warning | Documentar en Open Questions, continuar |
+| 🟢 Info | Nota para mejora futura |
 
 ---
 
 ## Archivos del Skill
 
-| Archivo        | Valida                          |
-| -------------- | ------------------------------- |
+| Archivo | Valida |
+|---------|--------|
 | `discovery.md` | Completitud del Discovery Brief |
-| `proposal.md`  | Proposal vs Discovery           |
-| `docs.md`      | Docs vs Discovery + Proposal    |
-| `design.md`    | Design vs Docs                  |
-| `backlog.md`   | Issues vs Design coverage       |
-| `implement.md` | Implement vs Issue + Docs       |
+| `proposal.md` | Proposal vs Discovery |
+| `docs.md` | Docs vs Discovery + Proposal |
+| `design.md` | Design vs Docs |
+| `backlog.md` | Issues vs Design coverage |
+| `implement.md` | Implement vs Issue + Docs |
+
+---
+
+## Principios Fundamentales
+
+1. **Validación antes de generación** — Nunca generar sin verificar inputs
+2. **Gaps explícitos** — Todo lo que falta debe ser visible
+3. **SSOT Chain** — Cada fase valida contra la anterior
+4. **Severidad clara** — Critical = STOP, Warning = continuar con nota
+5. **Evidencia** — Citar líneas específicas cuando hay problema
+
+---
+
+## SIEMPRE / NUNCA
+
+**SIEMPRE:**
+- Ejecutar checklist completo antes de generar
+- Reportar gaps con severidad
+- Citar fuente específica del problema
+- Ofrecer acción correctiva
+
+**NUNCA:**
+- Continuar con gap Critical sin resolver
+- Asumir que algo existe sin verificar
+- Omitir checks "porque es obvio"
+
+---
+
+## Colaboración
+
+| Consume | Produce | Escala a |
+|---------|---------|----------|
+| Documentos de la fase anterior | Validation Report | Workflow si FAIL |
+| SSOT_HIERARCHY.md | Gap list con severidad | Usuario si Critical |
+| Archivos de checklist por fase | | |
 
 ---
 

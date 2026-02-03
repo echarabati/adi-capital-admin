@@ -7,12 +7,12 @@
 
 ## Épicas
 
-| ID  | Épica      | Descripción           | Prioridad | Stories |
-| --- | ---------- | --------------------- | --------- | ------- |
-| E1  | {{Nombre}} | {{Descripción corta}} | 🔴 Must   | {{N}}   |
-| E2  | {{Nombre}} | {{Descripción corta}} | 🔴 Must   | {{N}}   |
-| E3  | {{Nombre}} | {{Descripción corta}} | 🟡 Should | {{N}}   |
-| E4  | {{Nombre}} | {{Descripción corta}} | 🟢 Could  | {{N}}   |
+| ID | Épica | Descripción | Prioridad | Stories |
+|----|-------|-------------|-----------|---------|
+| E1 | {{Nombre}} | {{Descripción corta}} | 🔴 Must | {{N}} |
+| E2 | {{Nombre}} | {{Descripción corta}} | 🔴 Must | {{N}} |
+| E3 | {{Nombre}} | {{Descripción corta}} | 🟡 Should | {{N}} |
+| E4 | {{Nombre}} | {{Descripción corta}} | 🟢 Could | {{N}} |
 
 ---
 
@@ -22,12 +22,12 @@
 
 #### US-001: {{Título corto}}
 
-| Atributo       | Valor          |
-| -------------- | -------------- |
-| **Feature**    | FT-XXX         |
-| **Prioridad**  | 🔴 Must Have   |
+| Atributo | Valor |
+|----------|-------|
+| **Feature** | FT-XXX |
+| **Prioridad** | 🔴 Must Have |
 | **Estimación** | S / M / L / XL |
-| **Épica**      | E1             |
+| **Épica** | E1 |
 
 **Como** {{rol de usuario}}  
 **Quiero** {{acción que quiere realizar}}  
@@ -51,7 +51,6 @@ Scenario: Error path - {{descripción del escenario de error}}
 > 💡 **Tip:** Incluir al menos 1 happy path + 1 error path por story.
 
 **Notas Técnicas:**
-
 - {{Nota sobre implementación}}
 - {{Dependencia o consideración}}
 
@@ -61,19 +60,18 @@ Scenario: Error path - {{descripción del escenario de error}}
 
 #### US-002: {{Título corto}}
 
-| Atributo       | Valor        |
-| -------------- | ------------ |
-| **Feature**    | FT-XXX       |
-| **Prioridad**  | 🔴 Must Have |
-| **Estimación** | M            |
-| **Épica**      | E1           |
+| Atributo | Valor |
+|----------|-------|
+| **Feature** | FT-XXX |
+| **Prioridad** | 🔴 Must Have |
+| **Estimación** | M |
+| **Épica** | E1 |
 
 **Como** {{rol}}  
 **Quiero** {{acción}}  
 **Para** {{beneficio}}
 
 **Criterios de Aceptación:**
-
 - [ ] {{Criterio 1}}
 - [ ] {{Criterio 2}}
 
@@ -83,19 +81,18 @@ Scenario: Error path - {{descripción del escenario de error}}
 
 #### US-010: {{Título}}
 
-| Atributo       | Valor        |
-| -------------- | ------------ |
-| **Feature**    | FT-XXX       |
-| **Prioridad**  | 🔴 Must Have |
-| **Estimación** | L            |
-| **Épica**      | E2           |
+| Atributo | Valor |
+|----------|-------|
+| **Feature** | FT-XXX |
+| **Prioridad** | 🔴 Must Have |
+| **Estimación** | L |
+| **Épica** | E2 |
 
 **Como** {{rol}}  
 **Quiero** {{acción}}  
 **Para** {{beneficio}}
 
 **Criterios de Aceptación:**
-
 - [ ] {{Criterio 1}}
 - [ ] {{Criterio 2}}
 
@@ -107,11 +104,11 @@ Scenario: Error path - {{descripción del escenario de error}}
 
 > Sin estas features, el producto no tiene sentido.
 
-| ID     | Story      | Estimación |
-| ------ | ---------- | ---------- |
-| US-001 | {{Título}} | S          |
-| US-002 | {{Título}} | M          |
-| US-010 | {{Título}} | L          |
+| ID | Story | Estimación |
+|----|-------|------------|
+| US-001 | {{Título}} | S |
+| US-002 | {{Título}} | M |
+| US-010 | {{Título}} | L |
 
 **Total estimado MVP:** {{X}} puntos / {{Y}} semanas
 
@@ -119,25 +116,25 @@ Scenario: Error path - {{descripción del escenario de error}}
 
 > Importantes pero el MVP puede vivir sin ellas.
 
-| ID     | Story      | Estimación |
-| ------ | ---------- | ---------- |
-| US-020 | {{Título}} | M          |
-| US-021 | {{Título}} | S          |
+| ID | Story | Estimación |
+|----|-------|------------|
+| US-020 | {{Título}} | M |
+| US-021 | {{Título}} | S |
 
 ### 🟢 Could Have (Futuro v2.0)
 
 > Nice to have, si hay tiempo.
 
-| ID     | Story      | Estimación |
-| ------ | ---------- | ---------- |
-| US-030 | {{Título}} | L          |
+| ID | Story | Estimación |
+|----|-------|------------|
+| US-030 | {{Título}} | L |
 
 ### ⚪ Won't Have (Descartado)
 
 > Explícitamente fuera de scope.
 
-| ID     | Story      | Razón                     |
-| ------ | ---------- | ------------------------- |
+| ID | Story | Razón |
+|----|-------|-------|
 | US-040 | {{Título}} | {{Por qué no lo haremos}} |
 
 ---
@@ -155,13 +152,13 @@ US-001 (Auth) ──► US-002 (Profile)
 
 ## Definición de Estimaciones
 
-| Tamaño | Puntos | Tiempo aprox | Ejemplo               |
-| ------ | ------ | ------------ | --------------------- |
-| S      | 1      | 2-4 horas    | Fix simple, ajuste UI |
-| M      | 2      | 1-2 días     | Feature pequeña       |
-| L      | 5      | 3-5 días     | Feature mediana       |
-| XL     | 8      | 1-2 semanas  | Feature compleja      |
+| Tamaño | Puntos | Tiempo aprox | Ejemplo |
+|--------|--------|--------------|---------|
+| S | 1 | 2-4 horas | Fix simple, ajuste UI |
+| M | 2 | 1-2 días | Feature pequeña |
+| L | 5 | 3-5 días | Feature mediana |
+| XL | 8 | 1-2 semanas | Feature compleja |
 
 ---
 
-_Generado con TimeKast Factory_
+*Generado con TimeKast Factory*

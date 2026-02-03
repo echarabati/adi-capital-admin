@@ -1,7 +1,7 @@
 # Design Specification — {{PROJECT_NAME}}
 
 > Generado desde Discovery Brief y Docs por `/design`
-> **Fuente:** docs/planning/00_DISCOVERY_BRIEFING.md, 01-05
+> **Fuente:** docs/planning/00_DISCOVERY_BRIEFING.md, 01-08
 > **SSOT:** Este doc → código UI (cuando exista)
 
 ---

@@ -746,7 +746,7 @@ experimental: {
 
 | Con | Cuándo | Acción |
 |-----|--------|--------|
-| **design** | Specs de componentes nuevos | Consultar 07_DESIGN.md |
+| **design** | Specs de componentes nuevos | Consultar 09_DESIGN.md |
 | **testing** | Tests de accesibilidad, E2E UI | Cargar `domains/testing/SKILL.md` |
 | **api** | Server Actions para forms | Coordinar |
 

@@ -23,21 +23,17 @@
 ## 📚 Referencias
 
 **Design:**
-
-- Pantalla: [SCR-XXX](../../planning/06_DESIGN.md#scr-xxx)
-- Flujo: [FLW-XXX](../../planning/06_DESIGN.md#flw-xxx)
+- Pantalla: [SCR-XXX](../../planning/09_DESIGN.md#scr-xxx)
+- Flujo: [FLW-XXX](../../planning/09_DESIGN.md#flw-xxx)
 
 **Schema:**
-
 - Entidades: [E-XXX](../../planning/04_DATA_MODEL.md#e-xxx)
 
 **Componentes Starter Kit:**
-
 - `DataTable` — {uso}
 - `{Componente}` — {uso}
 
 **Componentes Nuevos:**
-
 - `CMP-XXX` — {descripción breve}
 
 ---
@@ -51,7 +47,6 @@
 ## 🔧 Contexto Técnico
 
 **Archivos a crear/modificar:**
-
 - `{ruta/archivo.ts}` — {qué hacer}
 - `{ruta/archivo.ts}` — {qué hacer}
 
@@ -65,12 +60,12 @@
 ```typescript
 // Input
 type Input = {
-  fieldId: string; // UUID del recurso
-  amount: number; // Monto en centavos
+  fieldId: string;    // UUID del recurso
+  amount: number;     // Monto en centavos
 };
 
 // Output
-type Output =
+type Output = 
   | { success: true; data: { id: string; version: number } }
   | { success: false; error: string; code: ErrorCode };
 
@@ -79,19 +74,16 @@ type Errors = 'VALIDATION_ERROR' | 'NOT_FOUND' | 'UNAUTHORIZED' | 'CONFLICT';
 ```
 
 **Side Effects:**
-
 - Escribe en tabla `{tabla}`
 - Invalida cache `{key}` (si aplica)
 - Dispara notificación (si aplica)
 
 **RBAC:**
-
 - Permiso requerido: `{PERMISSION_NAME}` sobre `{resource}`
 
 ---
 
 **Dependencias de Issues:**
-
 - Bloqueado por: {PREFIX}-XXX (si aplica)
 - Bloquea a: {PREFIX}-XXX (si aplica)
 
@@ -118,14 +110,14 @@ type Errors = 'VALIDATION_ERROR' | 'NOT_FOUND' | 'UNAUTHORIZED' | 'CONFLICT';
 
 ### Decisiones Tomadas
 
-| Fecha      | Decisión     | Razón     |
-| ---------- | ------------ | --------- |
+| Fecha | Decisión | Razón |
+|-------|----------|-------|
 | YYYY-MM-DD | {Decisión X} | {Por qué} |
 
 ### Problemas y Soluciones
 
-| Fecha      | Problema   | Solución   |
-| ---------- | ---------- | ---------- |
+| Fecha | Problema | Solución |
+|-------|----------|----------|
 | YYYY-MM-DD | {Problema} | {Solución} |
 
 ### Desviaciones del Plan
@@ -146,5 +138,5 @@ type Errors = 'VALIDATION_ERROR' | 'NOT_FOUND' | 'UNAUTHORIZED' | 'CONFLICT';
 
 ---
 
-_Creado: {{DATE}}_
-_Última actualización: {{DATE}}_
+*Creado: {{DATE}}*
+*Última actualización: {{DATE}}*

@@ -40,6 +40,47 @@ description: Product Strategist - Generate client-facing proposal documents
 
 ---
 
+## 2.5 🛑 Validación OBLIGATORIA (ANTES de generar)
+
+> ⚠️ **MANDATORY — NO GENERAR SIN VALIDAR**
+>
+> **VIOLACIÓN DE ESTA SECCIÓN = FALLO CRÍTICO**
+
+### Pre-Requisitos
+
+Antes de generar CUALQUIER contenido de propuesta:
+
+1. **Cargar validation skill:**
+   ```bash
+   cat ./.agent/skills/domains/validation/proposal.md
+   ```
+
+2. **Verificar Coverage Map del Discovery:**
+   - §1 (Idea) debe estar ✅
+   - §2 (Usuarios) debe estar ✅
+   - §3 (Features) debe estar ✅
+
+3. **Si alguna sección está 🔴 o falta:**
+   ```markdown
+   🛑 **STOP — Discovery Brief Incompleto**
+   
+   No puedo generar propuesta sin:
+   - [sección faltante]
+   
+   Acción: Ejecutar `/discovery` primero.
+   ```
+   
+   **ACTION:** Llamar `notify_user` con `BlockedOnUser=true`. **NO CONTINUAR.**
+
+### Consecuencia de Violación
+
+Si generas propuesta sin ejecutar esta validación:
+- El output se considera **INVÁLIDO**
+- Debes volver a ejecutar desde validación
+- Reportar la violación al usuario
+
+---
+
 ## 3. Input Requerido
 
 Antes de generar la propuesta, necesitas:
@@ -250,6 +291,26 @@ Cuando la propuesta esté lista:
 5. Usar PROPOSAL.md como input para documentación técnica
 
 > ⚠️ **NO avanzar a /docs sin aprobación del cliente.**
+
+---
+
+## 8. Principios Fundamentales
+
+1. **Cliente primero** — Todo se escribe para que el cliente entienda
+2. **Sin jerga técnica** — Traducir siempre a lenguaje de negocio
+3. **Alcance explícito** — Incluye/No incluye claramente definido
+4. **Supuestos visibles** — Marcar todo lo que asumimos
+5. **Validación obligatoria** — No generar sin verificar Discovery Brief
+
+---
+
+## 9. Colaboración
+
+| Consume | Produce | Escala a |
+|---------|---------|----------|
+| `00_DISCOVERY_BRIEF.md` | `docs/proposal/PROPOSAL.md` | `/consult-architect` si hay duda técnica |
+| `project-config.md` (client_context) | | Usuario si falta Discovery Brief |
+| Validation skill (`validation/proposal.md`) | | |
 
 ---
 

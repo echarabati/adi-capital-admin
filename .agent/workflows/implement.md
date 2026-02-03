@@ -24,13 +24,13 @@ description: Implement workflow - execute issues from backlog through full pipel
 
 ## Hard Gates
 
-| Validación             | Si falla                       |
-| ---------------------- | ------------------------------ |
-| Issue existe           | ❌ STOP                        |
-| Status ≠ ✅ Completed  | ❌ STOP                        |
-| Status ≠ 🚫 Blocked    | ❌ STOP                        |
-| Sin ADR bloqueante     | ❌ STOP → `/consult-architect` |
-| Dependencias cumplidas | ❌ STOP                        |
+| Validación | Si falla |
+|------------|----------|
+| Issue existe | ❌ STOP |
+| Status ≠ ✅ Completed | ❌ STOP |
+| Status ≠ 🚫 Blocked | ❌ STOP |
+| Sin ADR bloqueante | ❌ STOP → `/consult-architect` |
+| Dependencias cumplidas | ❌ STOP |
 
 ---
 
@@ -39,7 +39,6 @@ description: Implement workflow - execute issues from backlog through full pipel
 **Si no se especificó issue:**
 
 // turbo
-
 ```bash
 # Listar issues pendientes
 VERSION=$(ls -d ./docs/backlog/v*/ 2>/dev/null | sort -V | tail -1 | xargs basename 2>/dev/null || echo "none")
@@ -56,7 +55,6 @@ fi
 ```
 
 **Si usa `--next`:** Tomar primer issue P0/P1 pendiente.
-
 - Filtrar issues con Status ⬜ o 📋
 - Ordenar por Priority (P0 primero)
 - Tomar el primero
@@ -64,71 +62,95 @@ fi
 
 ---
 
-## Phase 0.5: Context Size Check
+## Phase 0.5: Context Status (MANDATORY)
 
-> ⚠️ **Antes de continuar, evalúa el tamaño del contexto.**
+> 🔴 **SIEMPRE MOSTRAR** — El agente DEBE mostrar el estado del contexto al inicio.
+>
+> Esta información es OBLIGATORIA en cada ejecución del workflow.
 
-**Indicadores de contexto alto (>70%):**
+**El agente debe mostrar este bloque AL INICIO de su respuesta:**
 
-- Conversación con >15 intercambios largos
-- Múltiples archivos grandes leídos (>500 líneas cada uno)
-- Errores repetidos o respuestas truncadas previas
+```markdown
+## 📊 Context Status
 
-**Si el contexto parece alto:**
+| Metric | Value | Status |
+|--------|-------|--------|
+| Conversación | [N] mensajes | 🟢/🟡/🔴 |
+| Archivos leídos | [M] archivos | 🟢/🟡/🔴 |
+| Contexto estimado | [X]% | 🟢/🟡/🔴 |
 
-```md
-⚠️ **Contexto de conversación alto**
-
-Esta sesión ha procesado mucha información.
-Para mejor calidad de resultados:
-
-1. **Guardar progreso**: Commit cambios actuales
-2. **Nueva sesión**: Abrir nueva conversación
-3. **Ejecutar `/start`**: Cargar contexto fresco
-
-> 💡 Puedes continuar si la tarea restante es simple.
+**Workflow:** /implement
+**Issue:** {ISSUE-ID}
+**Timestamp:** [fecha-hora]
 ```
+
+### Thresholds
+
+| Contexto | Status | Acción |
+|----------|--------|--------|
+| < 30% | 🟢 OK | Continuar normalmente |
+| 30-50% | 🟡 Moderate | Continuar con precaución |
+| > 50% | 🔴 HIGH | ⚠️ WARNING — Ver abajo |
+
+### Si contexto > 50%
+
+> ⚠️ **MANDATORY WARNING**
+>
+> El agente DEBE mostrar esta advertencia y RECOMENDAR nuevo chat.
+
+```markdown
+## ⚠️ CONTEXTO ALTO DETECTADO
+
+**Contexto estimado:** [X]% (> 50%)
+
+**🔴 RECOMENDACIÓN: INICIAR NUEVO CHAT**
+
+El contexto de esta conversación está por encima del 50%.
+Para asegurar la mejor calidad de resultados:
+
+1. **Commit cambios actuales**: `git add . && git commit -m "WIP: ..."`
+2. **Abrir nueva conversación**
+3. **Ejecutar `/start`** para cargar contexto fresco
+
+**¿Deseas continuar de todas formas?** (sí/no)
+```
+
+**ACTION:** Si usuario dice "no" → STOP workflow.
 
 ---
 
 ## Phase 1: Context Loading
 
 // turbo
-
 ```bash
 cat ./.agent/rules/AI_RULES.md
 ```
 
 // turbo
-
 ```bash
 cat ./.agent/rules/DOR_DOD.md
 ```
 
 // turbo
-
 ```bash
 cat ./.agent/skills/roles/implement/SKILL.md
 ```
 
 // turbo
-
 ```bash
 cat ./.agent/project-config.md 2>/dev/null || echo "No project config"
 ```
 
 // turbo
-
 ```bash
 # Load reference docs
 cat ./docs/reference/INVENTORY.md 2>/dev/null || echo "No INVENTORY"
 ```
 
 // turbo
-
 ```bash
 # Load glossary if exists
-cat ./docs/planning/09_GLOSSARY.md 2>/dev/null || echo "No glossary"
+cat ./docs/planning/08_GLOSSARY.md 2>/dev/null || echo "No glossary"
 ```
 
 ---
@@ -136,7 +158,6 @@ cat ./docs/planning/09_GLOSSARY.md 2>/dev/null || echo "No glossary"
 ## Phase 1: Pre-requisites
 
 // turbo
-
 ```bash
 ISSUE_ID="${1:-ISSUE-001}"
 
@@ -156,7 +177,6 @@ fi
 ```
 
 // turbo
-
 ```bash
 # Buscar issue
 FILES=$(ls ./docs/backlog/*/issues/${ISSUE_ID}*.md 2>/dev/null)
@@ -184,14 +204,12 @@ echo "✅ Issue encontrado: $FILES"
 ## Phase 2: Load Issue
 
 // turbo
-
 ```bash
 # Cargar issue
 cat ./docs/backlog/*/issues/${ISSUE_ID}*.md
 ```
 
 **Extraer:**
-
 - Title y ID
 - Status (verificar no es Completed/Blocked)
 - Epic asociado
@@ -217,7 +235,6 @@ cat ./docs/backlog/*/issues/${ISSUE_ID}*.md
 ```
 
 **Si detectas problemas:**
-
 ```markdown
 ⚠️ **Auditoría Previa - Bloqueadores**
 
@@ -234,21 +251,18 @@ cat ./docs/backlog/*/issues/${ISSUE_ID}*.md
 **Rol:** Staff Engineer / Tech Lead
 
 // turbo
-
 ```bash
 # Buscar código relacionado
 grep -rl "${FEATURE_KEYWORD}" src/ app/ lib/ 2>/dev/null | head -10
 ```
 
 // turbo
-
 ```bash
 # Consultar schema si aplica
 cat lib/db/schema/*.ts 2>/dev/null | head -50
 ```
 
 **Acciones:**
-
 1. Leer issue completo + AC
 2. Buscar código relacionado
 3. Consultar schema si hay data
@@ -264,25 +278,20 @@ cat lib/db/schema/*.ts 2>/dev/null | head -50
 ## 📋 Plan: {ISSUE-ID}
 
 **Archivos a crear:**
-
 - path/to/file.ts — propósito
 
 **Archivos a modificar:**
-
 - path/to/existing.ts — qué cambiar
 
 **Orden de implementación:**
-
 1. Paso 1
 2. Paso 2
 
 **Tests requeridos:**
-
 - Unit: descripción
 - E2E: descripción (si aplica)
 
 **Skills a consultar:** ← OBLIGATORIO
-
 > ui, db, security
 
 **Architect Gating:** Sí/No
@@ -290,13 +299,13 @@ cat lib/db/schema/*.ts 2>/dev/null | head -50
 
 **Determinar Skills (Reglas):**
 
-| Si el issue toca...                | Cargar skill |
-| ---------------------------------- | ------------ |
-| Componentes React, Tailwind, forms | `ui`         |
-| Schema, queries, migrations        | `db`         |
-| Server Actions, API routes         | `api`        |
-| Auth, RBAC, tokens, validation     | `security`   |
-| Tests, mocking, fixtures           | `testing`    |
+| Si el issue toca... | Cargar skill |
+|---------------------|-------------|
+| Componentes React, Tailwind, forms | `ui` |
+| Schema, queries, migrations | `db` |
+| Server Actions, API routes | `api` |
+| Auth, RBAC, tokens, validation | `security` |
+| Tests, mocking, fixtures | `testing` |
 
 **Architect Gating:** Si plan revela auth/cache/API/state ambiguo → `/consult-architect`
 
@@ -308,11 +317,10 @@ cat lib/db/schema/*.ts 2>/dev/null | head -50
 >
 > El agente **DEBE** usar `notify_user` y ESPERAR respuesta real del usuario.
 > **Inventar aprobación INVALIDA la implementación.**
->
+> 
 > **Consecuencia:** Si te saltas este paso, TODO el trabajo debe revertirse.
 
 ❌ **PROHIBIDO (Auto-Approval):**
-
 - Inventar frases como "el usuario aprueba", "LGTM", "user confirms"
 - Decir "proceeding with implementation" sin respuesta
 - Asumir que silencio = aprobación
@@ -323,28 +331,24 @@ cat lib/db/schema/*.ts 2>/dev/null | head -50
 ## 📋 Plan de Implementación: {ISSUE-ID}
 
 **Archivos a crear:**
-
 - [lista]
 
 **Archivos a modificar:**
-
 - [lista]
 
 **Tests requeridos:**
-
 - [lista]
 
 **Skills a consultar:**
-
 - [lista]
 
 ---
 
-| #   | Opción        | Acción                              |
-| --- | ------------- | ----------------------------------- |
-| 1   | **continuar** | Proceder a implementar              |
-| 2   | **ajustar**   | Modificar plan y presentar de nuevo |
-| 3   | **cancelar**  | Abortar workflow                    |
+| # | Opción | Acción |
+|---|--------|--------|
+| 1 | **continuar** | Proceder a implementar |
+| 2 | **ajustar** | Modificar plan y presentar de nuevo |
+| 3 | **cancelar** | Abortar workflow |
 
 **¿Qué quieres hacer?** (1-3)
 ```
@@ -363,7 +367,6 @@ cat lib/db/schema/*.ts 2>/dev/null | head -50
 
 ```markdown
 # Ejemplo: Si el plan dice "Skills a consultar: ui, db"
-
 // turbo
 cat ./.agent/skills/domains/ui/SKILL.md
 cat ./.agent/skills/domains/db/SKILL.md
@@ -374,7 +377,6 @@ cat ./.agent/skills/domains/db/SKILL.md
 **Skills disponibles:** `ui`, `db`, `api`, `security`, `testing` (en `.agent/skills/domains/*/SKILL.md`)
 
 **Acciones:**
-
 1. Leer plan de Fase 4
 2. **Cargar SOLO los skills listados en el plan**
 3. Implementar EXACTAMENTE lo del plan
@@ -383,14 +385,12 @@ cat ./.agent/skills/domains/db/SKILL.md
 6. Documentar desviaciones
 
 **Control de flujo:**
-
 ```bash
 /pause ISSUE-XXX    # Para pausar
 /park "[idea]"      # Para ideas descubiertas
 ```
 
 **Handoff:**
-
 ```markdown
 🔄 **Handoff: Implementer → Verifier**
 Issue: {ISSUE-ID}
@@ -406,42 +406,35 @@ Tests pendientes: [del plan]
 **Rol:** Senior QA Engineer
 
 // turbo
-
 ```bash
 pnpm typecheck
 ```
 
 // turbo
-
 ```bash
 pnpm lint
 ```
 
 // turbo
-
 ```bash
 pnpm build
 ```
 
 **Escribir tests especificados en plan:**
-
 - Unit tests → `*.test.ts`
 - E2E tests → `e2e/*.spec.ts`
 
 // turbo
-
 ```bash
 pnpm test
 ```
 
 **Si hay errores:**
-
 1. Corregir
 2. Re-ejecutar validaciones
 3. Repetir hasta ✅
 
 **Handoff:**
-
 ```markdown
 🔄 **Handoff: Verifier → Documenter**
 Issue: {ISSUE-ID}
@@ -456,14 +449,21 @@ Tests nuevos: [lista]
 **Rol:** Technical Writer
 
 **Documentación código:**
-
 1. JSDoc a funciones públicas nuevas
 2. README si feature visible
 3. CHANGELOG entry
 
-**Bitácora en issue.md:** 4. Decisiones tomadas 5. Problemas y soluciones 6. Desviaciones del plan 7. Notas para mantenimiento
+**Bitácora en issue.md:**
+4. Decisiones tomadas
+5. Problemas y soluciones
+6. Desviaciones del plan
+7. Notas para mantenimiento
 
-**PR Description:** 8. Título: Conventional Commits 9. Descripción estructurada 10. Checklist de review 11. `Closes #{issue-number}`
+**PR Description:**
+8. Título: Conventional Commits
+9. Descripción estructurada
+10. Checklist de review
+11. `Closes #{issue-number}`
 
 ---
 
@@ -473,11 +473,10 @@ Tests nuevos: [lista]
 >
 > El agente **DEBE** usar `notify_user` y ESPERAR respuesta real del usuario.
 > **Inventar aprobación INVALIDA la implementación.**
->
+> 
 > **Consecuencia:** Si te saltas este paso, TODO el trabajo debe revertirse.
 
 ❌ **PROHIBIDO (Auto-Approval):**
-
 - Inventar frases como "el usuario aprueba", "LGTM", "user confirms"
 - Marcar "Done" sin que el usuario diga "ok", "done", "approve", "1", etc.
 - Cerrar sin mostrar QC Report completo
@@ -488,10 +487,10 @@ Tests nuevos: [lista]
 ```md
 ## ✅ Verificación de AC
 
-| AC  | Descripción | Evidencia                        |
-| --- | ----------- | -------------------------------- |
-| 1   | [del issue] | ✅ Implementado en `file.ts:L45` |
-| 2   | [del issue] | ✅ Test en `file.test.ts:L12`    |
+| AC | Descripción | Evidencia |
+|----|-------------|-----------|
+| 1 | [del issue] | ✅ Implementado en `file.ts:L45` |
+| 2 | [del issue] | ✅ Test en `file.test.ts:L12` |
 ```
 
 **Regla:** Si hay CUALQUIER AC sin evidencia ✅, NO mostrar opción de cerrar.
@@ -502,19 +501,15 @@ Tests nuevos: [lista]
 ## ✅ Implementación Completada: {ISSUE-ID}
 
 **Archivos creados:**
-
 - [lista]
 
 **Archivos modificados:**
-
 - [lista]
 
 **Tests nuevos:**
-
 - [lista]
 
 **Verificación:**
-
 - typecheck ✅
 - lint ✅
 - build ✅
@@ -524,11 +519,11 @@ Tests nuevos: [lista]
 
 ---
 
-| #   | Opción        | Acción                  |
-| --- | ------------- | ----------------------- |
-| 1   | **completar** | Marcar issue como Done  |
-| 2   | **revisar**   | Ajustar antes de cerrar |
-| 3   | **cancelar**  | Dejar en progreso       |
+| # | Opción | Acción |
+|---|--------|--------|
+| 1 | **completar** | Marcar issue como Done |
+| 2 | **revisar** | Ajustar antes de cerrar |
+| 3 | **cancelar** | Dejar en progreso |
 
 **¿Qué quieres hacer?** (1-3)
 ```
@@ -548,11 +543,11 @@ cat ./.agent/workflows/qc.md
 
 **Ejecutar:** `/qc {ISSUE_ID}`
 
-| Resultado | Acción                 |
-| --------- | ---------------------- |
-| ✅ PASS   | Continuar a Phase 6    |
-| 🛑 STOP   | Esperar confirmación   |
-| 🔴 FAIL   | Fix antes de continuar |
+| Resultado | Acción |
+|-----------|--------|
+| ✅ PASS | Continuar a Phase 6 |
+| 🛑 STOP | Esperar confirmación |
+| 🔴 FAIL | Fix antes de continuar |
 
 ---
 
@@ -561,35 +556,29 @@ cat ./.agent/workflows/qc.md
 > ⚠️ El issue NO está completo hasta editar el archivo.
 
 **A) Actualizar header:**
-
 ```markdown
 > **Status:** ✅ Completed (YYYY-MM-DD)
 ```
 
 **B) Agregar Implementation Notes:**
-
 ```markdown
 ## Implementation Notes
 
 **Completed:** YYYY-MM-DD
 
 **Context & Decisions:**
-
 - **Resumen:** [qué se logró]
 - **Ajustes:** [cambios durante sesión]
 - **Decisiones:** [por qué X patrón]
 - **Bloqueadores:** [problemas y resolución]
 
 **Files created:**
-
 - `path/to/new.ts` — [propósito]
 
 **Files modified:**
-
 - `path/to/existing.ts` — [qué cambió]
 
 **Verification:**
-
 - [x] Typecheck: Pass
 - [x] Lint: Pass
 - [x] Build: Pass
@@ -597,7 +586,6 @@ cat ./.agent/workflows/qc.md
 ```
 
 **C) Marcar AC como completados:**
-
 ```markdown
 - [x] Criterio 1
 - [x] Criterio 2
@@ -605,7 +593,6 @@ cat ./.agent/workflows/qc.md
 
 **D) Verificar cierre:**
 // turbo
-
 ```bash
 grep -q "Status.*Completed" ./docs/backlog/*/issues/${ISSUE_ID}*.md && echo "✅ Issue cerrado correctamente"
 ```
@@ -623,7 +610,6 @@ PR: `feat(scope): description ({ISSUE-ID})`
 
 **Próximo:** `/implement {NEXT-ID}` o `/audit`
 ```
-
 ```
 
 ---
@@ -631,18 +617,14 @@ PR: `feat(scope): description ({ISSUE-ID})`
 ## Flujo Completo
 
 ```
-
 /start → /discovery → /docs → /design → /backlog → /implement → /audit
-↑
-YOU ARE HERE
-
+                                                        ↑
+                                                    YOU ARE HERE
 ```
 
 **SSOT Chain:**
 ```
-
-Discovery Brief → docs (01-05) → design (06) → backlog → code
-
+Discovery Brief → docs (01-08) → design (09) → backlog → code
 ```
 
 ---
@@ -699,4 +681,3 @@ Discovery Brief → docs (01-05) → design (06) → backlog → code
 ---
 
 _TimeKast Factory — Implement Workflow_
-```

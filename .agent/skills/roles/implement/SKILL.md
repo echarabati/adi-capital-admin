@@ -63,7 +63,7 @@ modes:
 |-------|-----------|-----------|
 | Issue a implementar | `docs/backlog/{version}/issues/{ISSUE-ID}*.md` | ✅ |
 | Epic del issue | `docs/backlog/{version}/epics/EPIC-*.md` | ⚪ Contexto |
-| Design Spec | `docs/planning/06_DESIGN.md` | ⚪ Referencias |
+| Design Spec | `docs/planning/09_DESIGN.md` | ⚪ Referencias |
 | Domain Skills | `.gemini/skills/domains/*` | ⚪ Por fase |
 | project-config | `.gemini/project-config.md` | ⚪ Stack context |
 
@@ -574,7 +574,7 @@ Primero completar todos los AC, luego volver a CHECKPOINT 2.
 
 **SSOT Chain:**
 ```
-Discovery Brief → docs (01-05) → design (06) → backlog → code
+Discovery Brief → docs (01-08) → design (09) → backlog → code
 ```
 
 ---

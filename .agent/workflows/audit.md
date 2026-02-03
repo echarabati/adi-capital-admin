@@ -48,6 +48,20 @@ description: Dynamic quality audit - select review level based on scope and risk
 > 💡 Shortcut: `/audit R2` para saltar selección.
 ```
 
+### 0.1 🛑 STOP — Esperar Selección de Tier
+
+> ⚠️ **MANDATORY STOP**: Usa `notify_user` con `BlockedOnUser: true` 
+> para mostrar las opciones y ESPERAR la respuesta del usuario.
+> 
+> **NO continúes a Phase 1 sin respuesta explícita.**
+
+❌ **PROHIBIDO:**
+- Continuar si no hay respuesta del usuario
+- Inventar respuestas ("user selects R2")
+- Asumir tier por defecto
+
+**Si el usuario ya especificó tier en la invocación** (ej: `/audit R2`), saltar este stop.
+
 ---
 
 ## Phase 1: Load Context
@@ -366,10 +380,14 @@ echo "  Last tag: $LAST_TAG"
 
 ---
 
-## Escalation
+## Gates/Escalation
 
-Si fix requiere cambio de arquitectura/schema:
-→ Ejecutar `/consult-architect`
+| Trigger | Acción | Cuándo |
+|---------|--------|--------|
+| Fix requiere cambio de arquitectura | `/consult-architect` | Schema, patterns, ADR |
+| Security concern encontrado | `/consult-qe` profundo | Secrets, vulns críticas |
+| Coverage < 80% sin fix obvio | Review de testing strategy | Considerar mock/stub |
+| Lighthouse LCP > 4s | Performance analysis | Bundle, images, SSR |
 
 ---
 

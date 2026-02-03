@@ -350,7 +350,7 @@ Al completar:
 
 **SSOT Chain:**
 ```
-Discovery Brief → docs (01-05) → design (06) → backlog → code
+Discovery Brief → docs (01-08) → design (09) → backlog → code
 ```
 
 ---

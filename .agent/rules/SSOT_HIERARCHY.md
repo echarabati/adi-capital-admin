@@ -21,14 +21,14 @@
 ## SSOT Chain
 
 ```
-Discovery Brief → docs (01-05) → design (06) → backlog → code
+Discovery Brief → docs (01-08) → design (09) → backlog → code
 ```
 
 | Fase | Documento | SSOT para |
 |------|-----------|-----------|
 | Discovery | `docs/planning/00_DISCOVERY_BRIEFING.md` | Requisitos, scope |
-| Docs | `docs/planning/01-05_*.md` | Personas, US, BR, Data, Arch |
-| Design | `docs/planning/06_DESIGN.md` | Pantallas, flujos, componentes |
+| Docs | `docs/planning/01-08_*.md` | Personas, US, BR, Data, Arch |
+| Design | `docs/planning/09_DESIGN.md` | Pantallas, flujos, componentes |
 | Backlog | `docs/backlog/{version}/issues/*.md` | Issues ejecutables |
 | Code | `lib/db/schema/*.ts` | Schema de DB |
 

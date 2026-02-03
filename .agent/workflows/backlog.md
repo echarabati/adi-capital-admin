@@ -26,9 +26,9 @@ description: Backlog workflow - generate issues from docs and design
 ```
 ¿Tienes docs y design completos?
 │
-├─► SÍ (02_USER_STORIES.md y 06_DESIGN.md existen)
+├─► SÍ (02_USER_STORIES.md y 09_DESIGN.md existen)
 │   │
-│   ├─► ¿Hay OQ High impact en 06_DESIGN?
+│   ├─► ¿Hay OQ High impact en 09_DESIGN?
 │   │     ├─► Sí → Crear ADR-XXX issues + marcar dependencias + generar resto
 │   │     └─► No → Generar backlog normal
 │   └─► Fin
@@ -46,28 +46,26 @@ description: Backlog workflow - generate issues from docs and design
 **Primero verificar si hay backlog:**
 
 // turbo
-
 ```bash
 ls -d docs/backlog/v*/ 2>/dev/null && echo "✅ Backlog existe" || echo "❌ No hay backlog"
 ```
 
 **Si NO existe backlog:**
-
 > No hay backlog. Creando desde design...
-> → Saltar a Phase 1
+→ Saltar a Phase 1
 
 **Si SÍ existe backlog:**
 
 ```markdown
 ## 📋 Backlog Action
 
-| #   | Acción          | Descripción                     |
-| --- | --------------- | ------------------------------- |
-| 1   | **profundizar** | Mejorar issues/epics existentes |
-| 2   | **agregar**     | Agregar issue nuevo             |
-| 3   | **milestone**   | Crear/editar milestone          |
-| 4   | **epic**        | Crear/editar epic               |
-| 5   | **status**      | Ver status del backlog          |
+| # | Acción | Descripción |
+|---|--------|-------------|
+| 1 | **profundizar** | Mejorar issues/epics existentes |
+| 2 | **agregar** | Agregar issue nuevo |
+| 3 | **milestone** | Crear/editar milestone |
+| 4 | **epic** | Crear/editar epic |
+| 5 | **status** | Ver status del backlog |
 
 **¿Qué quieres hacer?** (1-5)
 
@@ -77,11 +75,11 @@ ls -d docs/backlog/v*/ 2>/dev/null && echo "✅ Backlog existe" || echo "❌ No 
 **Si elige "profundizar":**
 
 ```markdown
-| #   | Scope                                        |
-| --- | -------------------------------------------- |
-| 1   | **issue** — Mejorar issue específico         |
-| 2   | **epic** — Mejorar epic específico           |
-| 3   | **todo** — Revisar y mejorar todo el backlog |
+| # | Scope |
+|---|-------|
+| 1 | **issue** — Mejorar issue específico |
+| 2 | **epic** — Mejorar epic específico |
+| 3 | **todo** — Revisar y mejorar todo el backlog |
 
 **¿Qué profundizar?** (1-3)
 ```
@@ -89,47 +87,94 @@ ls -d docs/backlog/v*/ 2>/dev/null && echo "✅ Backlog existe" || echo "❌ No 
 **Si elige "issue":** → Mostrar lista de issues disponibles
 **Si elige "epic":** → Mostrar lista de epics disponibles
 
+### 0.2 🛑 STOP — Esperar Selección de Acción
+
+> ⚠️ **MANDATORY STOP**: Usa `notify_user` con `BlockedOnUser: true` 
+> para mostrar las opciones y ESPERAR la respuesta del usuario.
+> 
+> **NO continúes a Phase 0.5 sin respuesta explícita.**
+
+❌ **PROHIBIDO:**
+- Continuar si no hay respuesta del usuario
+- Inventar respuestas ("user selects option 1")
+- Asumir acción por defecto
+
+**Si NO existe backlog**, este stop no aplica — ir directo a Phase 1.
+
 ---
 
-## Phase 0.5: Context Size Check
+## Phase 0.5: Context Status (MANDATORY)
 
-> ⚠️ **Antes de continuar, evalúa el tamaño del contexto.**
+> 🔴 **SIEMPRE MOSTRAR** — El agente DEBE mostrar el estado del contexto al inicio.
+>
+> Esta información es OBLIGATORIA en cada ejecución del workflow.
 
-**Indicadores de contexto alto (>70%):**
+**El agente debe mostrar este bloque AL INICIO de su respuesta:**
 
-- Conversación con >15 intercambios largos
-- Múltiples archivos grandes leídos (>500 líneas cada uno)
-- Errores repetidos o respuestas truncadas previas
+```markdown
+## 📊 Context Status
 
-**Si el contexto parece alto:**
+| Metric | Value | Status |
+|--------|-------|--------|
+| Conversación | [N] mensajes | 🟢/🟡/🔴 |
+| Archivos leídos | [M] archivos | 🟢/🟡/🔴 |
+| Contexto estimado | [X]% | 🟢/🟡/🔴 |
 
-```md
-⚠️ **Contexto de conversación alto**
-
-Esta sesión ha procesado mucha información.
-Para mejor calidad de resultados:
-
-1. **Guardar progreso**: Commit cambios actuales
-2. **Nueva sesión**: Abrir nueva conversación
-3. **Ejecutar `/start`**: Cargar contexto fresco
-
-> 💡 Puedes continuar si la tarea restante es simple.
+**Workflow:** /backlog
+**Timestamp:** [fecha-hora]
 ```
+
+### Thresholds
+
+| Contexto | Status | Acción |
+|----------|--------|--------|
+| < 30% | 🟢 OK | Continuar normalmente |
+| 30-50% | 🟡 Moderate | Continuar con precaución |
+| > 50% | 🔴 HIGH | ⚠️ WARNING — Ver abajo |
+
+### Si contexto > 50%
+
+> ⚠️ **MANDATORY WARNING**
+>
+> El agente DEBE mostrar esta advertencia y RECOMENDAR nuevo chat.
+
+```markdown
+## ⚠️ CONTEXTO ALTO DETECTADO
+
+**Contexto estimado:** [X]% (> 50%)
+
+**🔴 RECOMENDACIÓN: INICIAR NUEVO CHAT**
+
+El contexto de esta conversación está por encima del 50%.
+Para asegurar la mejor calidad de resultados:
+
+1. **Commit cambios actuales**: `git add . && git commit -m "WIP: ..."`
+2. **Abrir nueva conversación**
+3. **Ejecutar `/start`** para cargar contexto fresco
+
+**¿Deseas continuar de todas formas?** (sí/no)
+```
+
+**ACTION:** Si usuario dice "no" → STOP workflow.
 
 ---
 
 ## Phase 1: Context Loading
 
 // turbo
-
 ```bash
 cat ./.agent/rules/AI_RULES.md
 ```
 
 // turbo
-
 ```bash
 cat ./.agent/skills/roles/backlog/SKILL.md
+```
+
+// turbo
+```bash
+# Cargar validation skill para checklists pre/post generación
+cat ./.agent/skills/domains/validation/backlog.md
 ```
 
 ---
@@ -137,17 +182,16 @@ cat ./.agent/skills/roles/backlog/SKILL.md
 ## Phase 2: Verify Prerequisites
 
 // turbo
-
 ```bash
-ls -la ./docs/planning/02_USER_STORIES.md ./docs/planning/06_DESIGN.md 2>/dev/null || echo "❌ Missing required docs"
+ls -la ./docs/planning/02_USER_STORIES.md ./docs/planning/09_DESIGN.md 2>/dev/null || echo "❌ Missing required docs"
 ```
 
 **Archivos requeridos:**
 
-| Archivo                            | Estado       |
-| ---------------------------------- | ------------ |
+| Archivo | Estado |
+|---------|--------|
 | `docs/planning/02_USER_STORIES.md` | ✅ Requerido |
-| `docs/planning/06_DESIGN.md`       | ✅ Requerido |
+| `docs/planning/09_DESIGN.md` | ✅ Requerido |
 
 **Archivos opcionales (mejoran calidad):**
 | Archivo | Uso |
@@ -158,12 +202,10 @@ ls -la ./docs/planning/02_USER_STORIES.md ./docs/planning/06_DESIGN.md 2>/dev/nu
 | `04_DATA_MODEL.md` | Contexto técnico |
 
 **Si faltan prerequisitos:**
-
 ```markdown
 ⚠️ **Docs incompletos — No puedo generar Backlog**
 
 **Faltante:**
-
 - [archivo] → no existe
 
 **Acción:** Ejecutar `/docs` y `/design` primero.
@@ -174,19 +216,16 @@ ls -la ./docs/planning/02_USER_STORIES.md ./docs/planning/06_DESIGN.md 2>/dev/nu
 ## Phase 3: Load Docs
 
 // turbo
-
 ```bash
 cat ./docs/planning/02_USER_STORIES.md
 ```
 
 // turbo
-
 ```bash
-cat ./docs/planning/06_DESIGN.md
+cat ./docs/planning/09_DESIGN.md
 ```
 
 // turbo
-
 ```bash
 cat ./docs/planning/01_USER_PERSONAS.md 2>/dev/null || true
 cat ./docs/planning/03_BUSINESS_RULES.md 2>/dev/null || true
@@ -194,7 +233,6 @@ cat ./docs/planning/04_DATA_MODEL.md 2>/dev/null || true
 ```
 
 **Extraer:**
-
 - IDs de Stories (US-XXX) → origen de issues
 - IDs de Personas (P-XXX) → para user stories
 - IDs de Pantallas (SCR-XXX) → cross-refs
@@ -207,9 +245,8 @@ cat ./docs/planning/04_DATA_MODEL.md 2>/dev/null || true
 ## Phase 4: Check for Open Questions → ADR Issues
 
 // turbo
-
 ```bash
-grep -E "OQ-[0-9]+.*\*\*Alto\*\*|High|HIGH IMPACT" ./docs/planning/06_DESIGN.md 2>/dev/null && echo "⚠️ High impact OQs found - will create ADR issues" || echo "✅ No high impact OQs"
+grep -E "OQ-[0-9]+.*\*\*Alto\*\*|High|HIGH IMPACT" ./docs/planning/09_DESIGN.md 2>/dev/null && echo "⚠️ High impact OQs found - will create ADR issues" || echo "✅ No high impact OQs"
 ```
 
 **Si hay OQ High impact (NO bloquear, crear ADRs):**
@@ -219,7 +256,6 @@ grep -E "OQ-[0-9]+.*\*\*Alto\*\*|High|HIGH IMPACT" ./docs/planning/06_DESIGN.md 
 3. Continuar generando el resto del backlog
 
 **Formato de ADR issue:**
-
 ```markdown
 # ADR-001: Decidir [tema]
 
@@ -230,27 +266,22 @@ grep -E "OQ-[0-9]+.*\*\*Alto\*\*|High|HIGH IMPACT" ./docs/planning/06_DESIGN.md 
 > **Epic:** [EPIC-XXX](../epics/EPIC-XXX.md)
 
 ## Contexto
-
 [Descripción de la decisión pendiente]
 
 ## Opciones
 
 ### A) [Opción A]
-
 - Pros: ...
 - Cons: ...
 
 ### B) [Opción B]
-
 - Pros: ...
 - Cons: ...
 
 ## Decisión
-
 **Pendiente**
 
 ## Afecta a
-
 - {PREFIX}-XXX
 - {PREFIX}-YYY
 ```
@@ -260,7 +291,6 @@ grep -E "OQ-[0-9]+.*\*\*Alto\*\*|High|HIGH IMPACT" ./docs/planning/06_DESIGN.md 
 ## Phase 5: Load Templates
 
 // turbo
-
 ```bash
 cat ./.agent/skills/roles/backlog/issue.template.md
 cat ./.agent/skills/roles/backlog/epic.template.md
@@ -273,7 +303,6 @@ cat ./.agent/skills/roles/backlog/epic.template.md
 **Regla:** No preguntar, usar lógica automática.
 
 // turbo
-
 ```bash
 # Encontrar versión más reciente o crear v1.0
 VERSION=$(ls -d ./docs/backlog/v*/ 2>/dev/null | sort -V | tail -1 | xargs basename 2>/dev/null || echo "v1.0")
@@ -281,7 +310,6 @@ echo "Using version: $VERSION"
 ```
 
 **Lógica:**
-
 - Si existen `docs/backlog/v*/` → usar la **más reciente** (semver sort)
 - Si no existe ninguna → usar `v1.0`
 - `/backlog refresh` usa misma versión, preserva IDs
@@ -302,13 +330,12 @@ mkdir -p ./docs/backlog/{version}/issues
 
 **Agrupar User Stories por feature/componente:**
 
-| Epic      | User Stories   | Descripción   |
-| --------- | -------------- | ------------- |
+| Epic | User Stories | Descripción |
+|------|--------------|-------------|
 | EPIC-AUTH | US-001, US-002 | Autenticación |
-| EPIC-DASH | US-010, US-011 | Dashboard     |
+| EPIC-DASH | US-010, US-011 | Dashboard |
 
 **Para cada epic:**
-
 1. Copiar template: `epic.template.md`
 2. Reemplazar placeholders
 3. Listar issues que contendrá
@@ -322,21 +349,17 @@ mkdir -p ./docs/backlog/{version}/issues
 Para cada US-XXX crear issue con:
 
 **9.1 Nombre de archivo:**
-
 ```
 {PREFIX}-{NUM}-{slug}.md
 ```
-
 Ejemplo: `AUTH-001-login-form.md`
 
 **9.2 Título (CRÍTICO para parsing):**
-
 ```markdown
 # AUTH-001: Implementar Login Form
 ```
 
 **9.3 Metadata block (CRÍTICO para parsing):**
-
 ```markdown
 > **Issue ID:** AUTH-001
 > **Priority:** P1
@@ -346,7 +369,6 @@ Ejemplo: `AUTH-001-login-form.md`
 ```
 
 **9.4 Cross-references:**
-
 ```markdown
 **Implementa:** US-001
 **Pantalla:** SCR-001
@@ -359,15 +381,14 @@ Ejemplo: `AUTH-001-login-form.md`
 
 ## Phase 10: Assign Priorities
 
-| Priority | Criterio                                   |
-| -------- | ------------------------------------------ |
-| P0       | Bloquea otros issues, infraestructura base |
-| P1       | MVP crítico, primera iteración             |
-| P2       | Segunda iteración                          |
-| P3       | Nice-to-have                               |
+| Priority | Criterio |
+|----------|----------|
+| P0 | Bloquea otros issues, infraestructura base |
+| P1 | MVP crítico, primera iteración |
+| P2 | Segunda iteración |
+| P3 | Nice-to-have |
 
 **Orden de asignación:**
-
 1. Identificar dependencias entre issues
 2. Issues que bloquean otros → P0
 3. Issues en flujos críticos → P1
@@ -380,30 +401,28 @@ Ejemplo: `AUTH-001-login-form.md`
 > **MANDATORY STOP — USAR notify_user TOOL**
 >
 > El agente DEBE llamar a `notify_user` con:
->
 > - `BlockedOnUser: true`
 > - `Message`: Resumen del backlog planificado
 >
 > **NO EJECUTAR MÁS HERRAMIENTAS SIN RESPUESTA DEL USUARIO.**
 
 **Resumen para usuario:**
-
 - Milestone: {version}
 - Epics planificados: [N]
 - Issues planificados: [M]
 - ADRs pendientes: [lista si hay]
 
-| Epic     | Issues             | Effort |
-| -------- | ------------------ | ------ |
-| EPIC-XXX | AUTH-001, AUTH-002 | M+S    |
+| Epic | Issues | Effort |
+|------|--------|--------|
+| EPIC-XXX | AUTH-001, AUTH-002 | M+S |
 
 **Opciones:**
 
-| #   | Opción       | Acción                      |
-| --- | ------------ | --------------------------- |
-| 1   | **generar**  | Crear epics e issues        |
-| 2   | **revisar**  | Ver plan detallado de epics |
-| 3   | **cancelar** | Salir                       |
+| # | Opción | Acción |
+|---|--------|--------|
+| 1 | **generar** | Crear epics e issues |
+| 2 | **revisar** | Ver plan detallado de epics |
+| 3 | **cancelar** | Salir |
 
 **¿Qué quieres hacer?** (1-3)
 
@@ -414,7 +433,6 @@ Ejemplo: `AUTH-001-login-form.md`
 ## Phase 11: Validation
 
 // turbo
-
 ```bash
 ls -la ./docs/backlog/*/issues/*.md 2>/dev/null | head -20
 ```
@@ -422,41 +440,172 @@ ls -la ./docs/backlog/*/issues/*.md 2>/dev/null | head -20
 **Validación automática (update-board compatible):**
 
 // turbo
-
 ```bash
 # Verificar formato de título
-for f in ./docs/backlog/*/issues/*.md; do
+for f in ./docs/backlog/*/issues/*.md; do 
   grep -qE "^# [A-Z]+-[0-9]+:" "$f" && echo "✅ $f: título OK" || echo "❌ $f: título incorrecto"
 done 2>/dev/null || echo "No issues found"
 ```
 
 // turbo
-
 ```bash
 # Verificar metadata
-for f in ./docs/backlog/*/issues/*.md; do
+for f in ./docs/backlog/*/issues/*.md; do 
   grep -q ">\s*\*\*Status:\*\*" "$f" && echo "✅ $f: status OK" || echo "❌ $f: falta status"
 done 2>/dev/null || echo "No issues found"
 ```
 
 // turbo
-
 ```bash
 # Verificar Priority
-for f in ./docs/backlog/*/issues/*.md; do
+for f in ./docs/backlog/*/issues/*.md; do 
   grep -q ">\s*\*\*Priority:\*\*" "$f" && echo "✅ $f: priority OK" || echo "❌ $f: falta priority"
 done 2>/dev/null || echo "No issues found"
 ```
 
 **Checklist:**
 
-| Item        | Verificar                        |
-| ----------- | -------------------------------- |
-| Título      | Formato `# PREFIX-NUM: Título`   |
-| Metadata    | Status, Priority, Effort, Epic   |
-| Referencias | US-XXX, SCR-XXX, FLW-XXX         |
-| AC          | Checkboxes verificables          |
-| Ubicación   | `docs/backlog/{version}/issues/` |
+| Item | Verificar |
+|------|-----------|
+| Título | Formato `# PREFIX-NUM: Título` |
+| Metadata | Status, Priority, Effort, Epic |
+| Referencias | US-XXX, SCR-XXX, FLW-XXX |
+| AC | Checkboxes verificables |
+| Ubicación | `docs/backlog/{version}/issues/` |
+
+---
+
+## Phase 11.5: Análisis de Cobertura (Drift/Gap Detection)
+
+> 🔍 **OBLIGATORIO** — Comparar issues generados contra TODOS los docs anteriores (00-09).
+>
+> El agente DEBE analizar si los issues cubren TODO lo documentado.
+> Este análisis se presenta al usuario ANTES del handoff.
+
+### 11.5.1 Cargar TODOS los Docs Anteriores
+
+// turbo
+```bash
+echo "📄 Cargando todos los docs para validación..."
+# Discovery
+head -100 ./docs/planning/00_DISCOVERY_BRIEF.md 2>/dev/null || true
+# Docs 01-08
+for f in ./docs/planning/0[1-8]_*.md; do
+  echo "---"
+  echo "📁 $f"
+  head -50 "$f"
+done
+# Design
+echo "---"
+echo "📁 ./docs/planning/09_DESIGN.md"
+head -100 ./docs/planning/09_DESIGN.md
+```
+
+### 11.5.2 Ejecutar Análisis Completo
+
+**El agente debe comparar manualmente contra CADA documento:**
+
+| Doc | Qué verificar en Issues |
+|-----|------------------------|
+| 00_DISCOVERY_BRIEF | Objetivos principales → issues que los implementan |
+| 01_FEATURE_MAP | Cada feature MVP → al menos 1 issue |
+| 02_USER_PERSONAS | Cada persona → issues cubren su JTBD |
+| 03_USER_STORIES | Cada US-XXX → issue con `Implementa: US-XXX` |
+| 04_BUSINESS_RULES | BR críticas → issue que las implementa |
+| 05_DATA_MODEL | Cada E-XXX → issue de CRUD si aplica |
+| 06_ARCHITECTURE | ADRs → issue que implementa decisión |
+| 07_API_CONTRACTS | Cada Action → issue que la implementa |
+| 08_GLOSSARY | Términos → usados en títulos/descripciones |
+| 09_DESIGN | Cada SCR-XXX → issues que la cubren |
+| 09_DESIGN | Cada FLW-XXX → issues que lo implementan |
+| 09_DESIGN | Cada CMP-XXX → issue para crear componente |
+
+### 11.5.3 Generar Reporte de Cobertura
+
+**Formato OBLIGATORIO del análisis:**
+
+```markdown
+## 🔍 Análisis de Cobertura: Issues vs Todos los Docs
+
+### ✅ Cubierto por Documento
+
+#### 00_DISCOVERY_BRIEF
+| Objetivo | Cubierto | Issue(s) |
+|----------|----------|----------|
+| [Objetivo X] | ✅ | DASH-001, CORE-002 |
+
+#### 01_FEATURE_MAP
+| Feature | Cubierto | Issue(s) |
+|---------|----------|----------|
+| [Feature X] | ✅ | AUTH-001 |
+
+#### 03_USER_STORIES
+| Story | Cubierta | Issue(s) |
+|-------|----------|----------|
+| US-001 | ✅ | DASH-001 |
+
+#### 09_DESIGN
+| Pantalla | Cubierta | Issue(s) |
+|----------|----------|----------|
+| SCR-001 | ✅ | DASH-001, DASH-002 |
+
+### ❌ Gaps Detectados
+| # | Doc | Elemento | Falta Issue | Severidad |
+|---|-----|----------|-------------|-----------|
+| 1 | 03 | US-XXX | Sin issue | 🔴 Critical |
+| 2 | 09 | SCR-XXX | Sin cobertura | 🔴 Critical |
+
+### 🔄 Drift Detectado
+| # | Doc | Dice | Issue dice | Acción |
+|---|-----|------|------------|--------|
+| 1 | 09 | "Botón exportar" | No mencionado | Agregar AC |
+
+### 📊 Resumen
+- **Cobertura Discovery:** X%
+- **Cobertura Features:** Y%
+- **Cobertura Stories:** Z%
+- **Cobertura Design:** W%
+- **Gaps críticos:** N
+```
+- **Gaps críticos:** N
+- **Drift detectado:** M items
+```
+
+### 11.5.3 Evaluar Resultado
+
+**Si hay gaps 🔴 Critical (stories/pantallas sin issue):**
+- Listar qué stories/pantallas faltan
+- Sugerir crear issues adicionales
+- Preguntar si corregir antes de continuar
+
+---
+
+## 🛑 CHECKPOINT 2: Post-Generation Review
+
+> ⚠️ **MANDATORY STOP — ESPERAR APROBACIÓN**
+
+**Mostrar al usuario:**
+
+```markdown
+## ✅ Backlog Generado
+
+**Análisis de Cobertura:**
+- Stories cubiertas: [X/Y] ([Z%])
+- Pantallas cubiertas: [A/B] ([C%])
+- Gaps críticos: [N]
+
+**Opciones:**
+
+| # | Opción | Acción |
+|---|--------|--------|
+| 1 | **Corregir gaps** | Crear issues faltantes |
+| 2 | **Revisar backlog** | Ver epics/issues |
+| 3 | **Aprobar** | Continuar a /implement |
+
+**🛑 STOP AQUÍ — Esperar decisión del usuario**
+```
+
+**ACTION:** Call `notify_user` with `BlockedOnUser=true`.
 
 ---
 
@@ -471,7 +620,7 @@ pnpm update-board 2>/dev/null || echo "Ejecutar 'pnpm update-board' manualmente"
 
 ## Phase 13: Handoff
 
-````markdown
+```markdown
 ## ✅ Backlog Generado
 
 **Proyecto:** [nombre]
@@ -488,17 +637,14 @@ pnpm update-board 2>/dev/null || echo "Ejecutar 'pnpm update-board' manualmente"
 | P3 | [W] |
 
 **Artefactos:**
-
 - `docs/backlog/{version}/README.md`
 - `docs/backlog/{version}/epics/*.md`
 - `docs/backlog/{version}/issues/*.md`
 
 **Board:**
-
 ```bash
 pnpm update-board  # Generar BOARD.md
 ```
-````
 
 ---
 
@@ -507,13 +653,11 @@ pnpm update-board  # Generar BOARD.md
 **Flujo:** `/discovery` ✅ → `/docs` ✅ → `/design` ✅ → `/backlog` ✅ → **`/implement`** → `/audit`
 
 Ejecutar:
-
 ```
 /implement
 ```
 
 Este comando implementa issues del backlog.
-
 ```
 
 ---
@@ -533,7 +677,7 @@ Este comando implementa issues del backlog.
 | Condición | Severidad | Acción |
 |-----------|-----------|--------|
 | 02_USER_STORIES.md no existe | P0 | 🛑 STOP — `/docs` primero |
-| 06_DESIGN.md no existe | P0 | 🛑 STOP — `/design` primero |
+| 09_DESIGN.md no existe | P0 | 🛑 STOP — `/design` primero |
 | OQ High impact en 06 sin ADR | P1 | 🛑 STOP — Crear ADR issues primero |
 | Dependencias circulares | P1 | 🛑 STOP — Resolver antes de prioridades |
 
@@ -542,18 +686,14 @@ Este comando implementa issues del backlog.
 ## Flujo Completo
 
 ```
-
 /start → /discovery → /docs → /design → /backlog → /implement → /audit
-↑
-YOU ARE HERE
-
+                                            ↑
+                                        YOU ARE HERE
 ```
 
 **SSOT Chain:**
 ```
-
-Discovery Brief → docs (01-05) → design (06) → backlog → code
-
+Discovery Brief → docs (01-08) → design (09) → backlog → code
 ```
 
 ---
@@ -579,4 +719,3 @@ Discovery Brief → docs (01-05) → design (06) → backlog → code
 ---
 
 _TimeKast Factory — Backlog Workflow_
-```

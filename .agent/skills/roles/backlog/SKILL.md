@@ -2,7 +2,7 @@
 name: backlog-expert
 description: Generates issues from Discovery Brief, Docs, and Design
 triggers:
-  - After /design completed (06_DESIGN.md exists)
+  - After /design completed (09_DESIGN.md exists)
   - When issues need to be created from specs
   - When backlog needs to be updated
 modes:
@@ -70,7 +70,7 @@ modes:
 | Business Rules | `docs/planning/03_BUSINESS_RULES.md` | ⚪ Para AC |
 | Data Model | `docs/planning/04_DATA_MODEL.md` | ⚪ Para contexto técnico |
 | Architecture | `docs/planning/05_ARCHITECTURE.md` | ⚪ Para decisiones |
-| Design | `docs/planning/06_DESIGN.md` | ✅ Para pantallas/flujos |
+| Design | `docs/planning/09_DESIGN.md` | ✅ Para pantallas/flujos |
 
 ---
 
@@ -81,7 +81,7 @@ modes:
 | Condición | Acción |
 |-----------|--------|
 | 02_USER_STORIES.md no existe | Ejecutar `/docs` primero |
-| 06_DESIGN.md no existe | Ejecutar `/design` primero |
+| 09_DESIGN.md no existe | Ejecutar `/design` primero |
 
 **⚠️ NO BLOQUEAR por OQ High impact:**
 - Si Design tiene OQ High impact → **NO detener todo**
@@ -118,7 +118,7 @@ docs/backlog/{version}/
 
 **SSOT Chain:**
 ```
-Discovery Brief → docs (01-05) → design (06) → backlog → code
+Discovery Brief → docs (01-08) → design (09) → backlog → code
 ```
 
 ---
@@ -395,7 +395,7 @@ pnpm update-board  # Generar BOARD.md
 
 **SSOT Chain:**
 ```
-Discovery Brief → docs (01-05) → design (06) → backlog → code
+Discovery Brief → docs (01-08) → design (09) → backlog → code
 ```
 
 ---
@@ -404,7 +404,7 @@ Discovery Brief → docs (01-05) → design (06) → backlog → code
 
 | Con | Cuándo | Acción |
 |-----|--------|--------|
-| **design** | Input para backlog | Recibir handoff de 06_DESIGN |
+| **design** | Input para backlog | Recibir handoff de 09_DESIGN |
 | **implement** | Issues listos | Handoff a `/implement` |
 | **architect** | Decisión pendiente | Crear ADR-XXX issue |
 

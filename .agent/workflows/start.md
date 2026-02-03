@@ -14,13 +14,11 @@ description: Initialize session - load project context and show status
 ## Phase 1: Core Context Loading
 
 // turbo
-
 ```bash
 cat ./.agent/rules/AI_RULES.md
 ```
 
 // turbo
-
 ```bash
 cat ./.agent/rules/SSOT_HIERARCHY.md
 ```
@@ -30,13 +28,11 @@ cat ./.agent/rules/SSOT_HIERARCHY.md
 ## Phase 2: Project Config & Inventory
 
 // turbo
-
 ```bash
 cat ./.agent/project-config.md 2>/dev/null || echo "No project-config.md"
 ```
 
 // turbo
-
 ```bash
 cat ./docs/reference/INVENTORY.md 2>/dev/null || echo "No INVENTORY.md - run 'pnpm generate:inventory' to create"
 ```
@@ -48,7 +44,6 @@ cat ./docs/reference/INVENTORY.md 2>/dev/null || echo "No INVENTORY.md - run 'pn
 > **Prioridad:** BOARD.md (auto-generado, confiable) > README (manual, puede estar desactualizado)
 
 // turbo
-
 ```bash
 # 1. BOARD.md es la fuente más confiable (auto-actualizado en commits)
 if [ -f "./docs/backlog/BOARD.md" ]; then
@@ -60,7 +55,6 @@ fi
 ```
 
 // turbo
-
 ```bash
 # 2. README del backlog para contexto adicional (puede estar desactualizado)
 VERSION=$(ls -d ./docs/backlog/v*/ 2>/dev/null | sort -V | tail -1 | xargs basename 2>/dev/null || echo "none")
@@ -84,7 +78,6 @@ fi
 ## Phase 4: Project Status Check
 
 // turbo
-
 ```bash
 # Git status
 git branch --show-current 2>/dev/null || true
@@ -98,27 +91,25 @@ git status --short 2>/dev/null || true
 List available skills for on-demand loading:
 
 ### Role Skills
-
-| Skill            | Invocation           | Use Case                                  |
-| ---------------- | -------------------- | ----------------------------------------- |
-| Discovery Expert | `/discovery`         | Product discovery, requirements gathering |
-| Proposal Expert  | `/proposal`          | Client-facing scope document              |
-| Docs Expert      | `/docs`              | Generate planning docs (01-06)            |
-| Design Expert    | `/design`            | Generate 06_DESIGN.md                     |
-| Backlog Expert   | `/backlog`           | Create issues from design                 |
-| Implement Expert | `/implement`         | Execute issues through pipeline           |
-| Architect        | `/consult-architect` | Technical decisions, ADRs                 |
-| Quality Engineer | `/consult-qe`        | Quality review, audits                    |
+| Skill | Invocation | Use Case |
+|-------|------------|----------|
+| Discovery Expert | `/discovery` | Product discovery, requirements gathering |
+| Proposal Expert | `/proposal` | Client-facing scope document |
+| Docs Expert | `/docs` | Generate planning docs (01-06) |
+| Design Expert | `/design` | Generate 09_DESIGN.md |
+| Backlog Expert | `/backlog` | Create issues from design |
+| Implement Expert | `/implement` | Execute issues through pipeline |
+| Architect | `/consult-architect` | Technical decisions, ADRs |
+| Quality Engineer | `/consult-qe` | Quality review, audits |
 
 ### Domain Skills (load on demand)
-
-| Skill       | When to Load                  |
-| ----------- | ----------------------------- |
-| `api/`      | API routes, server actions    |
-| `db/`       | Database, Drizzle, migrations |
-| `security/` | Auth, RBAC, security review   |
-| `testing/`  | Tests, coverage, fixtures     |
-| `ui/`       | Components, design system     |
+| Skill | When to Load |
+|-------|--------------|
+| `api/` | API routes, server actions |
+| `db/` | Database, Drizzle, migrations |
+| `security/` | Auth, RBAC, security review |
+| `testing/` | Tests, coverage, fixtures |
+| `ui/` | Components, design system |
 
 ---
 
@@ -145,14 +136,14 @@ List available skills for on-demand loading:
 
 ### ¿Dónde estás?
 
-| Si tienes...         | Siguiente paso           | Workflow              |
-| -------------------- | ------------------------ | --------------------- |
-| Nada / idea inicial  | Entender el problema     | `/discovery`          |
-| Discovery Brief      | Propuesta para cliente   | `/proposal`           |
-| Propuesta aprobada   | Documentación técnica    | `/docs`               |
-| Docs 01-05 completos | Especificación UI/UX     | `/design`             |
-| Design 06 completo   | Crear issues del backlog | `/backlog`            |
-| Issues en backlog    | Implementar código       | `/implement ISSUE-ID` |
+| Si tienes... | Siguiente paso | Workflow |
+|--------------|----------------|----------|
+| Nada / idea inicial | Entender el problema | `/discovery` |
+| Discovery Brief | Propuesta para cliente | `/proposal` |
+| Propuesta aprobada | Documentación técnica | `/docs` |
+| Docs 01-08 completos | Especificación UI/UX | `/design` |
+| Design 06 completo | Crear issues del backlog | `/backlog` |
+| Issues en backlog | Implementar código | `/implement ISSUE-ID` |
 
 ---
 
@@ -160,24 +151,24 @@ List available skills for on-demand loading:
 
 ### Bootstrap Pipeline
 
-| Workflow     | Purpose                        | Prerequisito      | Output                       |
-| ------------ | ------------------------------ | ----------------- | ---------------------------- |
-| `/discovery` | Entender problema y requisitos | Input del usuario | `00_DISCOVERY_BRIEF.md`      |
-| `/proposal`  | Propuesta para cliente         | Discovery Brief   | `docs/proposal/PROPOSAL.md`  |
-| `/docs`      | Documentación técnica (01-05)  | Proposal aprobada | `docs/planning/01-05_*.md`   |
-| `/design`    | Especificación UI/UX           | Docs 01-05        | `docs/planning/06_DESIGN.md` |
-| `/backlog`   | Crear issues del diseño        | Design 06         | Issues en `docs/backlog/`    |
-| `/implement` | Implementar issue              | Issue ID          | Código + tests               |
+| Workflow | Purpose | Prerequisito | Output |
+|----------|---------|--------------|--------|
+| `/discovery` | Entender problema y requisitos | Input del usuario | `00_DISCOVERY_BRIEF.md` |
+| `/proposal` | Propuesta para cliente | Discovery Brief | `docs/proposal/PROPOSAL.md` |
+| `/docs` | Documentación técnica (01-08) | Proposal aprobada | `docs/planning/01-08_*.md` |
+| `/design` | Especificación UI/UX | Docs 01-08 | `docs/planning/09_DESIGN.md` |
+| `/backlog` | Crear issues del diseño | Design 06 | Issues en `docs/backlog/` |
+| `/implement` | Implementar issue | Issue ID | Código + tests |
 
 ### Utilities
 
-| Workflow             | Purpose               | Cuándo usar                      |
-| -------------------- | --------------------- | -------------------------------- |
-| `/start`             | Inicializar sesión    | Al comenzar cada sesión          |
-| `/park`              | Guardar ideas         | Cuando surge algo fuera de scope |
-| `/audit`             | Quality audit (R0-R3) | Pre-release o post-epic          |
-| `/consult-architect` | Decisiones técnicas   | Schema, patterns, trade-offs     |
-| `/consult-qe`        | Quality review        | Security, performance            |
+| Workflow | Purpose | Cuándo usar |
+|----------|---------|-------------|
+| `/start` | Inicializar sesión | Al comenzar cada sesión |
+| `/park` | Guardar ideas | Cuando surge algo fuera de scope |
+| `/audit` | Quality audit (R0-R3) | Pre-release o post-epic |
+| `/consult-architect` | Decisiones técnicas | Schema, patterns, trade-offs |
+| `/consult-qe` | Quality review | Security, performance |
 
 ---
 
@@ -189,39 +180,33 @@ Present to user:
 ## 🚀 Session Initialized
 
 ### 📋 Loaded Context
-
 - [x] AI_RULES.md
 - [x] SSOT_HIERARCHY.md
 - [x] project-config.md (or note if missing)
 - [x] INVENTORY.md (or note if missing)
 
 ### 📊 Project Status
-
 - **Project:** [name from project-config]
 - **Branch:** [current branch]
 - **Uncommitted changes:** [yes/no]
 
 ### 📋 Backlog Status
-
 - **Version:** [v1.0 or latest]
 - **Open issues:** [count] (📋 Backlog)
 - **In progress:** [count] (🚧 In Progress)
 - **Blocked:** [count] (🚫 Blocked)
 
 ### 🛠️ Available Actions
-
-| Action             | Command               |
-| ------------------ | --------------------- |
-| Implement feature  | `/implement AUTH-001` |
-| Create issues      | `/backlog`            |
-| Technical decision | `/consult-architect`  |
-| Quality review     | `/audit`              |
-| Park idea          | `/park "idea"`        |
+| Action | Command |
+|--------|---------|
+| Implement feature | `/implement AUTH-001` |
+| Create issues | `/backlog` |
+| Technical decision | `/consult-architect` |
+| Quality review | `/audit` |
+| Park idea | `/park "idea"` |
 
 ### 💡 Suggested Next
-
 Based on project status:
-
 - If issues in progress → Continue with `/implement {ISSUE-ID}`
 - If clean state → "Ready for `/implement` or `/audit`"
 - If uncommitted changes → "Review changes before proceeding"
@@ -231,29 +216,29 @@ Based on project status:
 
 **📍 Bootstrap (proyectos nuevos):**
 
-| #   | Paso                  | Workflow              | Descripción                |
-| --- | --------------------- | --------------------- | -------------------------- |
-| 1   | Entender problema     | `/discovery`          | Genera Discovery Brief     |
-| 2   | Crear propuesta       | `/proposal`           | Documento para cliente     |
-| 3   | Documentación técnica | `/docs`               | 01-05 planning docs        |
-| 4   | Diseño UI/UX          | `/design`             | 06_DESIGN.md               |
-| 5   | Crear issues          | `/backlog`            | Convierte diseño en issues |
-| 6   | Implementar           | `/implement ISSUE-ID` | Código + tests             |
+| # | Paso | Workflow | Descripción |
+|---|------|----------|-------------|
+| 1 | Entender problema | `/discovery` | Genera Discovery Brief |
+| 2 | Crear propuesta | `/proposal` | Documento para cliente |
+| 3 | Documentación técnica | `/docs` | 01-08 planning docs |
+| 4 | Diseño UI/UX | `/design` | 09_DESIGN.md |
+| 5 | Crear issues | `/backlog` | Convierte diseño en issues |
+| 6 | Implementar | `/implement ISSUE-ID` | Código + tests |
 
 **🔧 Desarrollo (proyectos existentes):**
 
-| #   | Acción              | Workflow              | Cuándo                    |
-| --- | ------------------- | --------------------- | ------------------------- |
-| 7   | Implementar feature | `/implement AUTH-001` | Tienes issue en backlog   |
-| 8   | Guardar idea        | `/park "idea"`        | Surge algo fuera de scope |
-| 9   | Auditoría           | `/audit`              | Pre-release o post-epic   |
+| # | Acción | Workflow | Cuándo |
+|---|--------|----------|--------|
+| 7 | Implementar feature | `/implement AUTH-001` | Tienes issue en backlog |
+| 8 | Guardar idea | `/park "idea"` | Surge algo fuera de scope |
+| 9 | Auditoría | `/audit` | Pre-release o post-epic |
 
 **🏛️ Consultar expertos:**
 
-| #   | Experto          | Workflow             | Cuándo                         |
-| --- | ---------------- | -------------------- | ------------------------------ |
-| 10  | Arquitecto       | `/consult-architect` | Decisiones de schema, patterns |
-| 11  | Quality Engineer | `/consult-qe`        | Revisión de calidad, security  |
+| # | Experto | Workflow | Cuándo |
+|---|---------|----------|--------|
+| 10 | Arquitecto | `/consult-architect` | Decisiones de schema, patterns |
+| 11 | Quality Engineer | `/consult-qe` | Revisión de calidad, security |
 
 ---
 
@@ -271,12 +256,24 @@ cat ./docs/planning/DESIGN.md 2>/dev/null || true
 
 ---
 
-## Notes
+## Gates/Escalation
 
-- **Always load AI_RULES.md** — Critical rules for agent behavior
-- **Check INVENTORY.md** — Prevents duplicate component creation
-- **Check project-config** — Project metadata and stack info
-- **Skills are on-demand** — Don't load all skills at once (too much context)
+| Trigger | Acción | Cuándo |
+|---------|--------|--------|
+| project-config.md no existe | Crear básico o preguntar | Proyecto nuevo |
+| INVENTORY.md desactualizado | `pnpm generate:inventory` | Componentes nuevos |
+| Backlog vacío | Sugerir `/backlog` o `/discovery` | Proyecto nuevo |
+| Branch diverge de main | Advertir, sugerir merge/rebase | Conflictos potenciales |
+
+---
+
+## Stop Conditions
+
+| Condición | Severidad | Acción |
+|-----------|-----------|--------|
+| AI_RULES.md no existe | P0 | 🛑 STOP — No continuar sin reglas |
+| Proyecto no es TimeKast SK | P1 | Advertir, ofrecer setup |
+| Git no inicializado | P2 | Sugerir `git init` |
 
 ---
 

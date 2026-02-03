@@ -27,12 +27,12 @@ triggers:
 
 | Mode | Comando | Comportamiento |
 |------|---------|----------------|
-| **generate** | `/design` | Genera 06_DESIGN.md desde cero |
+| **generate** | `/design` | Genera 09_DESIGN.md desde cero |
 | **validate** | `/design validate` | Solo verifica prerrequisitos y estructura |
 | **refresh** | `/design refresh` | Regenera desde docs actualizados, preservando IDs |
 
 **Regla de refresh:**
-- Si `docs/planning/06_DESIGN.md` ya existe → preservar IDs `SCR/FLW/CMP/DD`
+- Si `docs/planning/09_DESIGN.md` ya existe → preservar IDs `SCR/FLW/CMP/DD`
 - Solo agregar/modificar contenido, no reordenar IDs
 - Nuevos items reciben siguiente ID disponible
 - IDs eliminados NO se reutilizan
@@ -103,17 +103,17 @@ triggers:
 
 **Archivo a generar:**
 ```
-docs/planning/06_DESIGN.md
+docs/planning/09_DESIGN.md
 ```
 
 **Template:**
 ```
-.gemini/skills/roles/design/06_DESIGN.template.md
+.gemini/skills/roles/design/09_DESIGN.template.md
 ```
 
 **SSOT:**
 ```
-Discovery Brief → docs (01-05) → 06_DESIGN → code (cuando exista)
+Discovery Brief → docs (01-08) → 09_DESIGN → code (cuando exista)
 ```
 
 ---
@@ -238,7 +238,7 @@ graph TD
 
 ---
 
-## 9. Estructura Mínima del 06_DESIGN.md
+## 9. Estructura Mínima del 09_DESIGN.md
 
 ```markdown
 # Design Specification — {{PROJECT_NAME}}
@@ -360,7 +360,7 @@ Al completar:
 **Componentes nuevos:** CMP-001 → CMP-XXX ([K] total)
 
 **Artefacto:**
-- `docs/planning/06_DESIGN.md`
+- `docs/planning/09_DESIGN.md`
 
 **Open Questions:** [X pendientes]
 **Assumptions:** [Y declarados]
@@ -380,7 +380,7 @@ Al completar:
 
 **SSOT Chain:**
 ```
-Discovery Brief → docs (01-05) → 06_DESIGN → backlog → code
+Discovery Brief → docs (01-08) → 09_DESIGN → backlog → code
 ```
 
 ---
@@ -389,7 +389,7 @@ Discovery Brief → docs (01-05) → 06_DESIGN → backlog → code
 
 | Con | Cuándo | Acción |
 |-----|--------|--------|
-| **docs** | Input para design | Recibir handoff de 01-05 |
+| **docs** | Input para design | Recibir handoff de 01-08 |
 | **backlog** | Design completo | Handoff a `/backlog` |
 | **ui** | Componentes y patterns | Consultar `domains/ui/SKILL.md` |
 | **architect** | UI architecture decisions | Escalar `/consult-architect` |

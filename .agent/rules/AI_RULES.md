@@ -135,7 +135,7 @@ const calculatedScore = calculatePickScore();
 
 | Tipo          | Convención         | Ejemplo                            |
 | ------------- | ------------------ | ---------------------------------- |
-| Planning Docs | 0X_SCREAMING_SNAKE | `04_DATA_MODEL.md`, `06_DESIGN.md` |
+| Planning Docs | 0X_SCREAMING_SNAKE | `04_DATA_MODEL.md`, `09_DESIGN.md` |
 | Issues        | PREFIX-NUM         | `AUTH-001.md`, `DASH-003.md`       |
 | Epics         | EPIC-NAME          | `EPIC-AUTH.md`                     |
 | ADRs          | ADR-NUM            | `ADR-001-cache-strategy.md`        |
@@ -274,7 +274,7 @@ describe('calculateScore', () => {
 ### SSOT Chain
 
 ```
-Discovery Brief → docs (01-05) → design (06) → backlog → code
+Discovery Brief → docs (01-08) → design (09) → backlog → code
 ```
 
 ### Workflows Disponibles
@@ -283,8 +283,8 @@ Discovery Brief → docs (01-05) → design (06) → backlog → code
 | -------------------- | --------------------------------------------------- |
 | `/start`             | Cargar contexto inicial                             |
 | `/discovery`         | Entender proyecto, generar Discovery Brief          |
-| `/docs`              | Generar docs 01-05 desde Discovery Brief            |
-| `/design`            | Generar 06_DESIGN desde docs                        |
+| `/docs`              | Generar docs 01-08 desde Discovery Brief            |
+| `/design`            | Generar 09_DESIGN desde docs                        |
 | `/backlog`           | Crear issues desde design                           |
 | `/implement`         | Ejecutar UN issue del backlog                       |
 | `/park`              | Guardar ideas sin interrumpir flujo                 |

@@ -40,6 +40,20 @@ ls docs/planning/00_DISCOVERY_BRIEFING.md 2>/dev/null && echo "✅ Brief existe"
 > 💡 Usa `/discovery nuevo` para saltar esta pregunta.
 ```
 
+### 0.1 🛑 STOP — Esperar Selección de Modo
+
+> ⚠️ **MANDATORY STOP**: Usa `notify_user` con `BlockedOnUser: true` 
+> para mostrar las opciones y ESPERAR la respuesta del usuario.
+> 
+> **NO continúes a Phase 1 sin respuesta explícita.**
+
+❌ **PROHIBIDO:**
+- Continuar si no hay respuesta del usuario
+- Inventar respuestas ("user selects option 1")
+- Asumir modo por defecto
+
+**Si el usuario ya especificó modo** (ej: `/discovery nuevo`), saltar este stop.
+
 ---
 
 ## Phase 1: Context Loading

@@ -56,7 +56,7 @@
 
 ## 📚 Referencias
 
-- Design: [06_DESIGN.md](../../planning/06_DESIGN.md)
+- Design: [09_DESIGN.md](../../planning/09_DESIGN.md)
 - Stories: [02_USER_STORIES.md](../../planning/02_USER_STORIES.md)
 - Rules: [03_BUSINESS_RULES.md](../../planning/03_BUSINESS_RULES.md)
 
