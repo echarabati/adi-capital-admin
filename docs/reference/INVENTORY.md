@@ -70,8 +70,8 @@
 | `pnpm db:migrate` | `drizzle-kit migrate` |
 | `pnpm db:push` | `drizzle-kit push` |
 | `pnpm db:studio` | `drizzle-kit studio` |
-| `pnpm db:seed` | `tsx lib/db/seed.ts` |
-| `pnpm db:seed:admin` | `tsx lib/db/seeds/admin.ts` |
+| `pnpm db:seed` | `tsx --require dotenv/config lib/db/seed.ts dote...` |
+| `pnpm db:seed:admin` | `tsx --require dotenv/config lib/db/seeds/admin....` |
 | `pnpm prepare` | `husky` |
 | `pnpm pwa:check` | `echo 'Starting Lighthouse PWA audit...' && npx ...` |
 | `pnpm setup:e2e` | `tsx scripts/tools/setup-e2e.ts` |

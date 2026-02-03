@@ -41,6 +41,20 @@ const nextConfig: NextConfig = {
   // next-pwa uses webpack but works fine with Turbopack for dev
   turbopack: {},
 
+  // Allow external images from OAuth providers (Google, GitHub, etc.)
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com', // Google profile pictures
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com', // GitHub profile pictures
+      },
+    ],
+  },
+
   // Security headers for all routes
   async headers() {
     return [

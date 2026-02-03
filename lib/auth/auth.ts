@@ -186,6 +186,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               clientSecret,
               // Allow linking OAuth to existing email accounts
               allowDangerousEmailAccountLinking: true,
+              // Request explicit scopes including profile picture
+              // Note: Google Workspace orgs may restrict profile picture sharing
+              authorization: {
+                params: {
+                  scope: 'openid email profile',
+                },
+              },
               profile(profile) {
                 return {
                   id: profile.sub,
@@ -299,6 +306,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = user.role || getDefaultRole();
+        token.picture = user.image; // Preserve OAuth profile picture
       }
 
       // Handle session updates
@@ -316,6 +324,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
+        session.user.image = token.picture as string | undefined;
       }
       return session;
     },
@@ -344,14 +353,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
 
         if (existingUser) {
+          // Build update object for missing fields
+          const updates: { name?: string; image?: string } = {};
+
           // Sync Name if missing
-          // If user has no name in DB, but we got one from OAuth, update it
           if (!existingUser.name && profile?.name) {
-            await db
-              .update(users)
-              .set({ name: profile.name as string })
-              .where(eq(users.id, existingUser.id));
-            logger.info(`[Auth] Synced name for user ${user.email} from ${account?.provider}`);
+            updates.name = profile.name as string;
+          }
+
+          // Sync Image if missing
+          // Get image from OAuth profile (Google: picture, GitHub: avatar_url)
+          // Note: Google Workspace orgs may restrict profile photos from being shared
+          const profileImage =
+            (profile as { picture?: string })?.picture ||
+            (profile as { avatar_url?: string })?.avatar_url;
+
+          if (!existingUser.image && profileImage) {
+            updates.image = profileImage;
+          }
+
+          // Apply updates if any
+          if (Object.keys(updates).length > 0) {
+            await db.update(users).set(updates).where(eq(users.id, existingUser.id));
+            logger.info(
+              `[Auth] Synced ${Object.keys(updates).join(', ')} for user ${user.email} from ${account?.provider}`
+            );
           }
         }
       }

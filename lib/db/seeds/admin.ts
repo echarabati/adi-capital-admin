@@ -31,6 +31,9 @@
  * @see SEED-001
  */
 
+// Load environment variables from .env.local (required for tsx standalone execution)
+import 'dotenv/config';
+
 import { randomUUID } from 'crypto';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';

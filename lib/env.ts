@@ -78,7 +78,21 @@ const envSchema = z.object({
   // Email Provider (Required for magic link)
   // ─────────────────────────────────────────────────────────────
   EMAIL_PROVIDER: z.enum(['resend', 'smtp', 'none']).optional().default('none'),
-  EMAIL_FROM: z.string().email().optional(),
+  // Accept both plain email and RFC 5322 format: "Name <email@domain.com>"
+  EMAIL_FROM: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        // Plain email: user@domain.com
+        const plainEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // RFC 5322 format: "Display Name <email@domain.com>" or Display Name <email@domain.com>
+        const rfc5322 = /^.+\s*<[^\s@]+@[^\s@]+\.[^\s@]+>$/;
+        return plainEmail.test(val) || rfc5322.test(val);
+      },
+      { message: 'Must be a valid email or "Name <email@domain.com>" format' }
+    ),
   RESEND_API_KEY: z.string().optional(),
   EMAIL_SERVER_HOST: z.string().optional(),
   EMAIL_SERVER_PORT: z.coerce.number().optional().default(587),

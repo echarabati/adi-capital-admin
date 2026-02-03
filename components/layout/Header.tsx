@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils/cn';
 import { MobileMenuDropdown } from './MobileMenu';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { usePwaInstall } from '@/lib/pwa/usePwaInstall';
+import { Avatar } from '@/components/ui/Avatar';
 
 interface HeaderProps {
   user?: {
@@ -39,16 +40,6 @@ export function Header({ user }: HeaderProps) {
 
   const currentTheme = (theme as Theme) || 'midnight';
   const CurrentIcon = themes.find((t) => t.value === currentTheme)?.icon || Moon;
-
-  // Get user initials
-  const userInitials = user?.name
-    ? user.name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2)
-    : user?.email?.[0]?.toUpperCase() || 'U';
 
   return (
     <header
@@ -129,9 +120,7 @@ export function Header({ user }: HeaderProps) {
         {mounted ? (
           <Menu as="div" className="relative">
             <Menu.Button className="hover:bg-secondary/50 flex items-center gap-2 rounded-full p-1 transition-colors">
-              <span className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium">
-                {userInitials}
-              </span>
+              <Avatar src={user?.image} name={user?.name || user?.email || 'Usuario'} size="sm" />
               {/* User name - hidden on mobile */}
               <span className="text-foreground hidden text-sm font-medium lg:block">
                 {user?.name || 'Usuario'}
@@ -209,9 +198,7 @@ export function Header({ user }: HeaderProps) {
           </Menu>
         ) : (
           <div className="flex items-center gap-2 rounded-full p-1">
-            <span className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium">
-              {userInitials}
-            </span>
+            <Avatar src={user?.image} name={user?.name || user?.email || 'Usuario'} size="sm" />
             <span className="text-foreground hidden text-sm font-medium lg:block">
               {user?.name || 'Usuario'}
             </span>

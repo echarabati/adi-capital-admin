@@ -1,3 +1,8 @@
+// ⚠️ CRITICAL: Load env vars FIRST, before any other imports
+// This must be at the very top so DATABASE_URL is available when drizzle.ts loads
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+
 /**
  * Database Seed Orchestrator
  *
