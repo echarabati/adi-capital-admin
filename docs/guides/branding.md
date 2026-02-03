@@ -10,23 +10,38 @@ Esta guía documenta la estrategia de branding, manejo de assets (logos, iconos)
 
 TimeKast usa una estrategia dual para permitir marca blanca (whitelabeling) sencilla o fallback robusto a la marca TimeKast.
 
-### A. Cliente (Prioridad Alta)
+### A. Logo del Cliente
 
-Si deseas personalizar el logo para un cliente:
+Para personalizar el logo de cliente, se requieren **DOS variantes** (light y dark):
 
-1. Define la variable de entorno:
+```env
+# Logo para temas claros (fondo blanco/claro)
+NEXT_PUBLIC_CLIENT_LOGO_LIGHT="/assets/mi-cliente/logo-dark.png"
 
-   ```env
-   NEXT_PUBLIC_CLIENT_LOGO_URL="/assets/mi-cliente/logo.png"
-   ```
+# Logo para temas oscuros (fondo oscuro/negro)
+NEXT_PUBLIC_CLIENT_LOGO_DARK="/assets/mi-cliente/logo-light.png"
+```
 
-   _O URL externa: `https://cdn.cliente.com/logo.png`_
+> **Nota:** Si NO hay logo configurado, se muestra el nombre de la app como texto.
 
-2. El componente `<Logo />` usará automáticamente esta URL.
+#### Especificaciones del Logo
+
+| Propiedad       | Requisito                                               |
+| --------------- | ------------------------------------------------------- |
+| **Formato**     | PNG con fondo transparente                              |
+| **Dimensiones** | ~400-600px ancho (ratio 4:1 aprox)                      |
+| **Variantes**   | Light (para fondos claros) + Dark (para fondos oscuros) |
+| **Ubicación**   | `public/assets/[cliente]/`                              |
+
+> **Nota:** El sistema ajusta automáticamente el tamaño según el contexto:
+>
+> - Sidebar: max ~160px ancho
+> - Login: max ~280px ancho
+> - Emails: tamaño original
 
 ### B. TimeKast (Fallback Default)
 
-Si no hay logo de cliente configurado, el sistema usa los assets internos de TimeKast basándose en el tema (azul para light, silver para dark).
+Si no hay logo de cliente configurado, el sistema usa el nombre de la app como texto. El branding de TimeKast siempre aparece en el footer del sidebar.
 
 **Ubicación:** `public/assets/timekast/`
 

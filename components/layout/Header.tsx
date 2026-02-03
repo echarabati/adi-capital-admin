@@ -1,18 +1,17 @@
 'use client';
 
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 import { Menu, Transition } from '@headlessui/react';
 import { Sun, Moon, Monitor, UserCircle, LogOut, Download } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { branding } from '@/config/branding';
 import { cn } from '@/lib/utils/cn';
 import { MobileMenuDropdown } from './MobileMenu';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { usePwaInstall } from '@/lib/pwa/usePwaInstall';
 import { Avatar } from '@/components/ui/Avatar';
+import { useMounted } from '@/lib/hooks/useMounted';
 
 interface HeaderProps {
   user?: {
@@ -32,46 +31,26 @@ const themes: { value: Theme; label: string; icon: typeof Sun }[] = [
 
 export function Header({ user }: HeaderProps) {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   const { canInstall, isInstalled, promptInstall } = usePwaInstall();
-
-  // eslint-disable-next-line -- intentional SSR pattern
-  useEffect(() => void setMounted(true), []);
 
   const currentTheme = (theme as Theme) || 'midnight';
   const CurrentIcon = themes.find((t) => t.value === currentTheme)?.icon || Moon;
 
   return (
     <header
-      className="bg-card fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b px-4 lg:px-6"
+      className="bg-card fixed top-0 right-0 left-0 z-30 flex h-16 items-center justify-between border-b px-4 lg:left-60 lg:px-6"
       style={{
         borderColor: 'var(--header-border)',
         backgroundColor: 'var(--header-bg)',
       }}
     >
-      {/* Left: Sidebar area (app name) - matches sidebar width */}
-      <div className="flex items-center gap-3 lg:w-60 lg:shrink-0">
-        {/* Mobile menu dropdown */}
+      {/* Left: Mobile menu (hidden on desktop since sidebar is visible) */}
+      <div className="flex items-center gap-3 lg:hidden">
         <MobileMenuDropdown />
-
-        {/* App name or logo */}
-        <Link href="/dashboard" className="flex items-center gap-2">
-          {branding.clientLogoPath ? (
-            <Image
-              src={branding.clientLogoPath}
-              alt={branding.appName}
-              width={120}
-              height={32}
-              className="h-8 w-auto"
-              priority
-            />
-          ) : (
-            <span className="text-foreground text-lg font-bold">{branding.appName}</span>
-          )}
-        </Link>
       </div>
 
-      {/* Center: Breadcrumb (starts after sidebar, hidden on mobile) */}
+      {/* Center: Breadcrumb (hidden on mobile) */}
       <div className="hidden flex-1 lg:block">
         <Breadcrumb />
       </div>

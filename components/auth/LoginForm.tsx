@@ -43,7 +43,10 @@ export function LoginForm({ callbackUrl = '/', error, defaultEmail = '' }: Login
   }, []);
 
   // Get theme-aware logo (use light for SSR to prevent flash)
-  const logoSrc = branding.getTimeKastLogo('icon', mounted ? resolvedTheme : 'light');
+  const currentTheme = mounted ? resolvedTheme : 'light';
+  const clientLogo = branding.getClientLogo(currentTheme);
+  const timeKastLogo = branding.getTimeKastLogo('icon', currentTheme);
+  const logoSrc = clientLogo || timeKastLogo;
 
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,18 +116,18 @@ export function LoginForm({ callbackUrl = '/', error, defaultEmail = '' }: Login
     <div className="bg-card w-full max-w-md rounded-2xl p-8 shadow-lg">
       {/* Logo & Header */}
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center">
+        <div className="relative mx-auto mb-4 h-20 w-full max-w-[280px]">
           <Image
             src={logoSrc}
             alt="Logo"
-            width={96}
-            height={96}
+            fill
             className="object-contain"
             priority
+            sizes="(max-width: 768px) 100vw, 280px"
           />
         </div>
         <h1 className="text-card-foreground text-2xl font-bold">
-          {branding.clientLogoPath ? '' : branding.appName}
+          {clientLogo ? '' : branding.appName}
         </h1>
         {branding.appTagline && (
           <p className="text-muted-foreground mt-1 text-sm">{branding.appTagline}</p>

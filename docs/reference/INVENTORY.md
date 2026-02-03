@@ -254,6 +254,7 @@
 
 | Name | Import |
 |------|--------|
+| useMounted | `@/lib/hooks/useMounted` |
 | usePermissions | `@/lib/hooks/usePermissions` |
 | useServerTableState | `@/lib/hooks/useServerTableState` |
 | useTableState | `@/lib/hooks/useTableState` |
@@ -334,8 +335,8 @@
 | Dependencies | 32 |
 | Page Routes | 13 |
 | API Routes | 8 |
-| Components & Utils | 105 |
-| **Total items** | **158** |
+| Components & Utils | 106 |
+| **Total items** | **159** |
 
 ---
 

@@ -19,15 +19,20 @@ export const branding = {
 
   /**
    * Primary logo for PWA/emails (deterministic, no runtime fallback)
-   * Priority: NEXT_PUBLIC_CLIENT_LOGO_URL env var → default TimeKast
+   * Uses dark variant for emails (dark backgrounds)
    */
-  logo: process.env.NEXT_PUBLIC_CLIENT_LOGO_URL || '/assets/timekast/timekast-logo-blue-full.png',
+  logo:
+    process.env.NEXT_PUBLIC_CLIENT_LOGO_DARK || '/assets/timekast/timekast-logo-silver-full.png',
 
   /** Logo alt text */
   logoAlt: process.env.NEXT_PUBLIC_APP_NAME || 'TimeKast',
 
-  /** Path to client logo SVG/PNG. Set to null to use app name text instead */
-  clientLogoPath: process.env.NEXT_PUBLIC_CLIENT_LOGO || null,
+  /**
+   * Client logo variants for different themes
+   * Recommended specs: PNG ~200x50px with transparent background
+   */
+  clientLogoLight: process.env.NEXT_PUBLIC_CLIENT_LOGO_LIGHT || null,
+  clientLogoDark: process.env.NEXT_PUBLIC_CLIENT_LOGO_DARK || null,
 
   /** TimeKast branding paths */
   timekast: {
@@ -45,6 +50,15 @@ export const branding = {
     const color = validTheme === 'light' ? 'blue' : 'silver';
     const suffix = variant === 'full' ? '-full' : '';
     return `/assets/timekast/timekast-logo-${color}${suffix}.png`;
+  },
+
+  /** Get the appropriate client logo based on theme */
+  getClientLogo: (theme?: string): string | null => {
+    const isDark = theme !== 'light';
+    const logo = isDark
+      ? process.env.NEXT_PUBLIC_CLIENT_LOGO_DARK
+      : process.env.NEXT_PUBLIC_CLIENT_LOGO_LIGHT;
+    return logo || null;
   },
 } as const;
 

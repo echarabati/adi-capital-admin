@@ -50,7 +50,9 @@ export async function sendWithSmtp(payload: EmailPayload): Promise<EmailResult> 
         ? [
             {
               filename: 'email-logo.png',
-              path: './public/assets/timekast/email-logo.png',
+              path: process.env.NEXT_PUBLIC_CLIENT_LOGO_DARK
+                ? `./public${process.env.NEXT_PUBLIC_CLIENT_LOGO_DARK}`
+                : './public/assets/timekast/email-logo.png',
               cid: 'logo', // referenced in layout.ts
             },
           ]

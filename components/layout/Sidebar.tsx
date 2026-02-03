@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -8,6 +8,7 @@ import { Home, Settings, ChevronDown, ChevronRight } from 'lucide-react';
 import { branding } from '@/config/branding';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils/cn';
+import { useMounted } from '@/lib/hooks/useMounted';
 
 interface NavItem {
   name: string;
@@ -40,15 +41,12 @@ export function Sidebar() {
   const pathname = usePathname();
   const { resolvedTheme } = useTheme();
   const [expandedSections, setExpandedSections] = useState<string[]>(['Configuración']);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
 
-  // Prevent hydration mismatch - standard Next.js pattern for theme-aware components
-  useEffect(() => {
-    setMounted(true); // eslint-disable-line
-  }, []);
-
-  // Use resolvedTheme for accurate theme detection, fallback to 'light' for SSR to prevent flash
-  const logoSrc = branding.getTimeKastLogo('full', mounted ? resolvedTheme : 'light');
+  // Get theme-aware logos
+  const currentTheme = mounted ? resolvedTheme : 'light';
+  const clientLogo = branding.getClientLogo(currentTheme);
+  const timeKastLogo = branding.getTimeKastLogo('full', currentTheme);
 
   const isActive = (href: string) => {
     if (href === '/dashboard') {
@@ -65,28 +63,37 @@ export function Sidebar() {
 
   return (
     <aside
-      className="fixed top-16 left-0 z-30 h-[calc(100vh-4rem)] w-60 overflow-y-auto border-r"
+      className="fixed top-0 left-0 z-40 flex h-screen w-60 flex-col border-r"
       style={{
         backgroundColor: 'var(--sidebar-bg)',
         borderColor: 'var(--sidebar-border)',
       }}
     >
-      {/* TimeKast Logo */}
-      <div className="px-2 pt-5 pb-2" style={{ borderColor: 'var(--sidebar-border)' }}>
-        <div className="flex items-center justify-center">
-          <Image
-            src={logoSrc}
-            alt="TimeKast"
-            width={220}
-            height={60}
-            priority
-            className="h-auto w-full max-w-52"
-          />
-        </div>
+      {/* Top: Client Branding (matches header height) */}
+      <div
+        className="flex h-16 shrink-0 items-center justify-center border-b px-4"
+        style={{ borderColor: 'var(--sidebar-border)' }}
+      >
+        {clientLogo ? (
+          <div className="relative h-12 w-full max-w-[180px]">
+            <Image
+              src={clientLogo}
+              alt={branding.appName}
+              fill
+              priority
+              className="object-contain"
+              sizes="180px"
+            />
+          </div>
+        ) : (
+          <span className="text-lg font-bold" style={{ color: 'var(--sidebar-foreground)' }}>
+            {branding.appName}
+          </span>
+        )}
       </div>
 
-      {/* Navigation */}
-      <nav className="space-y-1 px-3 py-4">
+      {/* Middle: Navigation (scrollable) */}
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
         {navigation.map((item) => (
           <div key={item.name}>
             {item.collapsible ? (
@@ -158,6 +165,20 @@ export function Sidebar() {
           </div>
         ))}
       </nav>
+
+      <div className="shrink-0 border-t px-4 py-3" style={{ borderColor: 'var(--sidebar-border)' }}>
+        <div className="flex justify-center">
+          <div className="relative h-7 w-full max-w-[100px]">
+            <Image
+              src={timeKastLogo}
+              alt="TimeKast"
+              fill
+              className="object-contain opacity-70"
+              sizes="100px"
+            />
+          </div>
+        </div>
+      </div>
     </aside>
   );
 }

@@ -1,11 +1,15 @@
 'use client';
 
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, Transition } from '@headlessui/react';
 import { Menu as MenuIcon, Home, Settings } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils/cn';
+import { branding } from '@/config/branding';
+import { useMounted } from '@/lib/hooks/useMounted';
 
 interface NavItem {
   name: string;
@@ -29,17 +33,16 @@ const navigation: NavItem[] = [
 
 export function MobileMenuDropdown() {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-
-  // Prevent Headless UI hydration mismatch (generates different IDs on server vs client)
-  useEffect(() => {
-    setMounted(true); // eslint-disable-line
-  }, []);
+  const { resolvedTheme } = useTheme();
+  const mounted = useMounted();
 
   const isActive = (href: string) => {
     if (href === '/dashboard') return pathname === '/dashboard';
     return pathname.startsWith(href);
   };
+
+  // Get theme-aware TimeKast logo
+  const timeKastLogo = branding.getTimeKastLogo('full', mounted ? resolvedTheme : 'light');
 
   // Don't render Menu until mounted to avoid hydration mismatch
   if (!mounted) {
@@ -112,6 +115,21 @@ export function MobileMenuDropdown() {
               )}
             </div>
           ))}
+
+          {/* TimeKast Branding */}
+          <div className="mt-2 border-t border-white/10 px-4 pt-3 pb-2">
+            <div className="flex justify-center">
+              <div className="relative h-6 w-full max-w-[80px]">
+                <Image
+                  src={timeKastLogo}
+                  alt="TimeKast"
+                  fill
+                  className="object-contain opacity-50"
+                  sizes="80px"
+                />
+              </div>
+            </div>
+          </div>
         </Menu.Items>
       </Transition>
     </Menu>
