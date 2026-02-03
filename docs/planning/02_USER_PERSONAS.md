@@ -181,39 +181,142 @@
 
 ## Matriz de Permisos Completa (RBAC)
 
-> **Referencia detallada:** Ver `04_BUSINESS_RULES.md` sección RBAC
+> **Referencia técnica:** Ver `04_BUSINESS_RULES.md` sección RBAC y `.agent/skills/domains/security/SKILL.md`
 
-| Acción | P-001 | P-002 | P-003 | P-004 |
-|--------|:-----:|:-----:|:-----:|:-----:|
-| **Fondos** |
-| Ver todos los fondos | ✅ | ❌ | ❌ | ❌ |
-| Ver fondos asignados | ✅ | ✅ | ❌ | ❌ |
-| Editar configuración fondo | ✅ | ❌ | ❌ | ❌ |
-| **Proyectos** |
-| Ver proyectos del fondo | ✅ | ✅ | ✅* | ✅* |
-| Crear proyecto | ✅ | ✅ | ❌ | ❌ |
-| Editar proyecto | ✅ | ✅ | ❌ | ❌ |
-| Eliminar proyecto | ✅ | ❌ | ❌ | ❌ |
-| **Inversionistas** |
-| Ver todos los inversionistas | ✅ | ✅† | ✅‡ | ❌ |
-| Crear inversionista | ✅ | ✅ | ❌ | ❌ |
-| Editar inversionista | ✅ | ✅ | ❌ | ❌ |
-| **Movimientos** |
-| Registrar movimiento | ✅ | ✅ | ❌ | ❌ |
-| Confirmar movimiento | ✅ | ✅ | ❌ | ❌ |
-| Cancelar movimiento | ✅ | ✅ | ❌ | ❌ |
-| **Documentos** |
-| Ver docs públicos | ✅ | ✅ | ✅ | ✅* |
-| Ver docs privados | ✅ | ✅ | ❌ | ❌ |
-| Subir documentos | ✅ | ✅ | ❌ | ❌ |
-| **Sistema** |
-| Gestionar usuarios | ✅ | ❌ | ❌ | ❌ |
-| Ver dashboard completo | ✅ | ✅† | ❌ | ❌ |
+### Resumen de Roles
 
-**Notas:**
-- `*` Solo datos donde participa
-- `†` Solo de sus fondos
-- `‡` Solo inversionistas que gestiona (Post-MVP)
+| Rol | Código | Prioridad | Scope |
+|-----|--------|-----------|-------|
+| Super Admin | `SUPER_ADMIN` | 100 | Acceso total, todos los fondos |
+| Admin de Fondo | `FUND_ADMIN` | 80 | CRUD en fondos asignados |
+| Agente de Ventas | `AGENT` | 40 | Read-only inversiones propias (Post-MVP) |
+| Inversionista | `INVESTOR` | 30 | Solo app móvil, no Admin Panel |
+
+---
+
+### Módulo: Fondos
+
+| Acción | SUPER_ADMIN | FUND_ADMIN | AGENT |
+|--------|:-----------:|:----------:|:-----:|
+| Listar fondos | ✅ (todos) | ✅ (asignados) | ❌ |
+| Ver detalle fondo | ✅ | ✅ (asignados) | ❌ |
+| Crear fondo | ✅ | ❌ | ❌ |
+| Editar fondo | ✅ | ❌ | ❌ |
+| Eliminar fondo | ✅ | ❌ | ❌ |
+
+### Módulo: Proyectos
+
+| Acción | SUPER_ADMIN | FUND_ADMIN | AGENT |
+|--------|:-----------:|:----------:|:-----:|
+| Listar proyectos | ✅ (todos) | ✅ (de sus fondos) | ❌ |
+| Ver detalle proyecto | ✅ | ✅ (de sus fondos) | ❌ |
+| Crear proyecto | ✅ | ✅ | ❌ |
+| Editar proyecto | ✅ | ✅ | ❌ |
+| Eliminar proyecto | ✅ | ❌ | ❌ |
+| Ver posición financiera | ✅ | ✅ | ❌ |
+
+### Módulo: Inversionistas
+
+| Acción | SUPER_ADMIN | FUND_ADMIN | AGENT |
+|--------|:-----------:|:----------:|:-----:|
+| Listar inversionistas | ✅ | ✅ (de sus fondos) | ✅ (propios) |
+| Ver detalle | ✅ | ✅ (de sus fondos) | ✅ (propios) |
+| Crear inversionista | ✅ | ✅ | ❌ |
+| Editar inversionista | ✅ | ✅ | ❌ |
+| Eliminar inversionista | ✅ | ❌ | ❌ |
+
+### Módulo: Inversiones
+
+| Acción | SUPER_ADMIN | FUND_ADMIN | AGENT |
+|--------|:-----------:|:----------:|:-----:|
+| Listar inversiones | ✅ | ✅ (de sus fondos) | ✅ (propias) |
+| Ver detalle inversión | ✅ | ✅ | ✅ (propias) |
+| Crear inversión | ✅ | ✅ | ❌ |
+| Editar inversión | ✅ | ✅ | ❌ |
+| Gestionar calendario | ✅ | ✅ | ❌ |
+
+### Módulo: Movimientos
+
+| Acción | SUPER_ADMIN | FUND_ADMIN | AGENT |
+|--------|:-----------:|:----------:|:-----:|
+| Listar movimientos | ✅ | ✅ (de sus fondos) | ❌ |
+| Ver detalle | ✅ | ✅ | ❌ |
+| Crear movimiento | ✅ | ✅ | ❌ |
+| Editar borrador | ✅ | ✅ | ❌ |
+| Confirmar movimiento | ✅ | ✅ | ❌ |
+| Cancelar movimiento | ✅ | ❌ | ❌ |
+
+### Módulo: Wizard de Reparto
+
+| Acción | SUPER_ADMIN | FUND_ADMIN | AGENT |
+|--------|:-----------:|:----------:|:-----:|
+| Iniciar wizard | ✅ | ❌ | ❌ |
+| Ver preview distribución | ✅ | ❌ | ❌ |
+| Confirmar distribución | ✅ | ❌ | ❌ |
+
+### Módulo: Documentos (Drive)
+
+| Acción | SUPER_ADMIN | FUND_ADMIN | AGENT |
+|--------|:-----------:|:----------:|:-----:|
+| Ver documentos públicos | ✅ | ✅ | ❌ |
+| Ver documentos privados | ✅ | ✅ (participantes) | ❌ |
+| Subir documentos | ✅ | ✅ | ❌ |
+| Eliminar documentos | ✅ | ✅ | ❌ |
+| Crear carpetas | ✅ | ✅ | ❌ |
+
+### Módulo: Noticias
+
+| Acción | SUPER_ADMIN | FUND_ADMIN | AGENT |
+|--------|:-----------:|:----------:|:-----:|
+| Listar noticias | ✅ | ✅ | ❌ |
+| Crear noticia | ✅ | ❌ | ❌ |
+| Editar noticia | ✅ | ❌ | ❌ |
+| Eliminar noticia | ✅ | ❌ | ❌ |
+
+### Módulo: Configuración
+
+| Acción | SUPER_ADMIN | FUND_ADMIN | AGENT |
+|--------|:-----------:|:----------:|:-----:|
+| Gestión usuarios | ✅ | ❌ | ❌ |
+| Cuentas bancarias | ✅ | ✅ | ❌ |
+| Beneficiarios | ✅ | ✅ | ❌ |
+| Conceptos de movimiento | ✅ | ❌ | ❌ |
+
+---
+
+### Restricciones por Fondo
+
+El aislamiento de fondos se aplica automáticamente via middleware:
+
+```typescript
+// Comportamiento del middleware de autorización
+if (user.role === 'SUPER_ADMIN') return true; // Acceso a todos
+return user.assignedFunds.includes(fundId);
+```
+
+**Efectos:**
+- Queries filtran por `fund_id IN (user.assignedFunds)`
+- Listas solo muestran datos accesibles
+- Intentar acceder a fondo no autorizado → 403 Forbidden
+
+### Bitmask (Compatibilidad Firebase)
+
+Para sincronización con app móvil existente:
+
+| Valor | Binario | Significado |
+|-------|---------|-------------|
+| 0 | `00` | Sin acceso |
+| 1 | `01` | Solo Kentucky |
+| 2 | `10` | Solo Adi Capital |
+| 3 | `11` | Ambos fondos |
+
+### Auditoría de Accesos
+
+Se registra automáticamente:
+- Login exitoso/fallido
+- Cambios de rol
+- Cancelación de movimientos (SUPER_ADMIN only)
+- Acciones en Wizard de Reparto
 
 ---
 
