@@ -2,7 +2,7 @@
 
 > **Auto-generated** — Run `pnpm generate:inventory` to update
 > **Regla:** SIEMPRE consultar antes de crear algo nuevo.
-> **Last updated:** 2026-02-02
+> **Last updated:** 2026-02-03
 
 ---
 

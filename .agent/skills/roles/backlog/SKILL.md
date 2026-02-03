@@ -29,13 +29,14 @@ modes:
 
 ## Modes
 
-| Mode | Comando | Comportamiento |
-|------|---------|----------------|
-| **generate** | `/backlog` | Genera issues desde docs y design |
-| **validate** | `/backlog validate` | Solo verifica prerrequisitos |
-| **refresh** | `/backlog refresh` | Regenera preservando IDs de issues existentes |
+| Mode         | Comando             | Comportamiento                                |
+| ------------ | ------------------- | --------------------------------------------- |
+| **generate** | `/backlog`          | Genera issues desde docs y design             |
+| **validate** | `/backlog validate` | Solo verifica prerrequisitos                  |
+| **refresh**  | `/backlog refresh`  | Regenera preservando IDs de issues existentes |
 
 **Regla de refresh:**
+
 - Si `docs/backlog/{version}/issues/*.md` ya existen → preservar IDs
 - Solo agregar nuevos issues, no renumerar existentes
 - IDs eliminados NO se reutilizan
@@ -45,6 +46,7 @@ modes:
 ## 0. Qué Hace y Qué NO Hace
 
 **HACE:**
+
 - Transforma User Stories (US-XXX) en issues implementables
 - Agrupa issues en epics por feature/componente
 - Asigna prioridad basada en dependencias y valor
@@ -53,6 +55,7 @@ modes:
 - Genera issues compatibles con `pnpm update-board`
 
 **NO HACE:**
+
 - Diseñar soluciones (eso es /design)
 - Escribir código (eso es /implement)
 - Evaluar calidad (eso es /audit)
@@ -62,15 +65,23 @@ modes:
 
 ## 1. Inputs (SSOT)
 
-| Input | Ubicación | Requerido |
-|-------|-----------|-----------|
-| Discovery Brief | `docs/planning/00_DISCOVERY_BRIEFING.md` | ⚪ Contexto |
-| User Personas | `docs/planning/01_USER_PERSONAS.md` | ✅ Para user stories |
-| User Stories | `docs/planning/02_USER_STORIES.md` | ✅ Source principal |
-| Business Rules | `docs/planning/03_BUSINESS_RULES.md` | ⚪ Para AC |
-| Data Model | `docs/planning/04_DATA_MODEL.md` | ⚪ Para contexto técnico |
-| Architecture | `docs/planning/05_ARCHITECTURE.md` | ⚪ Para decisiones |
-| Design | `docs/planning/09_DESIGN.md` | ✅ Para pantallas/flujos |
+> 🔴 **OBLIGATORIO:** Leer TODOS los documentos de planning (00-10) para generar un backlog completo.
+
+| Input             | Ubicación                                | Requerido                |
+| ----------------- | ---------------------------------------- | ------------------------ |
+| Discovery Brief   | `docs/planning/00_DISCOVERY_BRIEFING.md` | ✅ Obligatorio           |
+| Feature Map       | `docs/planning/01_FEATURE_MAP.md`        | ✅ Obligatorio           |
+| User Personas     | `docs/planning/02_USER_PERSONAS.md`      | ✅ Obligatorio           |
+| User Stories      | `docs/planning/03_USER_STORIES.md`       | ✅ Source principal      |
+| Business Rules    | `docs/planning/04_BUSINESS_RULES.md`     | ✅ Obligatorio           |
+| Data Model        | `docs/planning/05_DATA_MODEL.md`         | ✅ Obligatorio           |
+| Architecture      | `docs/planning/06_ARCHITECTURE.md`       | ✅ Obligatorio           |
+| API Contracts     | `docs/planning/07_API_CONTRACTS.md`      | ✅ Obligatorio           |
+| Glossary          | `docs/planning/08_GLOSSARY.md`           | ✅ Obligatorio           |
+| Design            | `docs/planning/09_DESIGN.md`             | ✅ Source principal      |
+| Runbooks          | `docs/planning/10_RUNBOOKS.md`           | ⚪ Si existe             |
+| Wireframes        | `docs/wireframes/*.png`                  | ⚪ Referencias visuales  |
+| Wireframes README | `docs/wireframes/README.md`              | ⚪ Mapeo SCR → wireframe |
 
 ---
 
@@ -78,22 +89,25 @@ modes:
 
 **🛑 STOP — No generar issues si:**
 
-| Condición | Acción |
-|-----------|--------|
-| 02_USER_STORIES.md no existe | Ejecutar `/docs` primero |
-| 09_DESIGN.md no existe | Ejecutar `/design` primero |
+| Condición                    | Acción                     |
+| ---------------------------- | -------------------------- |
+| 02_USER_STORIES.md no existe | Ejecutar `/docs` primero   |
+| 09_DESIGN.md no existe       | Ejecutar `/design` primero |
 
 **⚠️ NO BLOQUEAR por OQ High impact:**
+
 - Si Design tiene OQ High impact → **NO detener todo**
 - Crear `ADR-XXX` issue para la decisión
 - Marcar issues afectados con `> **Blocked By:** ADR-XXX`
 - Generar el resto del backlog normalmente
 
 **Formato de bloqueo (solo si faltan docs):**
+
 ```markdown
 ⚠️ **No puedo generar Backlog**
 
 **Faltante:**
+
 - [doc] → no existe
 
 **Acción:** Ejecutar [/docs | /design] primero.
@@ -104,6 +118,7 @@ modes:
 ## 3. Output (Estructura)
 
 **Ubicación:**
+
 ```
 docs/backlog/{version}/
 ├── README.md            # Overview del milestone
@@ -117,6 +132,7 @@ docs/backlog/{version}/
 ```
 
 **SSOT Chain:**
+
 ```
 Discovery Brief → docs (01-08) → design (09) → backlog → code
 ```
@@ -128,12 +144,15 @@ Discovery Brief → docs (01-08) → design (09) → backlog → code
 **CRÍTICO:** El script `pnpm update-board` parsea issues para generar BOARD.md.
 
 ### Formato de Título (REQUERIDO)
+
 ```markdown
 # {PREFIX}-{NUM}: {Título Descriptivo}
 ```
+
 Ejemplo: `# AUTH-001: Implementar Login Form`
 
 ### Metadata (REQUERIDO)
+
 ```markdown
 > **Issue ID:** {PREFIX}-{NUM}
 > **Priority:** P0 | P1 | P2 | P3
@@ -143,14 +162,17 @@ Ejemplo: `# AUTH-001: Implementar Login Form`
 ```
 
 **Reglas de parsing:**
+
 - Status se detecta por emoji: `✅` = done, `🚧` = in-progress, default = todo
 - Priority se detecta por `P0|P1|P2|P3`
 - Epic se extrae de link markdown
 
 ### Ubicación de Archivos (REQUERIDO)
+
 ```
 docs/backlog/{version}/issues/{PREFIX}-{NUM}-{slug}.md
 ```
+
 El `{version}` se extrae del path para agrupar por milestone.
 
 ---
@@ -159,35 +181,35 @@ El `{version}` se extrae del path para agrupar por milestone.
 
 ### Nuevos IDs
 
-| Tipo | Formato | Ejemplo |
-|------|---------|---------|
-| Epics | `EPIC-{NAME}` | EPIC-AUTH, EPIC-DASHBOARD |
-| Issues | `{PREFIX}-{NUM}` | AUTH-001, DASH-015 |
+| Tipo   | Formato          | Ejemplo                   |
+| ------ | ---------------- | ------------------------- |
+| Epics  | `EPIC-{NAME}`    | EPIC-AUTH, EPIC-DASHBOARD |
+| Issues | `{PREFIX}-{NUM}` | AUTH-001, DASH-015        |
 
 ### Prefijos por Dominio
 
-| Dominio | Prefijo | Ejemplo |
-|---------|---------|---------|
-| **Decisiones/ADRs** | `ADR-` | ADR-001 |
-| Autenticación | `AUTH-` | AUTH-001 |
-| Dashboard | `DASH-` | DASH-001 |
-| Usuarios | `USER-` | USER-001 |
-| Configuración | `CFG-` | CFG-001 |
-| Core/Misc | `CORE-` | CORE-001 |
-| Infraestructura | `INFRA-` | INFRA-001 |
-| Shell/Navigation | `SHELL-` | SHELL-001 |
+| Dominio             | Prefijo  | Ejemplo   |
+| ------------------- | -------- | --------- |
+| **Decisiones/ADRs** | `ADR-`   | ADR-001   |
+| Autenticación       | `AUTH-`  | AUTH-001  |
+| Dashboard           | `DASH-`  | DASH-001  |
+| Usuarios            | `USER-`  | USER-001  |
+| Configuración       | `CFG-`   | CFG-001   |
+| Core/Misc           | `CORE-`  | CORE-001  |
+| Infraestructura     | `INFRA-` | INFRA-001 |
+| Shell/Navigation    | `SHELL-` | SHELL-001 |
 
 > **Tip:** Si un issue toca múltiples áreas, usar el prefijo del **punto de entrada** (pantalla/flujo principal).
 
 ### Cross-references desde Docs/Design
 
-| Tipo | Formato | Uso en Issues |
-|------|---------|---------------|
-| Personas | P-XXX | "Como P-001 (Admin)…" |
-| Stories | US-XXX | "Implementa US-003" |
-| Pantallas | SCR-XXX | "Pantalla: SCR-002" |
-| Flujos | FLW-XXX | "Flujo: FLW-001" |
-| Componentes | CMP-XXX | "Nuevo: CMP-003" |
+| Tipo        | Formato | Uso en Issues         |
+| ----------- | ------- | --------------------- |
+| Personas    | P-XXX   | "Como P-001 (Admin)…" |
+| Stories     | US-XXX  | "Implementa US-003"   |
+| Pantallas   | SCR-XXX | "Pantalla: SCR-002"   |
+| Flujos      | FLW-XXX | "Flujo: FLW-001"      |
+| Componentes | CMP-XXX | "Nuevo: CMP-003"      |
 
 ### Reglas de Estabilidad
 
@@ -203,6 +225,7 @@ El `{version}` se extrae del path para agrupar por milestone.
 Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 
 **Secciones mínimas:**
+
 1. Título con ID (`# {PREFIX}-{NUM}: {Título}`)
 2. Metadata block (`> **Status:**`, etc.)
 3. Descripción
@@ -219,14 +242,15 @@ Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 
 ## 7. Priorización
 
-| Priority | Significado | Criterio |
-|----------|-------------|----------|
-| **P0** | Blocker | Sin esto no funciona nada más |
-| **P1** | MVP Critical | Requerido para primera entrega |
-| **P2** | Important | Segunda iteración |
-| **P3** | Nice-to-have | Cuando haya tiempo |
+| Priority | Significado  | Criterio                       |
+| -------- | ------------ | ------------------------------ |
+| **P0**   | Blocker      | Sin esto no funciona nada más  |
+| **P1**   | MVP Critical | Requerido para primera entrega |
+| **P2**   | Important    | Segunda iteración              |
+| **P3**   | Nice-to-have | Cuando haya tiempo             |
 
 **Orden de implementación:**
+
 1. P0 de todos los epics primero
 2. Luego P1 por epic (respetando dependencias)
 3. Las dependencias se declaran en cada issue
@@ -250,6 +274,7 @@ Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 | UI architecture | Offline-first, realtime, wizard state |
 
 **Formato en issue afectado:**
+
 ```markdown
 > **Blocked By:** ADR-001
 ```
@@ -258,19 +283,20 @@ Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 
 ## 9. Slicing Rules (issues ejecutables)
 
-**Regla:** Un issue debe ser *testable* y *mergeable* de forma independiente.
+**Regla:** Un issue debe ser _testable_ y _mergeable_ de forma independiente.
 
 ### Heurística de tamaño
 
-| Size | Descripción | Target |
-|------|-------------|--------|
-| ✅ S-M | Ideal: 0.5-1 día | Preferir siempre |
-| ⚠️ L | Complejo pero necesario | Si no se puede partir |
-| ❌ XL | Muy grande | Dividir en 2-4 issues |
+| Size   | Descripción             | Target                |
+| ------ | ----------------------- | --------------------- |
+| ✅ S-M | Ideal: 0.5-1 día        | Preferir siempre      |
+| ⚠️ L   | Complejo pero necesario | Si no se puede partir |
+| ❌ XL  | Muy grande              | Dividir en 2-4 issues |
 
 ### Cómo partir una US en issues
 
 **Ejemplo típico (MVP):**
+
 1. **UI skeleton** + validación básica (pantalla y estados) → `PREFIX-001`
 2. **Server actions** / API contract → `PREFIX-002`
 3. **Persistencia** / data model touch → `PREFIX-003`
@@ -279,22 +305,22 @@ Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 
 ### Anti-patrones de slicing
 
-| ❌ Evitar | ✅ Preferir |
-|-----------|-------------|
-| "Implementar toda la feature X" | Partir por capa/concern |
-| Issues sin AC verificable | Cada issue con checkboxes |
-| Issues que requieren 3 decisiones | Primero ADR-*, luego implementación |
+| ❌ Evitar                         | ✅ Preferir                          |
+| --------------------------------- | ------------------------------------ |
+| "Implementar toda la feature X"   | Partir por capa/concern              |
+| Issues sin AC verificable         | Cada issue con checkboxes            |
+| Issues que requieren 3 decisiones | Primero ADR-\*, luego implementación |
 
 ---
 
 ## 10. Effort Heuristics
 
-| Effort | Indicador | Ejemplo |
-|--------|-----------|---------|
-| **XS** | Config/doc mínima, 1 archivo | Agregar env var |
-| **S** | UI pequeña o action simple | Form básico |
-| **M** | UI + action + validaciones | CRUD completo |
-| **L** | Varios archivos + tests | Feature con flujo |
+| Effort | Indicador                      | Ejemplo            |
+| ------ | ------------------------------ | ------------------ |
+| **XS** | Config/doc mínima, 1 archivo   | Agregar env var    |
+| **S**  | UI pequeña o action simple     | Form básico        |
+| **M**  | UI + action + validaciones     | CRUD completo      |
+| **L**  | Varios archivos + tests        | Feature con flujo  |
 | **XL** | Integración externa o refactor | **Preferir split** |
 
 ---
@@ -314,9 +340,9 @@ Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 
 ## Issues
 
-| ID | Título | Priority | Status |
-|----|--------|----------|--------|
-| {PREFIX}-001 | ... | P0 | 📋 |
+| ID           | Título | Priority | Status |
+| ------------ | ------ | -------- | ------ |
+| {PREFIX}-001 | ...    | P0       | 📋     |
 
 ## Dependencias
 
@@ -326,9 +352,11 @@ Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 ## Scope
 
 **Incluido:**
+
 - ...
 
 **Excluido:**
+
 - ...
 ```
 
@@ -337,6 +365,7 @@ Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 ## 10. Reglas Duras
 
 **SIEMPRE:**
+
 1. Verificar que 02 y 06 existen
 2. Seguir formato de título: `# PREFIX-NUM: Título`
 3. Incluir metadata block compatible con update-board
@@ -346,6 +375,7 @@ Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 7. Ubicar en `docs/backlog/{version}/issues/`
 
 **NUNCA:**
+
 1. Inventar features no documentados en 02 o 06
 2. Crear issues sin metadata block
 3. Ignorar formato de título (rompe BOARD.md)
@@ -358,7 +388,7 @@ Usar template en: `.gemini/skills/roles/backlog/issue.template.md`
 
 Al completar:
 
-```markdown
+````markdown
 ## ✅ Backlog Generado
 
 **Proyecto:** [nombre]
@@ -367,20 +397,25 @@ Al completar:
 **Issues:** [M] issues totales
 
 **Distribución por prioridad:**
+
 - P0: [X]
 - P1: [Y]
 - P2: [Z]
 
 **Artefactos:**
+
 - `docs/backlog/{version}/README.md`
 - `docs/backlog/{version}/epics/*.md`
 - `docs/backlog/{version}/issues/*.md`
 
-**Próximo paso:** 
+**Próximo paso:**
+
 ```bash
 pnpm update-board  # Generar BOARD.md
 /implement         # Comenzar desarrollo
 ```
+````
+
 ```
 
 ---
@@ -388,14 +423,18 @@ pnpm update-board  # Generar BOARD.md
 ## 12. Flujo Completo
 
 ```
+
 /start → /discovery → /docs → /design → /backlog → /implement → /audit
-                                            ↑
-                                        YOU ARE HERE
+↑
+YOU ARE HERE
+
 ```
 
 **SSOT Chain:**
 ```
+
 Discovery Brief → docs (01-08) → design (09) → backlog → code
+
 ```
 
 ---
@@ -411,3 +450,4 @@ Discovery Brief → docs (01-08) → design (09) → backlog → code
 ---
 
 _TimeKast Factory — Backlog Expert Skill_
+```
