@@ -14,7 +14,8 @@
 | **Estilos** | Tailwind CSS | v4 | Design tokens del Starter Kit |
 | **Base de datos** | Neon PostgreSQL | — | Serverless, branching |
 | **ORM** | Drizzle | latest | Type-safe, SQL-like |
-| **Auth** | NextAuth.js | v5 beta | Credentials + Magic Link |
+| **Auth** | NextAuth.js | v5 beta | Credentials + Google OAuth + Magic Link |
+| **Email** | Nodemailer | — | SMTP transport (no Resend) |
 | **Hosting** | Vercel | — | Edge functions, preview deploys |
 | **Storage docs** | Google Drive API | v3 | Workspace integration |
 | **Sync móvil** | Firebase Admin SDK | — | Firestore + Storage |

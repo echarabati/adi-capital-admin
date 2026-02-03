@@ -61,6 +61,18 @@
 - `P-001` — Super Admin (todos los fondos)
 - `P-002` — Admin de Fondo (solo fondos asignados)
 
+### Wireframes Disponibles
+
+| SCR | Nombre | Wireframe |
+|-----|--------|-----------|
+| SCR-001 | Dashboard | [Ver wireframe](../wireframes/SCR-001_dashboard.png) |
+| SCR-021 | Proyecto Detalle | [Ver wireframe](../wireframes/SCR-021_proyecto_detalle.png) |
+| SCR-051 | Form Movimiento | [Ver wireframe](../wireframes/SCR-051_movimiento_form.png) |
+| SCR-060 | Wizard Reparto | [Ver wireframe](../wireframes/SCR-060_wizard_reparto.png) |
+| SCR-070 | Drive Navigator | [Ver wireframe](../wireframes/SCR-070_drive_navigator.png) |
+
+> 📁 Todos los wireframes: [docs/wireframes/README.md](../wireframes/README.md)
+
 ---
 
 ## 🧭 Navegación y Sidebar
