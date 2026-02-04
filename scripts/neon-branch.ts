@@ -44,18 +44,13 @@ function getConfig(): NeonConfig {
  * Create a temporary Neon branch for E2E tests.
  *
  * @param branchName - Name for the branch (default: e2e-{timestamp})
- * @param expiresInHours - Auto-delete after N hours (default: 1)
  * @returns Connection URI for the new branch
  */
 export async function createE2EBranch(
-  branchName?: string,
-  expiresInHours = 1
+  branchName?: string
 ): Promise<{ branchId: string; connectionUri: string }> {
   const { apiKey, projectId } = getConfig();
   const name = branchName || `e2e-${Date.now()}`;
-
-  // Calculate expiration timestamp
-  const expiresAt = new Date(Date.now() + expiresInHours * 60 * 60 * 1000).toISOString();
 
   const response = await fetch(`${NEON_API_BASE}/projects/${projectId}/branches`, {
     method: 'POST',
@@ -87,7 +82,7 @@ export async function createE2EBranch(
     throw new Error('Neon branch created but no connection URI returned');
   }
 
-  console.log(`[Neon] Created branch: ${name} (expires in ${expiresInHours}h)`);
+  console.log(`[Neon] Created branch: ${name}`);
 
   return {
     branchId: data.branch.id,
