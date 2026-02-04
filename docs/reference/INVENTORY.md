@@ -11,6 +11,7 @@
 | Package | Version |
 |---------|--------|
 | @auth/drizzle-adapter | 1.11.1 |
+| @ducanh2912/next-pwa | 10.2.9 |
 | @headlessui/react | 2.2.9 |
 | @hookform/resolvers | 5.2.2 |
 | @neondatabase/serverless | 1.0.2 |
@@ -32,7 +33,6 @@
 | lucide-react | 0.562.0 |
 | next | 16.1.6 |
 | next-auth | 5.0.0-beta.30 |
-| next-pwa | 5.6.0 |
 | next-themes | 0.4.6 |
 | nodemailer | 7.0.12 |
 | react | 19.2.3 |

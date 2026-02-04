@@ -7,14 +7,13 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 49 |
-| ✅ Done | 8 |
+| 📅 To Do | 48 |
+| ✅ Done | 9 |
 
 ### 📅 To Do
 
-**[E02-EPIC-FONDOS](../epics/EPIC-FONDOS.md)** (2)
+**[E02-EPIC-FONDOS](../epics/EPIC-FONDOS.md)** (1)
 - [FOND-004: CRUD Cuentas Bancarias](v1.0/issues/FOND-004-cuentas-bancarias.md) 🟡
-- [TEST-001: E2E Auth + RBAC](v1.0/issues/TEST-001-e2e-auth-rbac.md) 🔴
 
 **[E03-EPIC-PROYECTOS](../epics/EPIC-PROYECTOS.md)** (5)
 - [PROJ-001: Lista de proyectos](v1.0/issues/PROJ-001-lista-proyectos.md) 🟡
@@ -81,7 +80,7 @@
 
 
 <details>
-<summary>✅ Done (8)</summary>
+<summary>✅ Done (9)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
@@ -91,6 +90,7 @@
 - [SCHEMA-001: Crear schemas Drizzle para entidades core](v1.0/issues/SCHEMA-001-drizzle-schemas-core.md) 🔴
 - [SCHEMA-002: Crear schemas para movimientos y calendario](v1.0/issues/SCHEMA-002-schemas-movimientos.md) 🔴
 - [SCHEMA-003: Extender users con roles y fondos](v1.0/issues/SCHEMA-003-users-roles.md) 🔴
+- [TEST-001: E2E Auth + RBAC](v1.0/issues/TEST-001-e2e-auth-rbac.md) 🔴
 </details>
 
 ---

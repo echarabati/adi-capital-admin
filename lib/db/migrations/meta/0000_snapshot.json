@@ -1,5 +1,5 @@
 {
-  "id": "e862166b-3fa3-41d3-9de5-845cd4e3e57e",
+  "id": "95798470-718a-4589-b4fa-0c3434f1e148",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -237,10 +237,11 @@
         },
         "role": {
           "name": "role",
-          "type": "text",
+          "type": "rol_usuario",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'user'"
+          "default": "'admin_fondo'"
         },
         "password": {
           "name": "password",
@@ -251,6 +252,12 @@
         "deleted_at": {
           "name": "deleted_at",
           "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -482,9 +489,1499 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.fondos": {
+      "name": "fondos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moneda_base": {
+          "name": "moneda_base",
+          "type": "moneda",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'MXN'"
+        },
+        "metodo_cascada": {
+          "name": "metodo_cascada",
+          "type": "metodo_cascada",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pref_primero'"
+        },
+        "success_fee_default": {
+          "name": "success_fee_default",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'20'"
+        },
+        "pref_rate_default": {
+          "name": "pref_rate_default",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'12'"
+        },
+        "capital_socios": {
+          "name": "capital_socios",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "activo": {
+          "name": "activo",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.proyectos": {
+      "name": "proyectos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "fondo_id": {
+          "name": "fondo_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_proyecto",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'activo'"
+        },
+        "metodo_cascada": {
+          "name": "metodo_cascada",
+          "type": "metodo_cascada",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "success_fee_pct": {
+          "name": "success_fee_pct",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inversion_recibida": {
+          "name": "inversion_recibida",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "gastos": {
+          "name": "gastos",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "retornos": {
+          "name": "retornos",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "proyectos_fondo_id_idx": {
+          "name": "proyectos_fondo_id_idx",
+          "columns": [
+            {
+              "expression": "fondo_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "proyectos_fondo_id_fondos_id_fk": {
+          "name": "proyectos_fondo_id_fondos_id_fk",
+          "tableFrom": "proyectos",
+          "tableTo": "fondos",
+          "columnsFrom": ["fondo_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.inversionistas": {
+      "name": "inversionistas",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "telefono": {
+          "name": "telefono",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rfc": {
+          "name": "rfc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notas": {
+          "name": "notas",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "es_fundador": {
+          "name": "es_fundador",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "agente_id": {
+          "name": "agente_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.inversionistas_fondos": {
+      "name": "inversionistas_fondos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "inversionista_id": {
+          "name": "inversionista_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fondo_id": {
+          "name": "fondo_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "inversionistas_fondos_inversionista_id_idx": {
+          "name": "inversionistas_fondos_inversionista_id_idx",
+          "columns": [
+            {
+              "expression": "inversionista_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "inversionistas_fondos_fondo_id_idx": {
+          "name": "inversionistas_fondos_fondo_id_idx",
+          "columns": [
+            {
+              "expression": "fondo_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "inversionistas_fondos_inversionista_id_inversionistas_id_fk": {
+          "name": "inversionistas_fondos_inversionista_id_inversionistas_id_fk",
+          "tableFrom": "inversionistas_fondos",
+          "tableTo": "inversionistas",
+          "columnsFrom": ["inversionista_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "inversionistas_fondos_fondo_id_fondos_id_fk": {
+          "name": "inversionistas_fondos_fondo_id_fondos_id_fk",
+          "tableFrom": "inversionistas_fondos",
+          "tableTo": "fondos",
+          "columnsFrom": ["fondo_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "inversionistas_fondos_unique": {
+          "name": "inversionistas_fondos_unique",
+          "nullsNotDistinct": false,
+          "columns": ["inversionista_id", "fondo_id"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.inversiones": {
+      "name": "inversiones",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "inversionista_id": {
+          "name": "inversionista_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "proyecto_id": {
+          "name": "proyecto_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "compromiso": {
+          "name": "compromiso",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pref_rate": {
+          "name": "pref_rate",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "success_fee_pct": {
+          "name": "success_fee_pct",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admin_fee_tipo": {
+          "name": "admin_fee_tipo",
+          "type": "tipo_admin_fee",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admin_fee_base": {
+          "name": "admin_fee_base",
+          "type": "base_admin_fee",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admin_fee_metodo": {
+          "name": "admin_fee_metodo",
+          "type": "metodo_admin_fee",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admin_fee_pct": {
+          "name": "admin_fee_pct",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capital_aportado": {
+          "name": "capital_aportado",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "pref_acumulado": {
+          "name": "pref_acumulado",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "pref_pagado": {
+          "name": "pref_pagado",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "notas": {
+          "name": "notas",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "inversiones_inversionista_id_idx": {
+          "name": "inversiones_inversionista_id_idx",
+          "columns": [
+            {
+              "expression": "inversionista_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "inversiones_proyecto_id_idx": {
+          "name": "inversiones_proyecto_id_idx",
+          "columns": [
+            {
+              "expression": "proyecto_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "inversiones_inversionista_id_inversionistas_id_fk": {
+          "name": "inversiones_inversionista_id_inversionistas_id_fk",
+          "tableFrom": "inversiones",
+          "tableTo": "inversionistas",
+          "columnsFrom": ["inversionista_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "inversiones_proyecto_id_proyectos_id_fk": {
+          "name": "inversiones_proyecto_id_proyectos_id_fk",
+          "tableFrom": "inversiones",
+          "tableTo": "proyectos",
+          "columnsFrom": ["proyecto_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "inversiones_unique": {
+          "name": "inversiones_unique",
+          "nullsNotDistinct": false,
+          "columns": ["inversionista_id", "proyecto_id"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.movimientos": {
+      "name": "movimientos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "fondo_id": {
+          "name": "fondo_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "proyecto_id": {
+          "name": "proyecto_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inversionista_id": {
+          "name": "inversionista_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "inversion_id": {
+          "name": "inversion_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "beneficiario_id": {
+          "name": "beneficiario_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cuenta_id": {
+          "name": "cuenta_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "concepto": {
+          "name": "concepto",
+          "type": "concepto",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "monto": {
+          "name": "monto",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "moneda": {
+          "name": "moneda",
+          "type": "moneda",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tipo_cambio": {
+          "name": "tipo_cambio",
+          "type": "numeric(10, 4)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "monto_usd": {
+          "name": "monto_usd",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_movimiento",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'borrador'"
+        },
+        "fecha_movimiento": {
+          "name": "fecha_movimiento",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_confirmacion": {
+          "name": "fecha_confirmacion",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "grupo_movimiento": {
+          "name": "grupo_movimiento",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "descripcion": {
+          "name": "descripcion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sincronizado_firebase": {
+          "name": "sincronizado_firebase",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "movimientos_fondo_id_idx": {
+          "name": "movimientos_fondo_id_idx",
+          "columns": [
+            {
+              "expression": "fondo_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "movimientos_proyecto_id_idx": {
+          "name": "movimientos_proyecto_id_idx",
+          "columns": [
+            {
+              "expression": "proyecto_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "movimientos_inversionista_id_idx": {
+          "name": "movimientos_inversionista_id_idx",
+          "columns": [
+            {
+              "expression": "inversionista_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "movimientos_inversion_id_idx": {
+          "name": "movimientos_inversion_id_idx",
+          "columns": [
+            {
+              "expression": "inversion_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "movimientos_concepto_idx": {
+          "name": "movimientos_concepto_idx",
+          "columns": [
+            {
+              "expression": "concepto",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "movimientos_estado_idx": {
+          "name": "movimientos_estado_idx",
+          "columns": [
+            {
+              "expression": "estado",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "movimientos_fecha_idx": {
+          "name": "movimientos_fecha_idx",
+          "columns": [
+            {
+              "expression": "fecha_movimiento",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "movimientos_grupo_idx": {
+          "name": "movimientos_grupo_idx",
+          "columns": [
+            {
+              "expression": "grupo_movimiento",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "movimientos_fondo_id_fondos_id_fk": {
+          "name": "movimientos_fondo_id_fondos_id_fk",
+          "tableFrom": "movimientos",
+          "tableTo": "fondos",
+          "columnsFrom": ["fondo_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "movimientos_proyecto_id_proyectos_id_fk": {
+          "name": "movimientos_proyecto_id_proyectos_id_fk",
+          "tableFrom": "movimientos",
+          "tableTo": "proyectos",
+          "columnsFrom": ["proyecto_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "movimientos_inversionista_id_inversionistas_id_fk": {
+          "name": "movimientos_inversionista_id_inversionistas_id_fk",
+          "tableFrom": "movimientos",
+          "tableTo": "inversionistas",
+          "columnsFrom": ["inversionista_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "movimientos_inversion_id_inversiones_id_fk": {
+          "name": "movimientos_inversion_id_inversiones_id_fk",
+          "tableFrom": "movimientos",
+          "tableTo": "inversiones",
+          "columnsFrom": ["inversion_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "movimientos_beneficiario_id_beneficiarios_id_fk": {
+          "name": "movimientos_beneficiario_id_beneficiarios_id_fk",
+          "tableFrom": "movimientos",
+          "tableTo": "beneficiarios",
+          "columnsFrom": ["beneficiario_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "movimientos_cuenta_id_cuentas_bancarias_id_fk": {
+          "name": "movimientos_cuenta_id_cuentas_bancarias_id_fk",
+          "tableFrom": "movimientos",
+          "tableTo": "cuentas_bancarias",
+          "columnsFrom": ["cuenta_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.calendario_pagos": {
+      "name": "calendario_pagos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "inversion_id": {
+          "name": "inversion_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero": {
+          "name": "numero",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fecha_programada": {
+          "name": "fecha_programada",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "monto_esperado": {
+          "name": "monto_esperado",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "monto_pagado": {
+          "name": "monto_pagado",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "estado": {
+          "name": "estado",
+          "type": "estado_call",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pendiente'"
+        },
+        "notas": {
+          "name": "notas",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "calendario_pagos_inversion_id_idx": {
+          "name": "calendario_pagos_inversion_id_idx",
+          "columns": [
+            {
+              "expression": "inversion_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "calendario_pagos_inversion_id_inversiones_id_fk": {
+          "name": "calendario_pagos_inversion_id_inversiones_id_fk",
+          "tableFrom": "calendario_pagos",
+          "tableTo": "inversiones",
+          "columnsFrom": ["inversion_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "calendario_pagos_unique": {
+          "name": "calendario_pagos_unique",
+          "nullsNotDistinct": false,
+          "columns": ["inversion_id", "numero"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.cuentas_bancarias": {
+      "name": "cuentas_bancarias",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "fondo_id": {
+          "name": "fondo_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "banco": {
+          "name": "banco",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "numero": {
+          "name": "numero",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "clabe": {
+          "name": "clabe",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "moneda": {
+          "name": "moneda",
+          "type": "moneda",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "saldo": {
+          "name": "saldo",
+          "type": "numeric(18, 2)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'0'"
+        },
+        "activa": {
+          "name": "activa",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "cuentas_bancarias_fondo_id_idx": {
+          "name": "cuentas_bancarias_fondo_id_idx",
+          "columns": [
+            {
+              "expression": "fondo_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "cuentas_bancarias_fondo_id_fondos_id_fk": {
+          "name": "cuentas_bancarias_fondo_id_fondos_id_fk",
+          "tableFrom": "cuentas_bancarias",
+          "tableTo": "fondos",
+          "columnsFrom": ["fondo_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "cuentas_bancarias_unique": {
+          "name": "cuentas_bancarias_unique",
+          "nullsNotDistinct": false,
+          "columns": ["fondo_id", "numero"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.beneficiarios": {
+      "name": "beneficiarios",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "fondo_id": {
+          "name": "fondo_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "nombre": {
+          "name": "nombre",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "banco": {
+          "name": "banco",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "numero_cuenta": {
+          "name": "numero_cuenta",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "clabe": {
+          "name": "clabe",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notas": {
+          "name": "notas",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "beneficiarios_fondo_id_idx": {
+          "name": "beneficiarios_fondo_id_idx",
+          "columns": [
+            {
+              "expression": "fondo_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "beneficiarios_fondo_id_fondos_id_fk": {
+          "name": "beneficiarios_fondo_id_fondos_id_fk",
+          "tableFrom": "beneficiarios",
+          "tableTo": "fondos",
+          "columnsFrom": ["fondo_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "beneficiarios_unique": {
+          "name": "beneficiarios_unique",
+          "nullsNotDistinct": false,
+          "columns": ["fondo_id", "nombre"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user_fondos": {
+      "name": "user_fondos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fondo_id": {
+          "name": "fondo_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "modified_by": {
+          "name": "modified_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "user_fondos_user_id_idx": {
+          "name": "user_fondos_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_fondos_fondo_id_idx": {
+          "name": "user_fondos_fondo_id_idx",
+          "columns": [
+            {
+              "expression": "fondo_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "user_fondos_user_id_users_id_fk": {
+          "name": "user_fondos_user_id_users_id_fk",
+          "tableFrom": "user_fondos",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "user_fondos_fondo_id_fondos_id_fk": {
+          "name": "user_fondos_fondo_id_fondos_id_fk",
+          "tableFrom": "user_fondos",
+          "tableTo": "fondos",
+          "columnsFrom": ["fondo_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_fondos_unique": {
+          "name": "user_fondos_unique",
+          "nullsNotDistinct": false,
+          "columns": ["user_id", "fondo_id"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.base_admin_fee": {
+      "name": "base_admin_fee",
+      "schema": "public",
+      "values": ["compromiso", "aportado"]
+    },
+    "public.concepto": {
+      "name": "concepto",
+      "schema": "public",
+      "values": [
+        "APO",
+        "APO-D",
+        "DIS",
+        "DEV",
+        "FEE",
+        "INV",
+        "INV-D",
+        "RET",
+        "GAS",
+        "GASP",
+        "APS",
+        "RPS",
+        "PRS",
+        "DPRS",
+        "TRA",
+        "CAM",
+        "ERR",
+        "TSI"
+      ]
+    },
+    "public.estado_call": {
+      "name": "estado_call",
+      "schema": "public",
+      "values": ["pendiente", "parcial", "completo"]
+    },
+    "public.estado_movimiento": {
+      "name": "estado_movimiento",
+      "schema": "public",
+      "values": ["borrador", "confirmado", "cancelado"]
+    },
+    "public.estado_proyecto": {
+      "name": "estado_proyecto",
+      "schema": "public",
+      "values": ["activo", "cerrado", "en_desarrollo"]
+    },
+    "public.metodo_admin_fee": {
+      "name": "metodo_admin_fee",
+      "schema": "public",
+      "values": ["capital_call_independiente", "incluido_en_capital_call"]
+    },
+    "public.metodo_cascada": {
+      "name": "metodo_cascada",
+      "schema": "public",
+      "values": ["pref_primero", "capital_primero"]
+    },
+    "public.moneda": {
+      "name": "moneda",
+      "schema": "public",
+      "values": ["MXN", "USD", "EUR", "ILS"]
+    },
+    "public.rol_usuario": {
+      "name": "rol_usuario",
+      "schema": "public",
+      "values": ["super_admin", "admin_fondo", "agente"]
+    },
+    "public.tipo_admin_fee": {
+      "name": "tipo_admin_fee",
+      "schema": "public",
+      "values": ["one_time", "anual"]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

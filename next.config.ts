@@ -1,6 +1,6 @@
 import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
-import withPWA from 'next-pwa';
+import withPWA from '@ducanh2912/next-pwa';
 
 // =============================================================================
 // Security Headers
@@ -72,28 +72,30 @@ const nextConfig: NextConfig = {
 const pwaConfig = withPWA({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
-  skipWaiting: true,
-  clientsClaim: true,
-  // CRITICAL: API default is NetworkOnly (security-first)
-  runtimeCaching: [
-    // Next.js static - CacheFirst (immutable hashes)
-    {
-      urlPattern: /\/_next\/static\/.*/i,
-      handler: 'CacheFirst',
-      options: { cacheName: 'next-static' },
-    },
-    // Media & fonts only (js/css already covered by _next/static)
-    {
-      urlPattern: /\.(woff2?|png|jpg|webp|svg|ico)$/i,
-      handler: 'StaleWhileRevalidate',
-      options: { cacheName: 'static-assets' },
-    },
-    // API - NetworkOnly by default (safe)
-    {
-      urlPattern: /\/api\/.*/i,
-      handler: 'NetworkOnly',
-    },
-  ],
+  workboxOptions: {
+    skipWaiting: true,
+    clientsClaim: true,
+    // CRITICAL: API default is NetworkOnly (security-first)
+    runtimeCaching: [
+      // Next.js static - CacheFirst (immutable hashes)
+      {
+        urlPattern: /\/_next\/static\/.*/i,
+        handler: 'CacheFirst',
+        options: { cacheName: 'next-static' },
+      },
+      // Media & fonts only (js/css already covered by _next/static)
+      {
+        urlPattern: /\.(woff2?|png|jpg|webp|svg|ico)$/i,
+        handler: 'StaleWhileRevalidate',
+        options: { cacheName: 'static-assets' },
+      },
+      // API - NetworkOnly by default (safe)
+      {
+        urlPattern: /\/api\/.*/i,
+        handler: 'NetworkOnly',
+      },
+    ],
+  },
 });
 
 // =============================================================================
