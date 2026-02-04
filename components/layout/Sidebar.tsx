@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Home, Settings, ChevronDown, ChevronRight } from 'lucide-react';
+import { Home, Settings, ChevronDown, ChevronRight, Building2 } from 'lucide-react';
 import { branding } from '@/config/branding';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils/cn';
@@ -24,6 +24,11 @@ const navigation: NavItem[] = [
     name: 'Dashboard',
     href: '/dashboard',
     icon: Home,
+  },
+  {
+    name: 'Fondos',
+    href: '/fondos',
+    icon: Building2,
   },
   {
     name: 'Configuración',
@@ -114,16 +119,28 @@ export function Sidebar({ userRole }: SidebarProps) {
           // const userRole = session?.user?.role; // Uses prop now
 
           // Role-based filtering for sidebar items
-          // Filter out Configuración if not admin
-          if (item.name === 'Configuración' && userRole !== 'admin' && userRole !== 'super_admin') {
+          // Filter out Configuración if not admin_fondo or super_admin
+          if (
+            item.name === 'Configuración' &&
+            userRole !== 'admin_fondo' &&
+            userRole !== 'super_admin'
+          ) {
             return null;
           }
 
           // For children - filter based on role
           const filteredChildren = item.children?.filter((child) => {
-            if (child.name === 'Usuarios' && userRole !== 'admin' && userRole !== 'super_admin')
+            if (
+              child.name === 'Usuarios' &&
+              userRole !== 'admin_fondo' &&
+              userRole !== 'super_admin'
+            )
               return false;
-            if (child.name === 'General' && userRole !== 'admin' && userRole !== 'super_admin')
+            if (
+              child.name === 'General' &&
+              userRole !== 'admin_fondo' &&
+              userRole !== 'super_admin'
+            )
               return false;
             return true;
           });

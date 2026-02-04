@@ -90,6 +90,7 @@
 | /accept-invite | `src/app/(auth)/accept-invite/page.tsx` |
 | /dashboard | `src/app/(protected)/dashboard/page.tsx` |
 | /error | `src/app/(auth)/error/page.tsx` |
+| /fondos | `src/app/(protected)/fondos/page.tsx` |
 | /forgot-password | `src/app/(auth)/forgot-password/page.tsx` |
 | /login | `src/app/(auth)/login/page.tsx` |
 | /offline | `src/app/offline/page.tsx` |
@@ -344,10 +345,10 @@
 | Metric | Value |
 |--------|-------|
 | Dependencies | 32 |
-| Page Routes | 13 |
+| Page Routes | 14 |
 | API Routes | 8 |
 | Components & Utils | 117 |
-| **Total items** | **170** |
+| **Total items** | **171** |
 
 ---
 
