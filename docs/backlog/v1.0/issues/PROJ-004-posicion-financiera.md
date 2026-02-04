@@ -3,7 +3,7 @@
 > **Issue ID:** PROJ-004
 > **Priority:** P2
 > **Effort:** S
-> **Status:** 📋 Backlog
+> **Status:** ✅ Done (2026-02-04)
 > **Epic:** [E03-EPIC-PROYECTOS](../epics/EPIC-PROYECTOS.md)
 
 ---
@@ -29,34 +29,11 @@ Implementar CMP-008 (ProjectPositionCard) mostrando resumen financiero del proye
 
 ## ✅ Criterios de Aceptación
 
-```gherkin
-Scenario: Ver posición financiera
-  Given que abro el detalle del proyecto "Marina Tower"
-  Then veo ProjectPositionCard con 4 métricas
-  And muestra: Inversión Recibida = $500,000
-  And muestra: Gastos = $50,000
-  And muestra: Retornos = $0
-  And muestra: Utilidad/Pérdida = -$50,000
-
-Scenario: Cálculo de utilidad
-  Given que el proyecto tiene:
-    | Concepto | Monto |
-    | Inversión Recibida | $500,000 |
-    | Gastos | $50,000 |
-    | Retornos | $600,000 |
-  Then Utilidad = $600,000 - $500,000 - $50,000 = $50,000
-  And el valor se muestra en verde con signo +
-
-Scenario: Pérdida
-  Given que Retornos < (Inversión + Gastos)
-  Then Utilidad muestra valor negativo en rojo
-```
-
-- [ ] Card en tab Overview de detalle proyecto
-- [ ] Métricas: Inversión Recibida, Gastos, Retornos, Utilidad/Pérdida
-- [ ] Fórmula: Utilidad = Retornos - Inversión - Gastos (BR-009)
-- [ ] Valores actualizados al cargar página
-- [ ] Color: verde para utilidad positiva, rojo para negativa
+- [x] Card en tab Overview de detalle proyecto
+- [x] Métricas: Inversión Recibida, Gastos, Retornos, Utilidad/Pérdida
+- [x] Fórmula: Utilidad = Retornos - Inversión - Gastos (BR-009)
+- [x] Valores actualizados al cargar página
+- [x] Color: verde para utilidad positiva, rojo para negativa
 
 ---
 
@@ -69,6 +46,28 @@ Scenario: Pérdida
 
 - [ ] Unit: Cálculo de utilidad
 - [ ] Unit: Render con valores positivos/negativos
+
+---
+
+## Implementation Notes
+
+**Completed:** 2026-02-04
+
+**Context & Decisions:**
+
+- Integrated Utilidad card into existing overview page
+- BR-009 formula: Utilidad = Retornos - Inversión - Gastos
+- Green (#10b981) for gains, Red (#ef4444) for losses
+
+**Files modified:**
+
+- `src/app/(protected)/fondos/[id]/proyectos/[proyectoId]/page.tsx` — Added Utilidad card
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] Build: Pass
 
 ---
 

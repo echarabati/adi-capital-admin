@@ -7,16 +7,15 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 45 |
-| ✅ Done | 12 |
+| 📅 To Do | 44 |
+| ✅ Done | 13 |
 
 ### 📅 To Do
 
 **[E02-EPIC-FONDOS](../epics/EPIC-FONDOS.md)** (1)
 - [FOND-004: CRUD Cuentas Bancarias](v1.0/issues/FOND-004-cuentas-bancarias.md) 🟡
 
-**[E03-EPIC-PROYECTOS](../epics/EPIC-PROYECTOS.md)** (2)
-- [PROJ-004: Posición financiera del proyecto](v1.0/issues/PROJ-004-posicion-financiera.md)
+**[E03-EPIC-PROYECTOS](../epics/EPIC-PROYECTOS.md)** (1)
 - [PROJ-005: Estados proyecto](v1.0/issues/PROJ-005-estados-proyecto.md)
 
 **[E04-EPIC-INVERSIONISTAS](../epics/EPIC-INVERSIONISTAS.md)** (5)
@@ -77,7 +76,7 @@
 
 
 <details>
-<summary>✅ Done (12)</summary>
+<summary>✅ Done (13)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
@@ -87,6 +86,7 @@
 - [PROJ-001: Lista de proyectos](v1.0/issues/PROJ-001-lista-proyectos.md) 🟡
 - [PROJ-002: Crear/Editar proyecto](v1.0/issues/PROJ-002-crear-editar-proyecto.md) 🟡
 - [PROJ-003: Detalle de proyecto con tabs](v1.0/issues/PROJ-003-detalle-proyecto.md) 🟡
+- [PROJ-004: Posición financiera del proyecto](v1.0/issues/PROJ-004-posicion-financiera.md)
 - [SCHEMA-001: Crear schemas Drizzle para entidades core](v1.0/issues/SCHEMA-001-drizzle-schemas-core.md) 🔴
 - [SCHEMA-002: Crear schemas para movimientos y calendario](v1.0/issues/SCHEMA-002-schemas-movimientos.md) 🔴
 - [SCHEMA-003: Extender users con roles y fondos](v1.0/issues/SCHEMA-003-users-roles.md) 🔴
