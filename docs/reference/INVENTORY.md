@@ -91,6 +91,10 @@
 | /dashboard | `src/app/(protected)/dashboard/page.tsx` |
 | /error | `src/app/(auth)/error/page.tsx` |
 | /fondos | `src/app/(protected)/fondos/page.tsx` |
+| /fondos/[id] | `src/app/(protected)/fondos/[id]/page.tsx` |
+| /fondos/[id]/beneficiarios | `src/app/(protected)/fondos/[id]/beneficiarios/page.tsx` |
+| /fondos/[id]/cuentas | `src/app/(protected)/fondos/[id]/cuentas/page.tsx` |
+| /fondos/[id]/proyectos | `src/app/(protected)/fondos/[id]/proyectos/page.tsx` |
 | /forgot-password | `src/app/(auth)/forgot-password/page.tsx` |
 | /login | `src/app/(auth)/login/page.tsx` |
 | /offline | `src/app/offline/page.tsx` |
@@ -345,10 +349,10 @@
 | Metric | Value |
 |--------|-------|
 | Dependencies | 32 |
-| Page Routes | 14 |
+| Page Routes | 18 |
 | API Routes | 8 |
 | Components & Utils | 117 |
-| **Total items** | **171** |
+| **Total items** | **175** |
 
 ---
 

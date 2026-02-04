@@ -29,6 +29,18 @@ export type FondoListItem = {
   activo: boolean;
 };
 
+export type FondoDetail = {
+  id: string;
+  nombre: string;
+  monedaBase: string;
+  metodoCascada: string;
+  successFeeDefault: string | null;
+  prefRateDefault: string | null;
+  capitalSocios: string | null;
+  activo: boolean;
+  proyectosCount: number;
+};
+
 // =============================================================================
 // Get Fondos with RBAC
 // =============================================================================
@@ -108,6 +120,99 @@ export async function getFondos(): Promise<FondoListItem[]> {
     activo: f.activo ?? true,
     proyectosCount: Number(f.proyectosCount) || 0,
   }));
+}
+
+// =============================================================================
+// Get Fondo by ID with RBAC
+// =============================================================================
+
+/**
+ * Get a single fund by ID with RBAC check.
+ *
+ * RBAC:
+ * - super_admin: Any active fund
+ * - admin_fondo/agente: Only assigned funds
+ *
+ * @param id - Fund UUID
+ * @returns Fund detail or null if not found/no access
+ */
+export async function getFondoById(id: string): Promise<FondoDetail | null> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error('Debes iniciar sesión');
+  }
+
+  const userId = session.user.id;
+  const userRole = session.user.role;
+
+  // Subquery for project count
+  const proyectosCountSq = db
+    .select({
+      fondoId: proyectos.fondoId,
+      count: sql<number>`count(*)`.as('count'),
+    })
+    .from(proyectos)
+    .groupBy(proyectos.fondoId)
+    .as('proyectos_count');
+
+  // Super Admin: can access any fund
+  if (isSuperAdmin(userRole)) {
+    const [fondo] = await db
+      .select({
+        id: fondos.id,
+        nombre: fondos.nombre,
+        monedaBase: fondos.monedaBase,
+        metodoCascada: fondos.metodoCascada,
+        successFeeDefault: fondos.successFeeDefault,
+        prefRateDefault: fondos.prefRateDefault,
+        capitalSocios: fondos.capitalSocios,
+        activo: fondos.activo,
+        proyectosCount: sql<number>`coalesce(${proyectosCountSq.count}, 0)`,
+      })
+      .from(fondos)
+      .leftJoin(proyectosCountSq, eq(fondos.id, proyectosCountSq.fondoId))
+      .where(eq(fondos.id, id))
+      .limit(1);
+
+    if (!fondo) return null;
+
+    return {
+      ...fondo,
+      monedaBase: fondo.monedaBase ?? 'MXN',
+      metodoCascada: fondo.metodoCascada ?? 'pref_primero',
+      activo: fondo.activo ?? true,
+      proyectosCount: Number(fondo.proyectosCount) || 0,
+    };
+  }
+
+  // Admin de Fondo / Agente: must be assigned to fund
+  const [fondo] = await db
+    .select({
+      id: fondos.id,
+      nombre: fondos.nombre,
+      monedaBase: fondos.monedaBase,
+      metodoCascada: fondos.metodoCascada,
+      successFeeDefault: fondos.successFeeDefault,
+      prefRateDefault: fondos.prefRateDefault,
+      capitalSocios: fondos.capitalSocios,
+      activo: fondos.activo,
+      proyectosCount: sql<number>`coalesce(${proyectosCountSq.count}, 0)`,
+    })
+    .from(fondos)
+    .innerJoin(userFondos, eq(fondos.id, userFondos.fondoId))
+    .leftJoin(proyectosCountSq, eq(fondos.id, proyectosCountSq.fondoId))
+    .where(and(eq(fondos.id, id), eq(userFondos.userId, userId)))
+    .limit(1);
+
+  if (!fondo) return null;
+
+  return {
+    ...fondo,
+    monedaBase: fondo.monedaBase ?? 'MXN',
+    metodoCascada: fondo.metodoCascada ?? 'pref_primero',
+    activo: fondo.activo ?? true,
+    proyectosCount: Number(fondo.proyectosCount) || 0,
+  };
 }
 
 // =============================================================================
