@@ -244,50 +244,48 @@ export function RecentUsersTable() {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="min-w-0 space-y-4">
       {/* Header - On dashboard background (no card) */}
       <div>
         <h2 className="text-foreground text-lg font-semibold">Usuarios Recientes</h2>
         <p className="text-muted-foreground text-sm">Gestión de usuarios del sistema</p>
       </div>
 
-      {/* Filter Bar - On dashboard background */}
-      <div className="flex flex-wrap items-end gap-4">
-        {/* Search */}
-        <div className="min-w-48 flex-1 lg:max-w-xs">
+      {/* Filter Bar - Stacked on mobile, inline on desktop */}
+      <div className="space-y-3 sm:flex sm:flex-wrap sm:items-end sm:gap-4 sm:space-y-0">
+        {/* Search - Full width on mobile */}
+        <div className="w-full sm:w-auto sm:min-w-48 sm:flex-1 lg:max-w-xs">
           <label className="text-muted-foreground mb-1 block text-xs font-medium tracking-wide uppercase">
             Buscar
           </label>
           <TableSearch value={search} onChange={setSearch} placeholder="Nombre, email..." />
         </div>
 
-        {/* Role Filter (Multi) */}
-        <TableFilter
-          label="Rol"
-          options={roleOptions}
-          value={roleFilter}
-          onChange={(v) => setRoleFilter(v as string[])}
-          mode="multi"
-          placeholder="Todos los roles"
-          className="min-w-40"
-        />
+        {/* Filters Row - 2 columns on mobile */}
+        <div className="grid grid-cols-2 gap-3 sm:contents">
+          <TableFilter
+            label="Rol"
+            options={roleOptions}
+            value={roleFilter}
+            onChange={(v) => setRoleFilter(v as string[])}
+            mode="multi"
+            placeholder="Todos los roles"
+          />
+          <TableFilter
+            label="Estado"
+            options={statusOptions}
+            value={statusFilter}
+            onChange={(v) => setStatusFilter(v as string)}
+            mode="single"
+            placeholder="Todos"
+          />
+        </div>
 
-        {/* Status Filter (Single) */}
-        <TableFilter
-          label="Estado"
-          options={statusOptions}
-          value={statusFilter}
-          onChange={(v) => setStatusFilter(v as string)}
-          mode="single"
-          placeholder="Todos"
-          className="min-w-32"
-        />
+        {/* Spacer (desktop only) */}
+        <div className="hidden lg:block lg:flex-1" />
 
-        {/* Spacer */}
-        <div className="flex-1" />
-
-        {/* Action Button */}
-        <div className="flex items-end">
+        {/* Action Button - Right aligned */}
+        <div className="flex justify-end sm:justify-start">
           <button className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors">
             <Plus className="h-4 w-4" />
             Agregar
@@ -295,9 +293,9 @@ export function RecentUsersTable() {
         </div>
       </div>
 
-      {/* Table - Wrapped in sidebar-colored container */}
+      {/* Table - Internal horizontal scroll respecting shell padding */}
       <div
-        className="overflow-hidden rounded-xl border"
+        className="scrollbar-auto w-full overflow-x-auto rounded-xl border"
         style={{
           backgroundColor: 'var(--sidebar-bg)',
           borderColor: 'var(--sidebar-border)',
@@ -309,7 +307,7 @@ export function RecentUsersTable() {
           keyExtractor={(user) => user.id}
           pageSize={5}
           showSearch={false}
-          className="rounded-none border-0 shadow-none"
+          className="min-w-[500px] rounded-none border-0 shadow-none"
         />
       </div>
     </div>

@@ -312,6 +312,23 @@ body {
   background: var(--foreground);
 }
 
+/* Auto-hide scrollbar - overlay style like native iOS/macOS */
+.scrollbar-auto {
+  scrollbar-width: thin;
+}
+
+/* On touch devices or when not actively scrolling, make it subtle */
+@media (pointer: coarse) {
+  .scrollbar-auto::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .scrollbar-auto::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    opacity: 0.5;
+  }
+}
+
 /* ===== UTILITY CLASSES ===== */
 .glass {
   backdrop-filter: blur(12px);

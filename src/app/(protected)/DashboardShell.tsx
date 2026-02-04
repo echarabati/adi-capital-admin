@@ -27,8 +27,8 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
       </div>
 
       {/* Main content area */}
-      <main className="pt-16 lg:ml-60">
-        <div className="p-4 lg:p-6">{children}</div>
+      <main className="min-w-0 pt-16 lg:ml-60">
+        <div className="max-w-full p-4 lg:p-6">{children}</div>
       </main>
 
       {/* PWA Install prompts - only in protected pages */}

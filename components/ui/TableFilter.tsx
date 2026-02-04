@@ -149,7 +149,7 @@ export function TableFilter({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="bg-card absolute left-0 z-50 mt-1 w-full min-w-48 origin-top-left rounded-lg border border-white/10 py-1 shadow-xl ring-1 shadow-black/20 ring-black/5 backdrop-blur-sm focus:outline-none">
+          <Menu.Items className="bg-card absolute left-0 z-50 mt-1 w-full origin-top-left rounded-lg border border-white/10 py-1 shadow-xl ring-1 shadow-black/20 ring-black/5 backdrop-blur-sm focus:outline-none sm:min-w-48">
             {/* Multi-select actions */}
             {mode === 'multi' && (
               <div className="flex items-center justify-between border-b border-white/10 px-3 py-2">

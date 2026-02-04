@@ -39,12 +39,12 @@ export default async function DashboardPage() {
       {/* Main Content Grid */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Users Table - 2 cols */}
-        <div className="lg:col-span-2">
+        <div className="min-w-0 lg:col-span-2">
           <RecentUsersTable />
         </div>
 
-        {/* Quick Actions - 1 col, offset to align with table */}
-        <div className="lg:mt-35">
+        {/* Quick Actions - constrained width on mobile, full on desktop */}
+        <div className="max-w-sm lg:mt-35 lg:max-w-none">
           <QuickActions user={session.user} />
         </div>
       </div>
