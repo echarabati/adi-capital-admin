@@ -95,6 +95,10 @@
 | /fondos/[id]/beneficiarios | `src/app/(protected)/fondos/[id]/beneficiarios/page.tsx` |
 | /fondos/[id]/cuentas | `src/app/(protected)/fondos/[id]/cuentas/page.tsx` |
 | /fondos/[id]/proyectos | `src/app/(protected)/fondos/[id]/proyectos/page.tsx` |
+| /fondos/[id]/proyectos/[proyectoId] | `src/app/(protected)/fondos/[id]/proyectos/[proyectoId]/page.tsx` |
+| /fondos/[id]/proyectos/[proyectoId]/documentos | `src/app/(protected)/fondos/[id]/proyectos/[proyectoId]/documentos/page.tsx` |
+| /fondos/[id]/proyectos/[proyectoId]/inversiones | `src/app/(protected)/fondos/[id]/proyectos/[proyectoId]/inversiones/page.tsx` |
+| /fondos/[id]/proyectos/[proyectoId]/movimientos | `src/app/(protected)/fondos/[id]/proyectos/[proyectoId]/movimientos/page.tsx` |
 | /forgot-password | `src/app/(auth)/forgot-password/page.tsx` |
 | /login | `src/app/(auth)/login/page.tsx` |
 | /offline | `src/app/offline/page.tsx` |
@@ -349,10 +353,10 @@
 | Metric | Value |
 |--------|-------|
 | Dependencies | 32 |
-| Page Routes | 18 |
+| Page Routes | 22 |
 | API Routes | 8 |
 | Components & Utils | 117 |
-| **Total items** | **175** |
+| **Total items** | **179** |
 
 ---
 

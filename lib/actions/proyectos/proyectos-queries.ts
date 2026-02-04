@@ -5,7 +5,7 @@
  *
  * Server-side queries for projects with RBAC filtering.
  *
- * @see PROJ-001
+ * @see PROJ-001, PROJ-003
  */
 
 import { eq, and, sql } from 'drizzle-orm';
@@ -24,6 +24,20 @@ export type ProyectoListItem = {
   estado: 'activo' | 'cerrado' | 'en_desarrollo';
   successFeePct: string | null;
   inversionRecibida: string;
+  inversionistasCount: number;
+};
+
+export type ProyectoDetail = {
+  id: string;
+  fondoId: string;
+  nombre: string;
+  descripcion: string | null;
+  estado: 'activo' | 'cerrado' | 'en_desarrollo';
+  metodoCascada: string | null;
+  successFeePct: string | null;
+  inversionRecibida: string;
+  gastos: string;
+  retornos: string;
   inversionistasCount: number;
 };
 
@@ -89,4 +103,82 @@ export async function getProyectosByFondo(fondoId: string): Promise<ProyectoList
     inversionRecibida: p.inversionRecibida ?? '0',
     inversionistasCount: Number(p.inversionistasCount) || 0,
   }));
+}
+
+// =============================================================================
+// Get Proyecto by ID
+// =============================================================================
+
+/**
+ * Get a single project by ID.
+ *
+ * RBAC:
+ * - super_admin: Any project
+ * - admin_fondo/agente: Only projects in assigned funds
+ *
+ * @param id - Project UUID
+ * @returns Project detail or null if not found/no access
+ */
+export async function getProyectoById(id: string): Promise<ProyectoDetail | null> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return null;
+  }
+
+  const userId = session.user.id;
+  const userRole = session.user.role;
+
+  // Fetch project
+  const [proyecto] = await db
+    .select({
+      id: proyectos.id,
+      fondoId: proyectos.fondoId,
+      nombre: proyectos.nombre,
+      descripcion: proyectos.descripcion,
+      estado: proyectos.estado,
+      metodoCascada: proyectos.metodoCascada,
+      successFeePct: proyectos.successFeePct,
+      inversionRecibida: proyectos.inversionRecibida,
+      gastos: proyectos.gastos,
+      retornos: proyectos.retornos,
+      inversionistasCount: sql<number>`(
+        SELECT COUNT(DISTINCT ${inversiones.inversionistaId})
+        FROM ${inversiones}
+        WHERE ${inversiones.proyectoId} = ${proyectos.id}
+      )`.as('inversionistas_count'),
+    })
+    .from(proyectos)
+    .where(eq(proyectos.id, id))
+    .limit(1);
+
+  if (!proyecto) {
+    return null;
+  }
+
+  // Check fund access for non-super_admin
+  if (!isSuperAdmin(userRole)) {
+    const [access] = await db
+      .select({ fondoId: userFondos.fondoId })
+      .from(userFondos)
+      .where(and(eq(userFondos.userId, userId), eq(userFondos.fondoId, proyecto.fondoId)))
+      .limit(1);
+
+    if (!access) {
+      return null;
+    }
+  }
+
+  return {
+    id: proyecto.id,
+    fondoId: proyecto.fondoId,
+    nombre: proyecto.nombre,
+    descripcion: proyecto.descripcion,
+    estado: proyecto.estado,
+    metodoCascada: proyecto.metodoCascada,
+    successFeePct: proyecto.successFeePct,
+    inversionRecibida: proyecto.inversionRecibida ?? '0',
+    gastos: proyecto.gastos ?? '0',
+    retornos: proyecto.retornos ?? '0',
+    inversionistasCount: Number(proyecto.inversionistasCount) || 0,
+  };
 }

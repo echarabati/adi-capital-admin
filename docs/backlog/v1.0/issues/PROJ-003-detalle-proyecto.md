@@ -3,7 +3,7 @@
 > **Issue ID:** PROJ-003
 > **Priority:** P1
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Done (2026-02-04)
 > **Epic:** [E03-EPIC-PROYECTOS](../epics/EPIC-PROYECTOS.md)
 
 ---
@@ -29,11 +29,11 @@ Implementar página de detalle de proyecto con tabs para Inversiones, Movimiento
 
 ## ✅ Criterios de Aceptación
 
-- [ ] URL: `/fondos/[fondoId]/proyectos/[id]`
-- [ ] Header con nombre, código, badge estado
-- [ ] Tabs: Overview, Inversiones, Movimientos, Documentos
-- [ ] Tab Overview: posición financiera (placeholder PROJ-004)
-- [ ] 404 si no existe o sin acceso
+- [x] URL: `/fondos/[fondoId]/proyectos/[id]`
+- [x] Header con nombre, código, badge estado
+- [x] Tabs: Overview, Inversiones, Movimientos, Documentos
+- [x] Tab Overview: posición financiera (placeholder PROJ-004)
+- [x] 404 si no existe o sin acceso
 
 ---
 
@@ -41,6 +41,31 @@ Implementar página de detalle de proyecto con tabs para Inversiones, Movimiento
 
 - Bloqueado por: PROJ-002
 - Bloquea a: PROJ-004, INVE-001
+
+---
+
+## Implementation Notes
+
+**Completed:** 2026-02-04
+
+**Context & Decisions:**
+
+- Followed `FondoLayout` pattern for consistency
+- Overview shows stats grid + project info
+- Three placeholder tabs for future issues
+
+**Files created:**
+
+- `lib/actions/proyectos/proyectos-queries.ts` — Added `getProyectoById`
+- `src/app/(protected)/fondos/[id]/proyectos/[proyectoId]/layout.tsx` — Header + tabs
+- `src/app/(protected)/fondos/[id]/proyectos/[proyectoId]/page.tsx` — Overview tab
+- `.../inversiones/page.tsx`, `.../movimientos/page.tsx`, `.../documentos/page.tsx` — Placeholders
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] Build: Pass
 
 ---
 
