@@ -22,7 +22,7 @@ export const createUserSchema = z.object({
   email: z.string().email('Email inválido'),
 
   /** User's role */
-  role: z.enum([ROLES.USER, ROLES.ADMIN, ROLES.SUPER_ADMIN], {
+  role: z.enum([ROLES.AGENTE, ROLES.ADMIN_FONDO, ROLES.SUPER_ADMIN], {
     message: 'Rol inválido',
   }),
 
@@ -51,7 +51,7 @@ export const updateUserSchema = z.object({
   email: z.string().email('Email inválido'),
 
   /** User's role */
-  role: z.enum([ROLES.USER, ROLES.ADMIN, ROLES.SUPER_ADMIN], {
+  role: z.enum([ROLES.AGENTE, ROLES.ADMIN_FONDO, ROLES.SUPER_ADMIN], {
     message: 'Rol inválido',
   }),
 });

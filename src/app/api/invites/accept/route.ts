@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
         name,
         password: hashedPassword,
         emailVerified: new Date(), // Email is verified since they received the invite
-        role: 'user',
+        role: 'admin_fondo',
       })
       .returning();
 

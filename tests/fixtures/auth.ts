@@ -22,7 +22,7 @@ export async function createTestUser(overrides: Partial<typeof users.$inferInser
       email,
       name: 'Test User',
       password: hashedPassword,
-      role: 'user',
+      role: 'agente',
       emailVerified: new Date(),
       ...overrides,
     })
@@ -36,7 +36,7 @@ export async function createTestUser(overrides: Partial<typeof users.$inferInser
  * Convenience wrapper for E2E tests that need admin access.
  */
 export async function createAdminTestUser(overrides: Partial<typeof users.$inferInsert> = {}) {
-  return createTestUser({ role: 'admin', ...overrides });
+  return createTestUser({ role: 'admin_fondo', ...overrides });
 }
 
 /**

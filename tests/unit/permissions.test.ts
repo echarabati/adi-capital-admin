@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { hasPermission, requirePermission, hasMinimumRole } from '@/lib/auth/permissions';
 
-// Mock config/roles if needed, but since we updated vitest alias it should resolve.
-// Assuming 'admin', 'user', 'super_admin' exist in the system.
+// Updated to use new role values: super_admin, admin_fondo, agente
+// Hierarchy: agente < admin_fondo < super_admin
 
 describe('RBAC Permissions', () => {
   describe('hasPermission', () => {
@@ -11,14 +11,14 @@ describe('RBAC Permissions', () => {
       expect(hasPermission('super_admin', 'settings', 'update')).toBe(true);
     });
 
-    it('allows admin to manage users', () => {
-      expect(hasPermission('admin', 'users', 'create')).toBe(true);
-      expect(hasPermission('admin', 'users', 'update')).toBe(true);
-      expect(hasPermission('admin', 'users', 'delete')).toBe(true);
+    it('allows admin_fondo to manage users', () => {
+      expect(hasPermission('admin_fondo', 'users', 'create')).toBe(true);
+      expect(hasPermission('admin_fondo', 'users', 'update')).toBe(true);
+      expect(hasPermission('admin_fondo', 'users', 'delete')).toBe(true);
     });
 
-    it('denies user from deleting users', () => {
-      expect(hasPermission('user', 'users', 'delete')).toBe(false);
+    it('denies agente from deleting users', () => {
+      expect(hasPermission('agente', 'users', 'delete')).toBe(false);
     });
 
     it('returns false for undefined role', () => {
@@ -29,23 +29,23 @@ describe('RBAC Permissions', () => {
 
   describe('requirePermission', () => {
     it('does not throw if allowed', () => {
-      expect(() => requirePermission('admin', 'users', 'create')).not.toThrow();
+      expect(() => requirePermission('admin_fondo', 'users', 'create')).not.toThrow();
     });
 
     it('throws error if denied', () => {
-      expect(() => requirePermission('user', 'users', 'delete')).toThrow(/Permission denied/);
+      expect(() => requirePermission('agente', 'users', 'delete')).toThrow(/Permission denied/);
     });
   });
 
   describe('hasMinimumRole', () => {
-    // Assuming hierarchy user < admin < super_admin
+    // Hierarchy: agente < admin_fondo < super_admin
     it('returns true if role meets minimum', () => {
-      expect(hasMinimumRole('admin', 'admin')).toBe(true);
-      expect(hasMinimumRole('super_admin', 'admin')).toBe(true);
+      expect(hasMinimumRole('admin_fondo', 'admin_fondo')).toBe(true);
+      expect(hasMinimumRole('super_admin', 'admin_fondo')).toBe(true);
     });
 
     it('returns false if role is lower', () => {
-      expect(hasMinimumRole('user', 'admin')).toBe(false);
+      expect(hasMinimumRole('agente', 'admin_fondo')).toBe(false);
     });
   });
 });

@@ -3,7 +3,7 @@
 > **Issue ID:** SCHEMA-003
 > **Priority:** P0
 > **Effort:** S
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-04)
 > **Epic:** [E01-EPIC-SCHEMA](../epics/EPIC-SCHEMA.md)
 
 ---
@@ -34,47 +34,53 @@ Extender schema de users existente (Starter Kit) para soportar roles y asignaci�
 
 ## ✅ Criterios de Aceptación
 
-- [ ] Enum `rol_usuario`: 'super_admin', 'admin_fondo', 'agente'
-- [ ] Campo `rol` agregado a tabla `users` existente
-- [ ] Tabla `user_fondos` para asignación NxM
-- [ ] Índices en `user_fondos`
-- [ ] `pnpm db:generate` ejecuta sin errores
+- [x] Enum `rol_usuario`: 'super_admin', 'admin_fondo', 'agente'
+- [x] Campo `role` agregado a tabla `users` usando enum (kept field name for compatibility)
+- [x] Tabla `user_fondos` para asignación NxM
+- [x] Índices en `user_fondos`
+- [x] `pnpm db:generate` ejecuta sin errores
 
 ## 🔧 Contexto Técnico
 
 **Archivos a modificar:**
 
-- `lib/db/schema/users.ts` — Agregar campo `rol`
+- `lib/db/schema/users.ts` — Agregar campo `role` con enum
 
 **Archivos a crear:**
 
 - `lib/db/schema/user-fondos.ts` — Tabla de asignación
 
 ```typescript
-export const userFondos = pgTable('user_fondos', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => createId()),
-  userId: text('user_id')
-    .notNull()
-    .references(() => users.id),
-  fondoId: text('fondo_id')
-    .notNull()
-    .references(() => fondos.id),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-});
+export const userFondos = pgTable(
+  'user_fondos',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    fondoId: uuid('fondo_id')
+      .notNull()
+      .references(() => fondos.id, { onDelete: 'cascade' }),
+    ...auditFields,
+  },
+  (table) => [
+    index('user_fondos_user_id_idx').on(table.userId),
+    index('user_fondos_fondo_id_idx').on(table.fondoId),
+    unique('user_fondos_unique').on(table.userId, table.fondoId),
+  ]
+);
 ```
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: SCHEMA-001
+- Bloqueado por: SCHEMA-001 ✅
 - Bloquea a: FOND-001, FOND-002
 
 ## 🧪 Tests Requeridos
 
-- [ ] Integration: Migraciones aplican sin romper auth existente
+- [x] Integration: Migraciones aplican sin romper auth existente
 
 ## 🚫 Out of Scope
 
@@ -82,4 +88,42 @@ export const userFondos = pgTable('user_fondos', {
 
 ---
 
+## Implementation Notes
+
+**Completed:** 2026-02-04
+
+**Context & Decisions:**
+
+- Kept field name as `role` (not `rol`) for backward compatibility with existing codebase
+- Changed enum values from `super_admin/admin/user` to `super_admin/admin_fondo/agente` per data model
+- Updated all role references across 10+ files to use new role values
+- Default role for invited users changed from `user` to `admin_fondo`
+
+**Files created:**
+
+- `lib/db/schema/user-fondos.ts` — N:M pivot table with UNIQUE(user_id, fondo_id)
+
+**Files modified:**
+
+- `lib/db/schema/enums.ts` — Added `rolUsuarioEnum`
+- `lib/db/schema/users.ts` — Changed role field to use enum
+- `lib/db/schema/index.ts` — Export user-fondos
+- `src/config/roles.ts` — New role values (SUPER_ADMIN, ADMIN_FONDO, AGENTE)
+- `lib/auth/permissions.ts` — Updated PERMISSIONS matrix
+- `lib/validations/admin/user-admin.ts` — Schema updates
+- `components/admin/UserTable.tsx` — Role filter options
+- `components/admin/UserFormDialog.tsx` — Form defaults
+- `tests/fixtures/auth.ts` — Test role values
+- `tests/e2e/user-admin.spec.ts` — E2E test role values
+- `src/app/api/invites/accept/route.ts` — Default role
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] DB Generate: `lib/db/migrations/0004_legal_senator_kelly.sql`
+
+---
+
 _Creado: 2026-02-03_
+_Completado: 2026-02-04_

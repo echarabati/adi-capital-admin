@@ -53,8 +53,8 @@ type UserForEdit = Pick<UserListItem, 'id' | 'name' | 'email' | 'role'>;
 // Filter options with colors
 const roleOptions = [
   { value: ROLES.SUPER_ADMIN, label: 'Super Admin', color: '#ef4444' },
-  { value: ROLES.ADMIN, label: 'Administrador', color: '#3b82f6' },
-  { value: ROLES.USER, label: 'Usuario', color: '#6b7280' },
+  { value: ROLES.ADMIN_FONDO, label: 'Administrador de Fondo', color: '#3b82f6' },
+  { value: ROLES.AGENTE, label: 'Agente', color: '#6b7280' },
 ];
 
 // =============================================================================

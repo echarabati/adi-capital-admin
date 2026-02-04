@@ -7,15 +7,10 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 56 |
-| ✅ Done | 0 |
+| 📅 To Do | 53 |
+| ✅ Done | 3 |
 
 ### 📅 To Do
-
-**[E01-EPIC-SCHEMA](../epics/EPIC-SCHEMA.md)** (3)
-- [SCHEMA-001: Crear schemas Drizzle para entidades core](v1.0/issues/SCHEMA-001-drizzle-schemas-core.md) 🔴
-- [SCHEMA-002: Crear schemas para movimientos y calendario](v1.0/issues/SCHEMA-002-schemas-movimientos.md) 🔴
-- [SCHEMA-003: Extender users con roles y fondos](v1.0/issues/SCHEMA-003-users-roles.md) 🔴
 
 **[E02-EPIC-FONDOS](../epics/EPIC-FONDOS.md)** (6)
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
@@ -88,6 +83,14 @@
 - [NEWS-001: Lista de noticias](v1.0/issues/NEWS-001-lista-noticias.md)
 - [NEWS-002: Publicar noticia + sync](v1.0/issues/NEWS-002-publicar-noticia.md)
 
+
+<details>
+<summary>✅ Done (3)</summary>
+
+- [SCHEMA-001: Crear schemas Drizzle para entidades core](v1.0/issues/SCHEMA-001-drizzle-schemas-core.md) 🔴
+- [SCHEMA-002: Crear schemas para movimientos y calendario](v1.0/issues/SCHEMA-002-schemas-movimientos.md) 🔴
+- [SCHEMA-003: Extender users con roles y fondos](v1.0/issues/SCHEMA-003-users-roles.md) 🔴
+</details>
 
 ---
 

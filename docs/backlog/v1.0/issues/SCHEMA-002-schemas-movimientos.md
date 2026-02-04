@@ -3,7 +3,7 @@
 > **Issue ID:** SCHEMA-002
 > **Priority:** P0
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-04)
 > **Epic:** [E01-EPIC-SCHEMA](../epics/EPIC-SCHEMA.md)
 
 ---
@@ -57,12 +57,12 @@ Scenario: Índices optimizados
     - calendario_pagos.inversion_id
 ```
 
-- [ ] `lib/db/schema/movimientos.ts` con concepto enum (18 valores)
-- [ ] `lib/db/schema/calendario-pagos.ts` con estado_call enum
-- [ ] `lib/db/schema/cuentas-bancarias.ts` con FK a fondos
-- [ ] `lib/db/schema/beneficiarios.ts` con FK a fondos
-- [ ] Índices para queries frecuentes
-- [ ] `pnpm db:generate` ejecuta sin errores
+- [x] `lib/db/schema/movimientos.ts` con concepto enum (18 valores)
+- [x] `lib/db/schema/calendario-pagos.ts` con estado_call enum
+- [x] `lib/db/schema/cuentas-bancarias.ts` con FK a fondos
+- [x] `lib/db/schema/beneficiarios.ts` con FK a fondos
+- [x] Índices para queries frecuentes
+- [x] `pnpm db:generate` ejecuta sin errores
 
 ## 🔧 Contexto Técnico
 
@@ -100,12 +100,12 @@ export const conceptoEnum = pgEnum('concepto', [
 
 **Dependencias de Issues:**
 
-- Bloqueado por: SCHEMA-001
+- Bloqueado por: SCHEMA-001 ✅
 - Bloquea a: FOND-004, FOND-005, MOV-\*, INVE-005
 
 ## 🧪 Tests Requeridos
 
-- [ ] Integration: Migraciones aplican correctamente
+- [x] Integration: Migraciones aplican correctamente
 
 ## 🚫 Out of Scope
 
@@ -113,4 +113,38 @@ export const conceptoEnum = pgEnum('concepto', [
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## Implementation Notes
+
+**Completed:** 2026-02-04
+
+**Context & Decisions:**
+
+- **Resumen:** Creados 4 schemas transaccionales + 3 enums nuevos
+- **Índices:** 8 índices en movimientos para optimizar queries frecuentes
+- **Helpers:** Agregado `getMontoPendiente()` en calendario-pagos
+
+**Files modified:**
+
+- `lib/db/schema/enums.ts` — +3 enums: concepto (18 valores), estadoMovimiento, estadoCall
+
+**Files created:**
+
+- `lib/db/schema/movimientos.ts` — 22 cols, 8 índices, 6 FKs
+- `lib/db/schema/calendario-pagos.ts` — Capital calls con unique constraint
+- `lib/db/schema/cuentas-bancarias.ts` — Cuentas de fondo con balance
+- `lib/db/schema/beneficiarios.ts` — Receptores de gastos
+
+**Migration generated:**
+
+- `lib/db/migrations/0003_lucky_thunderbolt_ross.sql` — 4 tablas, 3 enums
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] db:generate: Pass (16 tablas totales)
+
+---
+
+_Creado: 2026-02-03_
+_Completado: 2026-02-04_

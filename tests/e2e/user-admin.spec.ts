@@ -71,7 +71,7 @@ test.describe('User Admin E2E', () => {
       regularUser = await createTestUser({
         email: `e2e-user-${Date.now()}@test.com`,
         name: 'E2E Regular User',
-        role: 'user',
+        role: 'agente',
       });
       createdUserIds.push(regularUser.id);
     } catch (e) {
@@ -111,7 +111,7 @@ test.describe('User Admin E2E', () => {
       await page.fill('#password', 'Test1234!');
 
       // Select role using native select element
-      await page.selectOption('#role', 'user');
+      await page.selectOption('#role', 'agente');
 
       // Submit - button says "Crear"
       await page.click('button:has-text("Crear")');

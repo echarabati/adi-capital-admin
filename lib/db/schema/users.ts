@@ -2,12 +2,14 @@
  * Users Schema
  *
  * Database schema for user authentication and authorization.
- * Role is stored as text (not enum) to allow easy customization per project.
+ * Role is stored as enum for type-safe RBAC validation.
  *
  * @see ADR-007: Auth Framework Design
+ * @see SCHEMA-003: User roles and fund assignment
  */
 
 import { pgTable, text, timestamp, uuid, integer, primaryKey } from 'drizzle-orm/pg-core';
+import { rolUsuarioEnum } from './enums';
 
 // =============================================================================
 // Users Table
@@ -36,13 +38,13 @@ export const users = pgTable('users', {
   image: text('image'),
 
   /**
-   * User role for authorization.
-   * Stored as TEXT to allow project-specific roles without migrations.
-   * Valid values defined in config/roles.ts
+   * User role for authorization (RBAC).
+   * Uses enum for type-safe role validation.
    *
-   * @default 'user'
+   * @see 04_BUSINESS_RULES.md BR-050→071
+   * @default 'admin_fondo'
    */
-  role: text('role').notNull().default('user'),
+  role: rolUsuarioEnum('role').notNull().default('admin_fondo'),
 
   /** Hashed password (null for OAuth-only users) */
   password: text('password'),

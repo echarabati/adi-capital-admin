@@ -37,10 +37,10 @@
 export const ROLES = {
   /** System super admin - has all permissions, cannot be deleted */
   SUPER_ADMIN: 'super_admin',
-  /** Project admin - manages users and content */
-  ADMIN: 'admin',
-  /** Regular authenticated user */
-  USER: 'user',
+  /** Fund admin - manages assigned funds */
+  ADMIN_FONDO: 'admin_fondo',
+  /** Agent - limited access (Post-MVP) */
+  AGENTE: 'agente',
 } as const;
 
 /** Type for role values */
@@ -52,7 +52,7 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
  *
  * Used by `hasRoleOrHigher()` to determine access.
  */
-export const ROLE_HIERARCHY: Role[] = [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.USER];
+export const ROLE_HIERARCHY: Role[] = [ROLES.SUPER_ADMIN, ROLES.ADMIN_FONDO, ROLES.AGENTE];
 
 // =============================================================================
 // Role Utility Functions
@@ -138,14 +138,14 @@ export function isSuperAdmin(role: string): boolean {
  * @returns Human-readable role name
  *
  * @example
- * getRoleDisplayName('super_admin') // 'Super Admin'
- * getRoleDisplayName('user')        // 'User'
+ * getRoleDisplayName('super_admin')  // 'Super Admin'
+ * getRoleDisplayName('admin_fondo')  // 'Admin Fondo'
  */
 export function getRoleDisplayName(role: string): string {
   const displayNames: Record<string, string> = {
     super_admin: 'Super Admin',
-    admin: 'Administrador',
-    user: 'Usuario',
+    admin_fondo: 'Administrador de Fondo',
+    agente: 'Agente',
   };
   return displayNames[role] || role;
 }

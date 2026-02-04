@@ -3,7 +3,7 @@
 > **Issue ID:** SCHEMA-001
 > **Priority:** P0
 > **Effort:** L
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-04)
 > **Epic:** [E01-EPIC-SCHEMA](../epics/EPIC-SCHEMA.md)
 
 ---
@@ -35,13 +35,13 @@ Crear schemas Drizzle para las entidades core del sistema: Fondos (E-001), Proye
 
 ## ✅ Criterios de Aceptación
 
-- [ ] Archivo `lib/db/schema/enums.ts` con todos los enums compartidos
-- [ ] Archivo `lib/db/schema/fondos.ts` con tabla y relaciones
-- [ ] Archivo `lib/db/schema/proyectos.ts` con FK a fondos
-- [ ] Archivo `lib/db/schema/inversionistas.ts` con tabla multi-fondo
-- [ ] Archivo `lib/db/schema/inversiones.ts` con FK a proyecto e inversionista
-- [ ] `pnpm db:generate` ejecuta sin errores
-- [ ] `pnpm typecheck` pasa
+- [x] Archivo `lib/db/schema/enums.ts` con todos los enums compartidos
+- [x] Archivo `lib/db/schema/fondos.ts` con tabla y relaciones
+- [x] Archivo `lib/db/schema/proyectos.ts` con FK a fondos
+- [x] Archivo `lib/db/schema/inversionistas.ts` con tabla multi-fondo
+- [x] Archivo `lib/db/schema/inversiones.ts` con FK a proyecto e inversionista
+- [x] `pnpm db:generate` ejecuta sin errores
+- [x] `pnpm typecheck` pasa
 
 ## 🔧 Contexto Técnico
 
@@ -74,8 +74,8 @@ id: text('id')
 
 ## 🧪 Tests Requeridos
 
-- [ ] Unit: N/A para schemas
-- [ ] Integration: Verificar que migraciones aplican correctamente
+- [x] Unit: N/A para schemas
+- [x] Integration: Verificar que migraciones aplican correctamente
 
 ## 🚫 Out of Scope
 
@@ -84,4 +84,40 @@ id: text('id')
 
 ---
 
+## Implementation Notes
+
+**Completed:** 2026-02-04
+
+**Context & Decisions:**
+
+- **Resumen:** Creados 5 archivos de schema para entidades core + 6 enums compartidos
+- **Patrón:** Usamos UUID (como `users.ts`) en lugar de CUID mencionado en docs
+- **auditFields:** Se reutilizó el helper existente en `lib/db/helpers/audit-fields.ts`
+- **Helpers:** Se agregaron funciones `getPrefPendiente()` y `getSaldoCompromiso()` en inversiones
+
+**Files created:**
+
+- `lib/db/schema/enums.ts` — 6 enums: moneda, metodoCascada, estadoProyecto, tipoAdminFee, baseAdminFee, metodoAdminFee
+- `lib/db/schema/fondos.ts` — Tabla fondos (12 cols) + relations
+- `lib/db/schema/proyectos.ts` — Tabla proyectos (14 cols) + FK fondo_id + índice
+- `lib/db/schema/inversionistas.ts` — Tabla inversionistas (12 cols) + pivot table inversionistas_fondos
+- `lib/db/schema/inversiones.ts` — Tabla inversiones (18 cols) + FKs + helpers
+
+**Files modified:**
+
+- `lib/db/schema/index.ts` — Agregados exports para nuevos schemas
+
+**Migration generated:**
+
+- `lib/db/migrations/0002_real_falcon.sql` — 5 tablas, 6 enums
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] db:generate: Pass (12 tablas totales)
+
+---
+
 _Creado: 2026-02-03_
+_Completado: 2026-02-04_

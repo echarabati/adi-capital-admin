@@ -283,7 +283,17 @@
 | Name | Import |
 |------|--------|
 | audit | `@/lib/db/schema/audit` |
+| beneficiarios | `@/lib/db/schema/beneficiarios` |
+| calendario-pagos | `@/lib/db/schema/calendario-pagos` |
+| cuentas-bancarias | `@/lib/db/schema/cuentas-bancarias` |
+| enums | `@/lib/db/schema/enums` |
+| fondos | `@/lib/db/schema/fondos` |
+| inversiones | `@/lib/db/schema/inversiones` |
+| inversionistas | `@/lib/db/schema/inversionistas` |
 | invites | `@/lib/db/schema/invites` |
+| movimientos | `@/lib/db/schema/movimientos` |
+| proyectos | `@/lib/db/schema/proyectos` |
+| user-fondos | `@/lib/db/schema/user-fondos` |
 | users | `@/lib/db/schema/users` |
 
 ---
@@ -336,8 +346,8 @@
 | Dependencies | 32 |
 | Page Routes | 13 |
 | API Routes | 8 |
-| Components & Utils | 107 |
-| **Total items** | **160** |
+| Components & Utils | 117 |
+| **Total items** | **170** |
 
 ---
 

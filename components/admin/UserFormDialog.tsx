@@ -54,7 +54,7 @@ const baseSchema = {
     .min(2, 'El nombre debe tener al menos 2 caracteres')
     .max(100, 'El nombre no puede exceder 100 caracteres'),
   email: z.string().email('Email inválido'),
-  role: z.enum([ROLES.USER, ROLES.ADMIN, ROLES.SUPER_ADMIN], {
+  role: z.enum([ROLES.AGENTE, ROLES.ADMIN_FONDO, ROLES.SUPER_ADMIN], {
     message: 'Rol inválido',
   }),
 };
@@ -104,7 +104,7 @@ export function UserFormDialog({
         : {
             name: '',
             email: '',
-            role: ROLES.USER,
+            role: ROLES.ADMIN_FONDO,
             password: '',
           },
   });
@@ -121,7 +121,7 @@ export function UserFormDialog({
       reset({
         name: '',
         email: '',
-        role: ROLES.USER,
+        role: ROLES.ADMIN_FONDO,
         password: '',
       });
     }

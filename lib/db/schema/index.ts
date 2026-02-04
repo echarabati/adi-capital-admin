@@ -21,7 +21,23 @@ export * from './invites';
 export * from './audit';
 
 // =============================================================================
-// Add additional schemas below as needed
+// Core Domain Schemas (SCHEMA-001)
 // =============================================================================
-// export * from './posts';
-// export * from './comments';
+export * from './enums';
+export * from './fondos';
+export * from './proyectos';
+export * from './inversionistas';
+export * from './inversiones';
+
+// =============================================================================
+// Transactional Schemas (SCHEMA-002)
+// =============================================================================
+export * from './movimientos';
+export * from './calendario-pagos';
+export * from './cuentas-bancarias';
+export * from './beneficiarios';
+
+// =============================================================================
+// User Assignment Schema (SCHEMA-003)
+// =============================================================================
+export * from './user-fondos';
