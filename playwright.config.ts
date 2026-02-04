@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load .env.local for local development (includes DATABASE_URL)
+// Load .env.local for local development
 dotenv.config({ path: path.resolve(__dirname, '.env.local') });
 
 export default defineConfig({
@@ -13,7 +13,6 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
 
-  // Global setup/teardown (simplified - no longer creates test schemas)
   globalSetup: './tests/global-setup.ts',
   globalTeardown: './tests/global-teardown.ts',
 
@@ -22,9 +21,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
-  webServer: {
-    command: 'pnpm dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
-  },
+
+  // No webServer config - use pnpm test:e2e:isolated for full isolation
+  // Or start dev server manually: pnpm dev
 });

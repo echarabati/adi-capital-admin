@@ -64,6 +64,7 @@
 | `pnpm test:coverage` | `vitest run --coverage` |
 | `pnpm test:e2e` | `playwright test` |
 | `pnpm test:e2e:ui` | `playwright test --ui` |
+| `pnpm test:e2e:isolated` | `tsx scripts/e2e-isolated.ts` |
 | `pnpm verify` | `pnpm lint && pnpm typecheck && pnpm test` |
 | `pnpm env:check` | `node -e "require('./lib/env.ts')" 2>/dev/null |...` |
 | `pnpm db:generate` | `drizzle-kit generate` |
@@ -351,8 +352,8 @@
 | Dependencies | 32 |
 | Page Routes | 18 |
 | API Routes | 8 |
-| Components & Utils | 117 |
-| **Total items** | **175** |
+| Components & Utils | 118 |
+| **Total items** | **176** |
 
 ---
 

@@ -52,3 +52,4 @@ next-env.d.ts
 
 # Neon CLI config (local org)
 .neon
+.env.e2e

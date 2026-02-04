@@ -19,6 +19,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "test:e2e:isolated": "tsx scripts/e2e-isolated.ts",
     "verify": "pnpm lint && pnpm typecheck && pnpm test",
     "env:check": "node -e \"require('./lib/env.ts')\" 2>/dev/null || echo '⚠️  Run with tsx: pnpm tsx -e \"import { getEnv } from \\\"./lib/env\\\"; getEnv();\"'",
     "db:generate": "drizzle-kit generate",

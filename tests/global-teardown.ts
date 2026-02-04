@@ -1,12 +1,12 @@
 /**
  * Playwright Global Teardown
  *
- * Simple teardown for E2E tests.
- * Individual tests handle their own cleanup.
+ * Simple teardown - no longer deletes Neon branches.
+ * For isolated E2E tests, use: pnpm test:e2e:isolated
  */
 
 async function globalTeardown() {
-  console.warn('[E2E] Global teardown complete.');
+  console.log('[E2E] Global teardown complete.');
 }
 
 export default globalTeardown;
