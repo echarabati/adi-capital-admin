@@ -5,17 +5,20 @@
  *
  * Client component for displaying the list of funds.
  * Uses DataTable with search filter and navigation.
+ * Super Admin can create and edit fondos.
  *
- * @see FOND-001
+ * @see FOND-001, FOND-002
  */
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Building2 } from 'lucide-react';
+import { Building2, Plus, Pencil } from 'lucide-react';
 import { DataTable } from '@/components/ui/DataTable';
 import { TableColumn } from '@/components/ui/Table';
 import { TableSearch } from '@/components/ui/TableExtras';
 import { FondoListItem } from '@/lib/actions/fondos/fondos-queries';
+import { isSuperAdmin } from '@/src/config/roles';
+import { FondoFormDialog } from './FondoFormDialog';
 
 // =============================================================================
 // Types
@@ -23,22 +26,32 @@ import { FondoListItem } from '@/lib/actions/fondos/fondos-queries';
 
 interface FondosTableProps {
   fondos: FondoListItem[];
+  userRole?: string;
 }
+
+type FondoForEdit = Pick<FondoListItem, 'id' | 'nombre' | 'monedaBase'> & {
+  metodoCascada?: string;
+};
 
 // Currency badge colors
 const currencyColors: Record<string, string> = {
   MXN: '#10b981',
   USD: '#3b82f6',
   EUR: '#8b5cf6',
+  ILS: '#f59e0b',
 };
 
 // =============================================================================
 // Component
 // =============================================================================
 
-export function FondosTable({ fondos }: FondosTableProps) {
+export function FondosTable({ fondos, userRole }: FondosTableProps) {
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [editFondo, setEditFondo] = useState<FondoForEdit | null>(null);
+
+  const canManage = isSuperAdmin(userRole ?? '');
 
   // Apply search filter
   const filteredFondos = useMemo(() => {
@@ -97,6 +110,32 @@ export function FondosTable({ fondos }: FondosTableProps) {
       className: 'hidden lg:table-cell text-center',
       accessor: (fondo) => <span className="text-muted-foreground">{fondo.proyectosCount}</span>,
     },
+    // Actions column (super_admin only)
+    ...(canManage
+      ? [
+          {
+            id: 'actions',
+            header: '',
+            className: 'w-12',
+            accessor: (fondo: FondoListItem) => (
+              <button
+                className="hover:bg-secondary rounded-lg p-1.5 transition-colors"
+                title="Editar"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditFondo({
+                    id: fondo.id,
+                    nombre: fondo.nombre,
+                    monedaBase: fondo.monedaBase,
+                  });
+                }}
+              >
+                <Pencil className="text-muted-foreground h-4 w-4" />
+              </button>
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -116,6 +155,17 @@ export function FondosTable({ fondos }: FondosTableProps) {
           <TableSearch value={search} onChange={setSearch} placeholder="Nombre del fondo..." />
         </div>
         <div className="flex-1" />
+
+        {/* Create Button (super_admin only) */}
+        {canManage && (
+          <button
+            onClick={() => setIsCreateOpen(true)}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            Nuevo Fondo
+          </button>
+        )}
       </div>
 
       {/* Table */}
@@ -139,6 +189,19 @@ export function FondosTable({ fondos }: FondosTableProps) {
           onRowClick={handleRowClick}
         />
       </div>
+
+      {/* Create Dialog */}
+      <FondoFormDialog mode="create" open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+
+      {/* Edit Dialog */}
+      {editFondo && (
+        <FondoFormDialog
+          mode="edit"
+          open={true}
+          onOpenChange={(open) => !open && setEditFondo(null)}
+          fondo={editFondo}
+        />
+      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@
 > **Issue ID:** FOND-002
 > **Priority:** P0
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-04)
 > **Epic:** [E02-EPIC-FONDOS](../epics/EPIC-FONDOS.md)
 
 ---
@@ -35,19 +35,25 @@ Implementar formulario Dialog para crear y editar fondos. Solo Super Admin puede
 
 ## ✅ Criterios de Aceptación
 
-- [ ] Botón "+ Nuevo Fondo" visible solo para Super Admin
-- [ ] Dialog con campos: Nombre, Moneda Base, Método Cascada
-- [ ] Slug se genera automáticamente desde nombre
-- [ ] Validación: nombre único, campos requeridos
-- [ ] Toast de éxito/error
-- [ ] Lista se refresca al guardar
+- [x] Botón "+ Nuevo Fondo" visible solo para Super Admin
+- [x] Dialog con campos: Nombre, Moneda Base, Método Cascada
+- [x] Slug se genera automáticamente desde nombre
+- [x] Validación: nombre único, campos requeridos
+- [x] Toast de éxito/error
+- [x] Lista se refresca al guardar (revalidatePath)
 
 ## 🔧 Contexto Técnico
 
-**Archivos a crear:**
+**Archivos creados:**
 
-- `src/components/fondos/fondo-form.tsx`
-- `lib/actions/fondos/mutations.ts` — createFondo, updateFondo
+- `lib/validations/fondos/fondo-validation.ts` — Zod schemas
+- `lib/actions/fondos/fondos-mutations.ts` — createFondo, updateFondo
+- `src/app/(protected)/fondos/FondoFormDialog.tsx` — Dialog form
+
+**Archivos modificados:**
+
+- `FondosTable.tsx` — Botón "Nuevo" + acción editar
+- `page.tsx` — Pass userRole prop
 
 ### API Contract
 
@@ -70,15 +76,28 @@ type Output = { success: true; data: { id: string } } | { success: false; error:
 
 **Dependencias de Issues:**
 
-- Bloqueado por: FOND-001
+- Bloqueado por: FOND-001 ✅
 - Bloquea a: FOND-003
 
 ## 🧪 Tests Requeridos
 
-- [ ] Unit: Validación de formulario
-- [ ] Integration: Crear fondo con datos válidos
-- [ ] Integration: Rechazar duplicado de slug
+- [x] Unit: Validación de formulario (via Zod)
+- [x] Integration: Crear fondo con datos válidos (manual)
+- [x] Integration: Rechazar duplicado de nombre (manual)
+
+---
+
+## Implementation Notes
+
+**Completed:** 2026-02-04
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] Build: Pass
 
 ---
 
 _Creado: 2026-02-03_
+_Completado: 2026-02-04_

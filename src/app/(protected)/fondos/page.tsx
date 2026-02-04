@@ -31,7 +31,7 @@ export default async function FondosPage() {
 
   return (
     <div className="container mx-auto py-6">
-      <FondosTable fondos={fondos} />
+      <FondosTable fondos={fondos} userRole={session.user.role} />
     </div>
   );
 }
