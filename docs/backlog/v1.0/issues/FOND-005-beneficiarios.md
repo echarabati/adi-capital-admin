@@ -3,7 +3,7 @@
 > **Issue ID:** FOND-005
 > **Priority:** P1
 > **Effort:** S
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-04)
 > **Epic:** [E02-EPIC-FONDOS](../epics/EPIC-FONDOS.md)
 
 ---
@@ -38,31 +38,50 @@ Implementar CRUD de beneficiarios para registrar gastos.
 
 ## ✅ Criterios de Aceptación
 
-- [ ] Tab "Beneficiarios" en detalle de fondo
-- [ ] DataTable con: Nombre, Banco, Número Cuenta, CLABE
-- [ ] Botón "+ Nuevo Beneficiario" abre Dialog
-- [ ] Validación: nombre único dentro del fondo
-- [ ] Editar beneficiario existente
+- [x] Tab "Beneficiarios" en detalle de fondo
+- [x] DataTable con: Nombre, Banco, Número Cuenta, CLABE
+- [x] Botón "+ Nuevo Beneficiario" abre Dialog
+- [x] Validación: nombre único dentro del fondo (BR-019)
+- [x] Editar beneficiario existente
 
 ## 🔧 Contexto Técnico
 
-**Archivos a crear:**
+**Archivos creados:**
+
+- `lib/validations/beneficiarios/beneficiario-validation.ts`
+- `lib/actions/beneficiarios/beneficiarios-queries.ts`
+- `lib/actions/beneficiarios/beneficiarios-mutations.ts`
+- `src/app/(protected)/fondos/[id]/beneficiarios/BeneficiarioFormDialog.tsx`
+- `src/app/(protected)/fondos/[id]/beneficiarios/BeneficiariosTable.tsx`
+
+**Archivos modificados:**
 
 - `src/app/(protected)/fondos/[id]/beneficiarios/page.tsx`
-- `src/components/fondos/beneficiario-form.tsx`
-- `lib/actions/beneficiarios/` — CRUD actions
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: FOND-003, SCHEMA-002
+- Bloqueado por: FOND-003 ✅, SCHEMA-002 ✅
 - Bloquea a: MOV-006 (Form Gastos)
 
 ## 🧪 Tests Requeridos
 
-- [ ] Integration: CRUD completo de beneficiario
+- [x] Integration: CRUD completo de beneficiario (manual)
+
+---
+
+## Implementation Notes
+
+**Completed:** 2026-02-04
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] Build: Pass
 
 ---
 
 _Creado: 2026-02-03_
+_Completado: 2026-02-04_

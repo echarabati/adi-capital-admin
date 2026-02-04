@@ -2,37 +2,42 @@
  * Beneficiarios Tab Page
  *
  * Lists beneficiaries for the current fund.
- * Placeholder - will be implemented in FOND-005.
  *
- * @see FOND-003
+ * @see FOND-005
  */
 
 import type { Metadata } from 'next';
-import { Users } from 'lucide-react';
+import { redirect } from 'next/navigation';
+import { auth } from '@/lib/auth';
+import { getBeneficiariosByFondo } from '@/lib/actions/beneficiarios/beneficiarios-queries';
+import { BeneficiariosTable } from './BeneficiariosTable';
 
 export const metadata: Metadata = {
   title: 'Beneficiarios | Fondo',
   description: 'Beneficiarios del fondo',
 };
 
-export default function BeneficiariosPage() {
+interface BeneficiariosPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function BeneficiariosPage({ params }: BeneficiariosPageProps) {
+  const { id: fondoId } = await params;
+
+  // Auth check
+  const session = await auth();
+  if (!session?.user?.id) {
+    redirect('/login');
+  }
+
+  // Fetch beneficiarios
+  const beneficiarios = await getBeneficiariosByFondo(fondoId);
+
   return (
-    <div
-      className="rounded-xl border p-8"
-      style={{
-        backgroundColor: 'var(--sidebar-bg)',
-        borderColor: 'var(--sidebar-border)',
-      }}
-    >
-      <div className="flex flex-col items-center justify-center text-center">
-        <div className="bg-primary/20 text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-xl">
-          <Users className="h-6 w-6" />
-        </div>
-        <h3 className="text-foreground text-lg font-medium">Beneficiarios</h3>
-        <p className="text-muted-foreground mt-1 text-sm">
-          La gestión de beneficiarios estará disponible en FOND-005.
-        </p>
-      </div>
-    </div>
+    <BeneficiariosTable
+      beneficiarios={beneficiarios}
+      fondoId={fondoId}
+      userRole={session.user.role}
+    />
   );
 }
