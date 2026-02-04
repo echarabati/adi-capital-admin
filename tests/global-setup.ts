@@ -1,8 +1,8 @@
 /**
  * Playwright Global Setup
  *
- * Simple setup - no longer creates Neon branches.
- * For isolated E2E tests, use: pnpm test:e2e:isolated
+ * Simple setup for E2E tests.
+ * Branch isolation is handled by scripts/e2e-isolated.ts
  */
 
 async function globalSetup() {

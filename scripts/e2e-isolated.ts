@@ -8,7 +8,7 @@
  * 3. Runs Playwright tests
  * 4. Cleans up branch
  *
- * Usage: pnpm test:e2e:isolated
+ * Usage: pnpm test:e2e
  */
 
 import dotenv from 'dotenv';

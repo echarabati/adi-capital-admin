@@ -22,6 +22,6 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 
-  // No webServer config - use pnpm test:e2e:isolated for full isolation
+  // No webServer config - pnpm test:e2e starts its own server with isolated DB
   // Or start dev server manually: pnpm dev
 });
