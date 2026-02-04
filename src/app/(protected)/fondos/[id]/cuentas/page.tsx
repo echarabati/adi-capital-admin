@@ -2,37 +2,36 @@
  * Cuentas Bancarias Tab Page
  *
  * Lists bank accounts for the current fund.
- * Placeholder - will be implemented in FOND-004.
  *
- * @see FOND-003
+ * @see FOND-004
  */
 
 import type { Metadata } from 'next';
-import { CreditCard } from 'lucide-react';
+import { redirect } from 'next/navigation';
+import { auth } from '@/lib/auth';
+import { getCuentasByFondo } from '@/lib/actions/cuentas-bancarias/cuentas-bancarias-queries';
+import { CuentasBancariasTable } from './CuentasBancariasTable';
 
 export const metadata: Metadata = {
   title: 'Cuentas Bancarias | Fondo',
   description: 'Cuentas bancarias del fondo',
 };
 
-export default function CuentasPage() {
-  return (
-    <div
-      className="rounded-xl border p-8"
-      style={{
-        backgroundColor: 'var(--sidebar-bg)',
-        borderColor: 'var(--sidebar-border)',
-      }}
-    >
-      <div className="flex flex-col items-center justify-center text-center">
-        <div className="bg-primary/20 text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-xl">
-          <CreditCard className="h-6 w-6" />
-        </div>
-        <h3 className="text-foreground text-lg font-medium">Cuentas Bancarias</h3>
-        <p className="text-muted-foreground mt-1 text-sm">
-          La gestión de cuentas bancarias estará disponible en FOND-004.
-        </p>
-      </div>
-    </div>
-  );
+interface CuentasPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function CuentasPage({ params }: CuentasPageProps) {
+  const { id: fondoId } = await params;
+
+  // Auth check
+  const session = await auth();
+  if (!session?.user?.id) {
+    redirect('/login');
+  }
+
+  // Fetch cuentas
+  const cuentas = await getCuentasByFondo(fondoId);
+
+  return <CuentasBancariasTable cuentas={cuentas} fondoId={fondoId} userRole={session.user.role} />;
 }

@@ -8,7 +8,7 @@
 |--------|-------|
 | 🚧 In Progress | 0 |
 | 📅 To Do | 50 |
-| ✅ Done | 6 |
+| ✅ Done | 7 |
 
 ### 📅 To Do
 
@@ -82,11 +82,12 @@
 
 
 <details>
-<summary>✅ Done (6)</summary>
+<summary>✅ Done (7)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
 - [FOND-003: Detalle de fondo con tabs](v1.0/issues/FOND-003-detalle-fondo.md) 🟡
+- [FOND-004: CRUD Cuentas Bancarias](v1.0/issues/FOND-004-crud-cuentas-bancarias.md) 🟡
 - [SCHEMA-001: Crear schemas Drizzle para entidades core](v1.0/issues/SCHEMA-001-drizzle-schemas-core.md) 🔴
 - [SCHEMA-002: Crear schemas para movimientos y calendario](v1.0/issues/SCHEMA-002-schemas-movimientos.md) 🔴
 - [SCHEMA-003: Extender users con roles y fondos](v1.0/issues/SCHEMA-003-users-roles.md) 🔴
