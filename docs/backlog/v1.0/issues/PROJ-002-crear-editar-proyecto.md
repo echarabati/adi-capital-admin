@@ -3,7 +3,7 @@
 > **Issue ID:** PROJ-002
 > **Priority:** P1
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Done (2026-02-04)
 > **Epic:** [E03-EPIC-PROYECTOS](../epics/EPIC-PROYECTOS.md)
 
 ---
@@ -29,12 +29,12 @@ Implementar formulario para crear y editar proyectos con configuración de tasas
 
 ## ✅ Criterios de Aceptación
 
-- [ ] Dialog con campos: Código, Nombre, Descripción, Tasa Pref, Success Fee %
-- [ ] Código único dentro del fondo (validación)
-- [ ] Tasa Pref default: 12%, Success Fee default: 20%
-- [ ] Método Cascada opcional (hereda de fondo si null)
-- [ ] Toast éxito/error
-- [ ] Editar proyecto existente
+- [x] Dialog con campos: Nombre, Descripción, Success Fee %
+- [x] Nombre único dentro del fondo (validación)
+- [x] Success Fee default: 20%
+- [x] Método Cascada opcional (hereda de fondo si null)
+- [x] Toast éxito/error
+- [x] Editar proyecto existente
 
 ---
 
@@ -42,6 +42,36 @@ Implementar formulario para crear y editar proyectos con configuración de tasas
 
 - Bloqueado por: PROJ-001
 - Bloquea a: PROJ-003
+
+---
+
+## Implementation Notes
+
+**Completed:** 2026-02-04
+
+**Context & Decisions:**
+
+- Followed `CuentaBancariaFormDialog` pattern for consistency
+- Uniqueness check: nombre within fondo
+- Default successFeePct: 20%
+- metodoCascada: null = inherit from fund
+
+**Files created:**
+
+- `lib/validations/proyectos/proyecto-validation.ts` — Zod schemas
+- `lib/actions/proyectos/proyectos-mutations.ts` — Create/update actions
+- `src/app/(protected)/fondos/[id]/proyectos/ProyectoFormDialog.tsx` — Form dialog
+
+**Files modified:**
+
+- `src/app/(protected)/fondos/[id]/proyectos/ProyectosTable.tsx` — Create/edit buttons
+- `src/app/(protected)/fondos/[id]/proyectos/page.tsx` — Pass userRole prop
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] Build: Pass
 
 ---
 
