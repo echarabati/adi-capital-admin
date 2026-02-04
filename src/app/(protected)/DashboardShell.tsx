@@ -8,6 +8,7 @@ interface User {
   name?: string | null;
   email?: string | null;
   image?: string | null;
+  role?: string;
 }
 
 interface DashboardShellProps {
@@ -22,7 +23,7 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
 
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
-        <Sidebar />
+        <Sidebar userRole={user.role} />
       </div>
 
       {/* Main content area */}

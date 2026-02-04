@@ -13,6 +13,8 @@ import { usePwaInstall } from '@/lib/pwa/usePwaInstall';
 import { Avatar } from '@/components/ui/Avatar';
 import { useMounted } from '@/lib/hooks/useMounted';
 
+import { NavigationControls } from './NavigationControls';
+
 interface HeaderProps {
   user?: {
     name?: string | null;
@@ -35,7 +37,6 @@ export function Header({ user }: HeaderProps) {
   const { canInstall, isInstalled, promptInstall } = usePwaInstall();
 
   const currentTheme = (theme as Theme) || 'midnight';
-  const CurrentIcon = themes.find((t) => t.value === currentTheme)?.icon || Moon;
 
   return (
     <header
@@ -45,23 +46,32 @@ export function Header({ user }: HeaderProps) {
         backgroundColor: 'var(--header-bg)',
       }}
     >
-      {/* Left: Mobile menu (hidden on desktop since sidebar is visible) */}
-      <div className="flex items-center gap-3 lg:hidden">
-        <MobileMenuDropdown />
-      </div>
+      {/* Left: Mobile menu + Nav Controls + Breadcrumb */}
+      <div className="flex flex-1 items-center gap-1 overflow-hidden lg:gap-4">
+        {/* Mobile menu (hidden on desktop) */}
+        <div className="shrink-0 lg:hidden">
+          <MobileMenuDropdown />
+        </div>
 
-      {/* Center: Breadcrumb (hidden on mobile) */}
-      <div className="hidden flex-1 lg:block">
-        <Breadcrumb />
+        {/* Navigation Controls (Always visible) */}
+        <NavigationControls />
+
+        {/* Breadcrumb (Always visible, smart truncated) */}
+        <div className="flex-1 overflow-hidden">
+          <Breadcrumb className="whitespace-nowrap" />
+        </div>
       </div>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-2">
-        {/* Theme Selector Dropdown */}
+      <div className="flex shrink-0 items-center gap-2 pl-2">
+        {/* Desktop Theme Toggle (hidden on mobile) */}
         {mounted && (
-          <Menu as="div" className="relative">
+          <Menu as="div" className="relative hidden md:block">
             <Menu.Button className="text-foreground hover:bg-secondary flex items-center gap-2 rounded-full p-2 transition-colors">
-              <CurrentIcon className="h-5 w-5" />
+              {(() => {
+                const CurrentIcon = themes.find((t) => t.value === currentTheme)?.icon || Moon;
+                return <CurrentIcon className="h-5 w-5" />;
+              })()}
             </Menu.Button>
             <Transition
               as={Fragment}
@@ -72,14 +82,14 @@ export function Header({ user }: HeaderProps) {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="bg-card absolute right-0 mt-2 w-40 origin-top-right rounded-xl border border-white/10 py-1 shadow-xl ring-1 shadow-black/20 ring-black/5 backdrop-blur-sm">
+              <Menu.Items className="bg-card absolute right-0 mt-2 w-40 origin-top-right rounded-xl border border-white/10 py-1 shadow-xl ring-1 shadow-black/20 ring-black/5 backdrop-blur-sm focus:outline-none">
                 {themes.map(({ value, label, icon: Icon }) => (
                   <Menu.Item key={value}>
                     {({ active }) => (
                       <button
                         onClick={() => setTheme(value)}
                         className={cn(
-                          'flex w-full items-center gap-2 px-4 py-2 text-sm',
+                          'flex w-full items-center gap-2 px-4 py-2 text-sm transition-colors',
                           active && 'bg-secondary',
                           currentTheme === value && 'text-primary font-medium'
                         )}
@@ -114,73 +124,107 @@ export function Header({ user }: HeaderProps) {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="bg-card absolute right-0 mt-2 w-48 origin-top-right rounded-xl border border-white/10 py-1 shadow-xl ring-1 shadow-black/20 ring-black/5 backdrop-blur-sm">
+              <Menu.Items className="bg-card absolute right-0 mt-2 w-56 origin-top-right rounded-xl border border-white/10 py-1 shadow-xl ring-1 shadow-black/20 ring-black/5 backdrop-blur-sm focus:outline-none">
                 {/* User info */}
-                <div className="border-card-border border-b px-4 py-2">
+                <div className="border-card-border border-b px-4 py-3">
                   <p className="text-foreground truncate text-sm font-medium">
                     {user?.name || 'Usuario'}
                   </p>
                   <p className="text-muted-foreground truncate text-xs">{user?.email}</p>
                 </div>
 
-                {/* Profile link */}
-                <Menu.Item>
-                  {({ active }) => (
-                    <Link
-                      href="/settings/profile"
-                      className={cn(
-                        'flex items-center gap-2 px-4 py-2 text-sm',
-                        active && 'bg-secondary'
-                      )}
-                    >
-                      <UserCircle className="h-4 w-4" />
-                      Editar perfil
-                    </Link>
-                  )}
-                </Menu.Item>
-
-                {/* Install App (PWA) - only shows when installable */}
-                {canInstall && !isInstalled && (
+                <div className="p-1">
+                  {/* Profile link */}
                   <Menu.Item>
                     {({ active }) => (
-                      <button
-                        onClick={() => promptInstall()}
+                      <Link
+                        href="/settings/profile"
                         className={cn(
-                          'flex w-full items-center gap-2 px-4 py-2 text-sm',
-                          active && 'bg-secondary'
+                          'flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors',
+                          active ? 'bg-secondary text-primary' : 'text-foreground'
                         )}
                       >
-                        <Download className="h-4 w-4" />
-                        Instalar app
-                      </button>
+                        <UserCircle className="h-4 w-4 opacity-70" />
+                        Editar perfil
+                      </Link>
                     )}
                   </Menu.Item>
-                )}
 
-                {/* Logout */}
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      onClick={() => signOut({ callbackUrl: '/login' })}
-                      className={cn(
-                        'text-error flex w-full items-center gap-2 px-4 py-2 text-sm',
-                        active && 'bg-secondary'
-                      )}
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Cerrar sesión
-                    </button>
+                  {/* Theme Submenu (Mobile only - desktop has toggle in header) */}
+                  <div className="border-card-border mt-1 border-t pt-1 md:hidden">
+                    <div className="text-muted-foreground px-3 py-1.5 text-xs font-semibold tracking-wider uppercase">
+                      Tema
+                    </div>
+                    {themes.map(({ value, label, icon: Icon }) => (
+                      <Menu.Item key={value}>
+                        {({ active }) => (
+                          <button
+                            onClick={() => setTheme(value)}
+                            className={cn(
+                              'flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors',
+                              active ? 'bg-secondary' : '',
+                              currentTheme === value
+                                ? 'text-primary font-medium'
+                                : 'text-foreground'
+                            )}
+                          >
+                            <Icon
+                              className={cn(
+                                'h-4 w-4',
+                                currentTheme === value ? 'opacity-100' : 'opacity-70'
+                              )}
+                            />
+                            {label}
+                          </button>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </div>
+
+                  {/* Install App (PWA) */}
+                  {canInstall && !isInstalled && (
+                    <div className="border-card-border mt-1 border-t pt-1">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            onClick={() => promptInstall()}
+                            className={cn(
+                              'flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors',
+                              active ? 'bg-secondary text-primary' : 'text-foreground'
+                            )}
+                          >
+                            <Download className="h-4 w-4 opacity-70" />
+                            Instalar app
+                          </button>
+                        )}
+                      </Menu.Item>
+                    </div>
                   )}
-                </Menu.Item>
+
+                  {/* Logout */}
+                  <div className="border-card-border mt-1 border-t pt-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          onClick={() => signOut({ callbackUrl: '/login' })}
+                          className={cn(
+                            'text-error flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors',
+                            active ? 'bg-error/10' : ''
+                          )}
+                        >
+                          <LogOut className="h-4 w-4" />
+                          Cerrar sesión
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </div>
+                </div>
               </Menu.Items>
             </Transition>
           </Menu>
         ) : (
           <div className="flex items-center gap-2 rounded-full p-1">
             <Avatar src={user?.image} name={user?.name || user?.email || 'Usuario'} size="sm" />
-            <span className="text-foreground hidden text-sm font-medium lg:block">
-              {user?.name || 'Usuario'}
-            </span>
           </div>
         )}
       </div>

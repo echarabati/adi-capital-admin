@@ -2,7 +2,7 @@
 
 > **Auto-generated** — Run `pnpm generate:inventory` to update
 > **Regla:** SIEMPRE consultar antes de crear algo nuevo.
-> **Last updated:** 2026-02-03
+> **Last updated:** 2026-02-04
 
 ---
 
@@ -172,6 +172,7 @@
 | DashboardLayout | `@/components/layout/DashboardLayout` |
 | Header | `@/components/layout/Header` |
 | MobileMenu | `@/components/layout/MobileMenu` |
+| NavigationControls | `@/components/layout/NavigationControls` |
 | Sidebar | `@/components/layout/Sidebar` |
 
 ---
@@ -335,8 +336,8 @@
 | Dependencies | 32 |
 | Page Routes | 13 |
 | API Routes | 8 |
-| Components & Utils | 106 |
-| **Total items** | **159** |
+| Components & Utils | 107 |
+| **Total items** | **160** |
 
 ---
 

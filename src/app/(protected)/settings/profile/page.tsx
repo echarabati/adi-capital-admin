@@ -38,7 +38,6 @@ export default async function ProfilePage() {
 
       <div className="mx-auto max-w-2xl py-6">
         <div className="mb-6">
-          <h1 className="text-foreground text-2xl font-bold">Perfil</h1>
           <p className="text-muted-foreground">Gestiona tu información personal y seguridad.</p>
         </div>
 

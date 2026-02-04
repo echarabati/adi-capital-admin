@@ -34,6 +34,7 @@ export default async function ProtectedLayout({ children }: { children: React.Re
     name: freshUser.name ?? session.user.name,
     email: freshUser.email ?? session.user.email,
     image: freshUser.image ?? session.user.image,
+    role: freshUser.role ?? session.user.role,
   };
 
   return <DashboardShell user={user}>{children}</DashboardShell>;

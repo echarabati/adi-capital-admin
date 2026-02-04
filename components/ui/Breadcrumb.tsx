@@ -45,7 +45,7 @@ export function Breadcrumb({ className }: BreadcrumbProps) {
   }
 
   // Build breadcrumb items
-  const items = segments.map((segment, index) => {
+  const allItems = segments.map((segment, index) => {
     const href = '/' + segments.slice(0, index + 1).join('/');
     // Priority: context labels > static routeLabels > formatted segment
     const label =
@@ -54,6 +54,20 @@ export function Breadcrumb({ className }: BreadcrumbProps) {
 
     return { href, label, isLast };
   });
+
+  // Smart truncation logic
+  // If > 4 items (Home + 3 segments), collapse middle items
+  // e.g. Home > Users > 123 > Edit -> Home > ... > 123 > Edit
+  let displayItems = allItems;
+  let hasCollapsed = false;
+
+  if (allItems.length > 3) {
+    hasCollapsed = true;
+    // Keep first item (e.g. Users), last 2 items (Parent + Current)
+    const firstItem = allItems[0];
+    const lastItems = allItems.slice(-2);
+    displayItems = [firstItem, ...lastItems];
+  }
 
   return (
     <nav className={cn('flex items-center gap-1 text-sm', className)}>
@@ -65,22 +79,43 @@ export function Breadcrumb({ className }: BreadcrumbProps) {
         <Home className="h-4 w-4" />
       </Link>
 
-      {/* Breadcrumb items */}
-      {items.map((item) => (
-        <div key={item.href} className="flex items-center gap-1">
+      {hasCollapsed && (
+        <div className="flex items-center gap-1">
           <ChevronRight className="text-muted-foreground h-3 w-3" />
-          {item.isLast ? (
-            <span className="text-foreground font-medium">{item.label}</span>
-          ) : (
-            <Link
-              href={item.href}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {item.label}
-            </Link>
-          )}
+          <span className="text-muted-foreground">...</span>
         </div>
-      ))}
+      )}
+
+      {/* Breadcrumb items */}
+      {displayItems.map((item) => {
+        // Disable links for specific segments that don't have pages
+        const isClickable =
+          !['settings'].includes(item.label.toLowerCase()) &&
+          !['configuración'].includes(item.label.toLowerCase());
+
+        return (
+          <div key={item.href} className="flex items-center gap-1">
+            <ChevronRight className="text-muted-foreground h-3 w-3" />
+            {item.isLast || !isClickable ? (
+              <span
+                className={cn(
+                  'font-medium sm:max-w-none',
+                  item.isLast ? 'text-foreground max-w-[150px] truncate' : 'text-muted-foreground'
+                )}
+              >
+                {item.label}
+              </span>
+            ) : (
+              <Link
+                href={item.href}
+                className="text-muted-foreground hover:text-foreground dropdown-transition whitespace-nowrap"
+              >
+                {item.label}
+              </Link>
+            )}
+          </div>
+        );
+      })}
     </nav>
   );
 }

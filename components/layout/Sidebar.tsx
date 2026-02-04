@@ -37,8 +37,15 @@ const navigation: NavItem[] = [
   },
 ];
 
-export function Sidebar() {
+// import { useSession } from 'next-auth/react';
+
+interface SidebarProps {
+  userRole?: string;
+}
+
+export function Sidebar({ userRole }: SidebarProps) {
   const pathname = usePathname();
+  // const { data: session } = useSession(); // Removed to fix SessionProvider error
   const { resolvedTheme } = useTheme();
   const [expandedSections, setExpandedSections] = useState<string[]>(['Configuración']);
   const mounted = useMounted();
@@ -94,76 +101,108 @@ export function Sidebar() {
 
       {/* Middle: Navigation (scrollable) */}
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-        {navigation.map((item) => (
-          <div key={item.name}>
-            {item.collapsible ? (
-              <>
-                {/* Collapsible section */}
-                <button
-                  onClick={() => toggleSection(item.name)}
-                  className={cn(
-                    'group flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors'
-                  )}
-                  style={{ color: 'var(--sidebar-foreground)' }}
-                >
-                  <div className="flex items-center">
-                    <item.icon className="mr-3 h-5 w-5 shrink-0" />
-                    {item.name}
-                  </div>
-                  {expandedSections.includes(item.name) ? (
-                    <ChevronDown className="h-4 w-4" />
-                  ) : (
-                    <ChevronRight className="h-4 w-4" />
-                  )}
-                </button>
+        {navigation.map((item) => {
+          // Check visual permission (if item has a required permission, check it)
+          // For now, hardcode logic based on item names matching PERMISSIONS resource names
+          // Or better: filter based on specific logic.
+          // Since nav is static, we can add a check here.
 
-                {/* Submenu items */}
-                {expandedSections.includes(item.name) && item.children && (
-                  <div className="mt-1 ml-8 space-y-1">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.name}
-                        href={child.href}
-                        className={cn(
-                          'flex items-center rounded-lg px-3 py-1.5 text-sm transition-colors',
-                          isActive(child.href) ? 'font-medium' : ''
-                        )}
-                        style={{
-                          backgroundColor: isActive(child.href)
-                            ? 'var(--sidebar-active)'
-                            : 'transparent',
-                          color: isActive(child.href)
-                            ? 'var(--sidebar-active-foreground)'
-                            : 'var(--sidebar-foreground)',
-                        }}
-                      >
-                        <child.icon className="mr-2 h-4 w-4 shrink-0" />
-                        {child.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </>
-            ) : (
-              /* Regular link */
-              <Link
-                href={item.href}
-                className={cn(
-                  'group flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors'
-                )}
-                style={{
-                  backgroundColor: isActive(item.href) ? 'var(--sidebar-active)' : 'transparent',
-                  color: isActive(item.href)
-                    ? 'var(--sidebar-active-foreground)'
-                    : 'var(--sidebar-foreground)',
-                }}
-              >
-                <item.icon className="mr-3 h-5 w-5 shrink-0" />
-                {item.name}
-              </Link>
-            )}
-          </div>
-        ))}
+          // Logic: "Configuración" -> requires Admin or Super Admin
+          // "Usuarios" -> requires Admin or Super Admin
+          // We can use helper:
+
+          // const userRole = session?.user?.role; // Uses prop now
+
+          // Role-based filtering for sidebar items
+          // Filter out Configuración if not admin
+          if (item.name === 'Configuración' && userRole !== 'admin' && userRole !== 'super_admin') {
+            return null;
+          }
+
+          // For children - filter based on role
+          const filteredChildren = item.children?.filter((child) => {
+            if (child.name === 'Usuarios' && userRole !== 'admin' && userRole !== 'super_admin')
+              return false;
+            if (child.name === 'General' && userRole !== 'admin' && userRole !== 'super_admin')
+              return false;
+            return true;
+          });
+
+          if (item.collapsible && (!filteredChildren || filteredChildren.length === 0)) {
+            return null;
+          }
+
+          return (
+            <div key={item.name}>
+              {item.collapsible ? (
+                <>
+                  {/* Collapsible section */}
+                  <button
+                    onClick={() => toggleSection(item.name)}
+                    className={cn(
+                      'group flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors'
+                    )}
+                    style={{ color: 'var(--sidebar-foreground)' }}
+                  >
+                    <div className="flex items-center">
+                      <item.icon className="mr-3 h-5 w-5 shrink-0" />
+                      {item.name}
+                    </div>
+                    {expandedSections.includes(item.name) ? (
+                      <ChevronDown className="h-4 w-4" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4" />
+                    )}
+                  </button>
+
+                  {/* Submenu items */}
+                  {expandedSections.includes(item.name) && filteredChildren && (
+                    <div className="mt-1 ml-8 space-y-1">
+                      {filteredChildren.map((child) => (
+                        <Link
+                          key={child.name}
+                          href={child.href}
+                          className={cn(
+                            'flex items-center rounded-lg px-3 py-1.5 text-sm transition-colors',
+                            isActive(child.href) ? 'font-medium' : ''
+                          )}
+                          style={{
+                            backgroundColor: isActive(child.href)
+                              ? 'var(--sidebar-active)'
+                              : 'transparent',
+                            color: isActive(child.href)
+                              ? 'var(--sidebar-active-foreground)'
+                              : 'var(--sidebar-foreground)',
+                          }}
+                        >
+                          <child.icon className="mr-2 h-4 w-4 shrink-0" />
+                          {child.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                /* Regular link */
+                <Link
+                  href={item.href}
+                  className={cn(
+                    'group flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors'
+                  )}
+                  style={{
+                    backgroundColor: isActive(item.href) ? 'var(--sidebar-active)' : 'transparent',
+                    color: isActive(item.href)
+                      ? 'var(--sidebar-active-foreground)'
+                      : 'var(--sidebar-foreground)',
+                  }}
+                >
+                  <item.icon className="mr-3 h-5 w-5 shrink-0" />
+                  {item.name}
+                </Link>
+              )}
+            </div>
+          );
+        })}
       </nav>
 
       <div className="shrink-0 border-t px-4 py-3" style={{ borderColor: 'var(--sidebar-border)' }}>

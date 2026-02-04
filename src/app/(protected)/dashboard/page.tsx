@@ -28,7 +28,6 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground">
           Bienvenido de nuevo, {session.user.name || 'Usuario'}
         </p>
