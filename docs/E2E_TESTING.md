@@ -19,6 +19,192 @@ This project uses **Playwright** for E2E testing with **Neon database branching*
 
 ---
 
+## Implementation Guide (Replicating This Setup)
+
+This section explains the **technical challenge** we faced and **how to implement** Neon branching from scratch.
+
+### The Problem
+
+Playwright's architecture creates a timing issue with dynamic `DATABASE_URL`:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  Playwright Execution Order                                        │
+├─────────────────────────────────────────────────────────────────────┤
+│  1. playwright.config.ts is evaluated (webServer config loaded)    │
+│  2. webServer starts with original DATABASE_URL                    │
+│  3. globalSetup runs (we create Neon branch here - TOO LATE!)      │
+│  4. Tests run                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**The issue:** By the time `globalSetup` creates the branch, the dev server has already started with the main `DATABASE_URL`. Tests connect to the isolated branch, but the **server connects to production**.
+
+### Approaches That Don't Work
+
+#### ❌ Using globalSetup + webServer
+
+```typescript
+// playwright.config.ts
+export default defineConfig({
+  globalSetup: './tests/global-setup.ts', // Creates branch
+  webServer: {
+    command: 'pnpm dev',
+    env: { DATABASE_URL: '???' }, // Can't know branch URL yet!
+  },
+});
+```
+
+#### ❌ Writing .env.e2e in globalSetup
+
+Even if globalSetup writes a `.env.e2e` file, Next.js loads `.env.local` by default and the webServer has already started.
+
+### The Solution: Wrapper Script
+
+Instead of using Playwright's built-in webServer, we use a **wrapper script** that controls the entire flow:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  scripts/e2e-isolated.ts                                           │
+├─────────────────────────────────────────────────────────────────────┤
+│  1. Create Neon branch → get connectionUri                         │
+│  2. Start dev server with DATABASE_URL=connectionUri               │
+│  3. Wait for server to be ready                                    │
+│  4. Run playwright test (NO webServer in config)                   │
+│  5. Stop server + delete branch                                    │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Step-by-Step Implementation
+
+#### 1. Create `scripts/neon-branch.ts`
+
+```typescript
+const NEON_API_BASE = 'https://console.neon.tech/api/v2';
+
+export async function createE2EBranch(): Promise<{ branchId: string; connectionUri: string }> {
+  const { apiKey, projectId } = getConfig();
+
+  const response = await fetch(`${NEON_API_BASE}/projects/${projectId}/branches`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      branch: { name: `e2e-${Date.now()}` },
+      endpoints: [{ type: 'read_write' }],
+    }),
+  });
+
+  const data = await response.json();
+  return {
+    branchId: data.branch.id,
+    connectionUri: data.connection_uris[0].connection_uri,
+  };
+}
+
+export async function deleteE2EBranch(branchId: string): Promise<void> {
+  await fetch(`${NEON_API_BASE}/projects/${projectId}/branches/${branchId}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${apiKey}` },
+  });
+}
+```
+
+#### 2. Create `scripts/e2e-isolated.ts`
+
+```typescript
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+
+import { spawn } from 'child_process';
+import { createE2EBranch, deleteE2EBranch } from './neon-branch';
+
+async function main() {
+  let branchId: string | null = null;
+  let serverProcess = null;
+
+  try {
+    // 1. Create branch
+    const { branchId: id, connectionUri } = await createE2EBranch();
+    branchId = id;
+
+    // 2. Start server with branch DATABASE_URL
+    serverProcess = spawn('pnpm', ['dev:next'], {
+      env: { ...process.env, DATABASE_URL: connectionUri },
+      stdio: 'pipe',
+    });
+
+    await waitForServer('http://localhost:3000');
+
+    // 3. Run tests
+    const testProcess = spawn('pnpm', ['playwright', 'test', ...process.argv.slice(2)], {
+      env: { ...process.env, DATABASE_URL: connectionUri },
+      stdio: 'inherit',
+    });
+
+    const exitCode = await new Promise((resolve) => {
+      testProcess.on('close', resolve);
+    });
+
+    process.exitCode = exitCode;
+  } finally {
+    // 4. Cleanup
+    serverProcess?.kill();
+    if (branchId) await deleteE2EBranch(branchId);
+  }
+}
+
+main();
+```
+
+#### 3. Update `playwright.config.ts`
+
+Remove the `webServer` configuration:
+
+```typescript
+export default defineConfig({
+  testDir: './tests/e2e',
+  globalSetup: './tests/global-setup.ts',
+  globalTeardown: './tests/global-teardown.ts',
+
+  // NO webServer - handled by e2e-isolated.ts
+});
+```
+
+#### 4. Simplify global-setup/teardown
+
+Make them minimal since branching is handled externally:
+
+```typescript
+// tests/global-setup.ts
+async function globalSetup() {
+  console.log('[E2E] Global setup complete.');
+}
+export default globalSetup;
+```
+
+#### 5. Update package.json
+
+```json
+{
+  "scripts": {
+    "test:e2e": "tsx scripts/e2e-isolated.ts",
+    "test:e2e:ui": "playwright test --ui"
+  }
+}
+```
+
+### Key Insight
+
+The wrapper script ensures:
+
+1. **Branch is created BEFORE server starts**
+2. **Server receives branch DATABASE_URL** via environment variable
+3. **Both server and tests use the same isolated database**
+4. **Cleanup always runs** via try/finally
+
 ## Quick Start
 
 ```bash
