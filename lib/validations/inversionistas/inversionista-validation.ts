@@ -19,6 +19,18 @@ export const inversionistaSchema = z.object({
   rfc: z.string().max(13).optional().nullable(),
   notas: z.string().optional().nullable(),
   esFundador: z.boolean().default(false),
+  porcentajePropiedad: z
+    .string()
+    .optional()
+    .nullable()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        const num = parseFloat(val);
+        return !isNaN(num) && num >= 0 && num <= 100;
+      },
+      { message: 'El porcentaje debe estar entre 0 y 100' }
+    ),
 });
 
 // =============================================================================

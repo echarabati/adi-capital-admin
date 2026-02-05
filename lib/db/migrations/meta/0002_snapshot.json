@@ -1,6 +1,6 @@
 {
-  "id": "bd844af5-120d-4e41-b4e1-6a4313a23a7e",
-  "prevId": "979f9077-2a6d-434c-9cae-3b6614b0b2ed",
+  "id": "ffb0b441-eb07-4796-b799-7a365e9c657a",
+  "prevId": "78246a70-1c26-4ff6-a502-c8467190d44c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -507,6 +507,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "moneda_base": {
           "name": "moneda_base",
           "type": "moneda",
@@ -603,6 +609,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "codigo": {
+          "name": "codigo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "nombre": {
           "name": "nombre",
           "type": "text",
@@ -623,6 +641,13 @@
           "notNull": true,
           "default": "'inversion_abierta'"
         },
+        "tasa_pref": {
+          "name": "tasa_pref",
+          "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'12.00'"
+        },
         "metodo_cascada": {
           "name": "metodo_cascada",
           "type": "metodo_cascada",
@@ -633,6 +658,18 @@
         "success_fee_pct": {
           "name": "success_fee_pct",
           "type": "numeric(5, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_inicio": {
+          "name": "fecha_inicio",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fecha_terminacion": {
+          "name": "fecha_terminacion",
+          "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": false
         },
@@ -713,7 +750,13 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "proyectos_fondo_codigo_unique": {
+          "name": "proyectos_fondo_codigo_unique",
+          "nullsNotDistinct": false,
+          "columns": ["fondo_id", "codigo"]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -765,6 +808,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": false
+        },
+        "porcentaje_propiedad": {
+          "name": "porcentaje_propiedad",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "agente_id": {
           "name": "agente_id",

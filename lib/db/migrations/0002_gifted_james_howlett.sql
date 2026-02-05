@@ -1,0 +1,1 @@
+ALTER TABLE "inversionistas" ADD COLUMN "porcentaje_propiedad" text;

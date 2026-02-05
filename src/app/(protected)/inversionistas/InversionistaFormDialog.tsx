@@ -48,6 +48,7 @@ interface InversionistaFormDialogProps {
     email: string | null;
     telefono: string | null;
     esFundador: boolean;
+    porcentajePropiedad: string | null;
     fondos: { id: string; nombre: string }[];
   };
 }
@@ -71,6 +72,7 @@ export function InversionistaFormDialog({
     handleSubmit,
     reset,
     control,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(createInversionistaSchema),
@@ -79,9 +81,13 @@ export function InversionistaFormDialog({
       email: '',
       telefono: '',
       esFundador: false,
+      porcentajePropiedad: '',
       fondoIds: [],
     },
   });
+
+  // Watch esFundador for conditional porcentaje field
+  const esFundador = watch('esFundador');
 
   // Reset form when dialog opens/closes or inversionista changes
   useEffect(() => {
@@ -91,6 +97,7 @@ export function InversionistaFormDialog({
         email: inversionista.email || '',
         telefono: inversionista.telefono || '',
         esFundador: inversionista.esFundador,
+        porcentajePropiedad: inversionista.porcentajePropiedad || '',
         fondoIds: inversionista.fondos.map((f) => f.id),
       });
     } else if (mode === 'create' && open) {
@@ -99,6 +106,7 @@ export function InversionistaFormDialog({
         email: '',
         telefono: '',
         esFundador: false,
+        porcentajePropiedad: '',
         fondoIds: [],
       });
     }
@@ -255,6 +263,28 @@ export function InversionistaFormDialog({
               Marcar como Fundador
             </label>
           </div>
+
+          {/* Porcentaje Propiedad (visible only if esFundador) */}
+          {esFundador && (
+            <div className="space-y-1.5">
+              <label htmlFor="porcentajePropiedad" className="text-sm font-medium">
+                Porcentaje de Propiedad (%)
+              </label>
+              <Input
+                id="porcentajePropiedad"
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                {...register('porcentajePropiedad')}
+                placeholder="Ej: 33.33"
+                disabled={isSubmitting}
+              />
+              {errors.porcentajePropiedad && (
+                <p className="text-destructive text-sm">{errors.porcentajePropiedad.message}</p>
+              )}
+            </div>
+          )}
 
           <DialogFooter>
             <Button

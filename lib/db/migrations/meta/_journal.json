@@ -15,6 +15,13 @@
       "when": 1770280865882,
       "tag": "0003_overrated_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770289954869,
+      "tag": "0002_gifted_james_howlett",
+      "breakpoints": true
     }
   ]
 }

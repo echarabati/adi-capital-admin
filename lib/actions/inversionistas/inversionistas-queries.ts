@@ -26,6 +26,7 @@ export type InversionistaListItem = {
   email: string | null;
   telefono: string | null;
   esFundador: boolean;
+  porcentajePropiedad: string | null;
   fondos: { id: string; nombre: string }[];
 };
 
@@ -128,6 +129,7 @@ export async function getInversionistas(
       email: inversionistas.email,
       telefono: inversionistas.telefono,
       esFundador: inversionistas.esFundador,
+      porcentajePropiedad: inversionistas.porcentajePropiedad,
     })
     .from(inversionistas)
     .where(and(...conditions))
@@ -154,6 +156,7 @@ export async function getInversionistas(
       return {
         ...inv,
         esFundador: inv.esFundador ?? false,
+        porcentajePropiedad: inv.porcentajePropiedad ?? null,
         fondos: invFondos,
       };
     })
@@ -189,6 +192,7 @@ export async function getInversionistaById(id: string): Promise<InversionistaLis
       email: inversionistas.email,
       telefono: inversionistas.telefono,
       esFundador: inversionistas.esFundador,
+      porcentajePropiedad: inversionistas.porcentajePropiedad,
     })
     .from(inversionistas)
     .where(eq(inversionistas.id, id))
@@ -222,6 +226,7 @@ export async function getInversionistaById(id: string): Promise<InversionistaLis
   return {
     ...inv,
     esFundador: inv.esFundador ?? false,
+    porcentajePropiedad: inv.porcentajePropiedad ?? null,
     fondos: invFondos,
   };
 }

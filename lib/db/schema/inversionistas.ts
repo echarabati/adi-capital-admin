@@ -44,6 +44,9 @@ export const inversionistas = pgTable('inversionistas', {
   /** Flag for founding partners (can receive APS/RPS/PRS/DPRS movements) */
   esFundador: boolean('es_fundador').default(false),
 
+  /** Ownership percentage for founders (0-100) */
+  porcentajePropiedad: text('porcentaje_propiedad'),
+
   /** Associated sales agent (post-MVP) */
   agenteId: uuid('agente_id'),
 
