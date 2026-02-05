@@ -87,17 +87,26 @@ export async function createProyecto(
     return { error: firstError?.message || 'Datos inválidos' };
   }
 
-  const { nombre, descripcion, successFeePct, metodoCascada } = parsed.data;
+  const {
+    codigo,
+    nombre,
+    descripcion,
+    tasaPref,
+    successFeePct,
+    metodoCascada,
+    fechaInicio,
+    fechaTerminacion,
+  } = parsed.data;
 
-  // 4. Check uniqueness (same fund + project name)
+  // 4. Check uniqueness (same fund + project codigo)
   const [existing] = await db
     .select({ id: proyectos.id })
     .from(proyectos)
-    .where(and(eq(proyectos.fondoId, fondoId), eq(proyectos.nombre, nombre)))
+    .where(and(eq(proyectos.fondoId, fondoId), eq(proyectos.codigo, codigo)))
     .limit(1);
 
   if (existing) {
-    return { error: 'Ya existe un proyecto con ese nombre en este fondo' };
+    return { error: 'Ya existe un proyecto con ese código en este fondo' };
   }
 
   try {
@@ -106,10 +115,14 @@ export async function createProyecto(
       .insert(proyectos)
       .values({
         fondoId,
+        codigo,
         nombre,
         descripcion: descripcion || null,
+        tasaPref: tasaPref || '12.00',
         successFeePct: successFeePct || null,
         metodoCascada: metodoCascada || null,
+        fechaInicio: fechaInicio ? new Date(fechaInicio) : null,
+        fechaTerminacion: fechaTerminacion ? new Date(fechaTerminacion) : null,
         createdBy: session.user.id,
         modifiedBy: session.user.id,
       })
@@ -188,13 +201,17 @@ export async function updateProyecto(id: string, input: unknown): Promise<Proyec
 
   try {
     // 6. Update project
+    const { fechaInicio, fechaTerminacion, ...restData } = parsed.data;
     await db
       .update(proyectos)
       .set({
-        ...parsed.data,
+        ...restData,
         descripcion: parsed.data.descripcion || null,
+        tasaPref: parsed.data.tasaPref || undefined,
         successFeePct: parsed.data.successFeePct || null,
         metodoCascada: parsed.data.metodoCascada || null,
+        fechaInicio: fechaInicio ? new Date(fechaInicio) : undefined,
+        fechaTerminacion: fechaTerminacion ? new Date(fechaTerminacion) : undefined,
         modifiedAt: new Date(),
         modifiedBy: session.user.id,
       })

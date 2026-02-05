@@ -27,6 +27,10 @@ export const ESTADO_PROYECTO_OPTIONS = [
  * Schema for creating a new project.
  */
 export const createProyectoSchema = z.object({
+  codigo: z
+    .string()
+    .min(1, 'El código es requerido')
+    .max(50, 'El código no puede exceder 50 caracteres'),
   nombre: z
     .string()
     .min(2, 'El nombre debe tener al menos 2 caracteres')
@@ -36,12 +40,19 @@ export const createProyectoSchema = z.object({
     .max(1000, 'La descripción no puede exceder 1000 caracteres')
     .optional()
     .or(z.literal('')),
+  tasaPref: z
+    .string()
+    .regex(/^\d+(\.\d{1,2})?$/, 'Ingresa un porcentaje válido')
+    .optional()
+    .default('12.00'),
   successFeePct: z
     .string()
     .regex(/^\d+(\.\d{1,2})?$/, 'Ingresa un porcentaje válido')
     .optional()
     .or(z.literal('')),
   metodoCascada: z.enum(METODO_CASCADA_OPTIONS).optional().nullable(),
+  fechaInicio: z.string().optional().or(z.literal('')),
+  fechaTerminacion: z.string().optional().or(z.literal('')),
 });
 
 /**

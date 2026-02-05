@@ -8,7 +8,7 @@
  * @see SCHEMA-001
  */
 
-import { pgTable, text, uuid, decimal, index } from 'drizzle-orm/pg-core';
+import { pgTable, text, uuid, decimal, index, unique, timestamp } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { auditFields } from '@/lib/db/helpers/audit-fields';
 import { metodoCascadaEnum, estadoProyectoEnum } from './enums';
@@ -34,6 +34,12 @@ export const proyectos = pgTable(
       .notNull()
       .references(() => fondos.id),
 
+    /** Project code (unique within fund, e.g. PRJ-001) */
+    codigo: text('codigo').notNull(),
+
+    /** URL-friendly identifier */
+    slug: text('slug'),
+
     /** Project name */
     nombre: text('nombre').notNull(),
 
@@ -43,11 +49,20 @@ export const proyectos = pgTable(
     /** Project lifecycle state */
     estado: estadoProyectoEnum('estado').notNull().default('inversion_abierta'),
 
+    /** Preferred return rate (annual %) */
+    tasaPref: decimal('tasa_pref', { precision: 5, scale: 2 }).notNull().default('12.00'),
+
     /** Cascade method override (null = inherit from fund) */
     metodoCascada: metodoCascadaEnum('metodo_cascada'),
 
     /** Success fee override (null = inherit from fund) */
     successFeePct: decimal('success_fee_pct', { precision: 5, scale: 2 }),
+
+    /** Project start date */
+    fechaInicio: timestamp('fecha_inicio', { withTimezone: true }),
+
+    /** Expected project end date */
+    fechaTerminacion: timestamp('fecha_terminacion', { withTimezone: true }),
 
     // Cached financial fields
     /** Cached: Total capital invested in project */
@@ -62,7 +77,10 @@ export const proyectos = pgTable(
     // Audit fields
     ...auditFields,
   },
-  (table) => [index('proyectos_fondo_id_idx').on(table.fondoId)]
+  (table) => [
+    index('proyectos_fondo_id_idx').on(table.fondoId),
+    unique('proyectos_fondo_codigo_unique').on(table.fondoId, table.codigo),
+  ]
 );
 
 // =============================================================================

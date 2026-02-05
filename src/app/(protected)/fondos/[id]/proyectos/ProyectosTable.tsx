@@ -32,8 +32,10 @@ type EstadoFilter = 'all' | 'inversion_abierta' | 'inversion_cerrada' | 'conclui
 
 type ProyectoForEdit = {
   id: string;
+  codigo: string;
   nombre: string;
   descripcion: string | null;
+  tasaPref: string | null;
   successFeePct: string | null;
   metodoCascada: string | null;
 };
@@ -149,10 +151,17 @@ export function ProyectosTable({ proyectos, fondoId, userRole }: ProyectosTableP
                 title="Editar"
                 onClick={(e) => {
                   e.stopPropagation();
+                  // Cast to access full proyecto with new fields
+                  const p = proyecto as ProyectoListItem & {
+                    codigo?: string;
+                    tasaPref?: string | null;
+                  };
                   setEditProyecto({
                     id: proyecto.id,
+                    codigo: p.codigo || '',
                     nombre: proyecto.nombre,
                     descripcion: null, // Will be fetched from full data
+                    tasaPref: p.tasaPref || '12.00',
                     successFeePct: proyecto.successFeePct,
                     metodoCascada: null,
                   });

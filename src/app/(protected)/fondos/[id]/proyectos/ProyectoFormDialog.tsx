@@ -43,8 +43,10 @@ interface ProyectoFormDialogProps {
   fondoId: string;
   proyecto?: {
     id: string;
+    codigo: string;
     nombre: string;
     descripcion: string | null;
+    tasaPref: string | null;
     successFeePct: string | null;
     metodoCascada: string | null;
   };
@@ -78,8 +80,10 @@ export function ProyectoFormDialog({
   } = useForm<FormData>({
     resolver: zodResolver(createProyectoSchema),
     defaultValues: {
+      codigo: '',
       nombre: '',
       descripcion: '',
+      tasaPref: '12.00',
       successFeePct: '20',
       metodoCascada: null,
     },
@@ -89,15 +93,19 @@ export function ProyectoFormDialog({
   useEffect(() => {
     if (mode === 'edit' && proyecto && open) {
       reset({
+        codigo: proyecto.codigo,
         nombre: proyecto.nombre,
         descripcion: proyecto.descripcion || '',
+        tasaPref: proyecto.tasaPref || '12.00',
         successFeePct: proyecto.successFeePct || '',
         metodoCascada: proyecto.metodoCascada as FormData['metodoCascada'],
       });
     } else if (mode === 'create' && open) {
       reset({
+        codigo: '',
         nombre: '',
         descripcion: '',
+        tasaPref: '12.00',
         successFeePct: '20',
         metodoCascada: null,
       });
@@ -147,6 +155,20 @@ export function ProyectoFormDialog({
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Código */}
+          <div className="space-y-1.5">
+            <label htmlFor="codigo" className="text-sm font-medium">
+              Código
+            </label>
+            <Input
+              id="codigo"
+              {...register('codigo')}
+              placeholder="Ej: PRJ-001"
+              disabled={isSubmitting}
+            />
+            {errors.codigo && <p className="text-destructive text-sm">{errors.codigo.message}</p>}
+          </div>
+
           {/* Nombre */}
           <div className="space-y-1.5">
             <label htmlFor="nombre" className="text-sm font-medium">
@@ -176,6 +198,24 @@ export function ProyectoFormDialog({
             />
             {errors.descripcion && (
               <p className="text-destructive text-sm">{errors.descripcion.message}</p>
+            )}
+          </div>
+
+          {/* Tasa Pref % */}
+          <div className="space-y-1.5">
+            <label htmlFor="tasaPref" className="text-sm font-medium">
+              Tasa Pref % <span className="text-muted-foreground">(default: 12%)</span>
+            </label>
+            <Input
+              id="tasaPref"
+              {...register('tasaPref')}
+              placeholder="12.00"
+              disabled={isSubmitting}
+              type="text"
+              inputMode="decimal"
+            />
+            {errors.tasaPref && (
+              <p className="text-destructive text-sm">{errors.tasaPref.message}</p>
             )}
           </div>
 

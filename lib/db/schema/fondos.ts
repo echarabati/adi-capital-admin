@@ -29,6 +29,9 @@ export const fondos = pgTable('fondos', {
   /** Fund name */
   nombre: text('nombre').notNull(),
 
+  /** URL-friendly identifier */
+  slug: text('slug'),
+
   /** Base currency for the fund */
   monedaBase: monedaEnum('moneda_base').notNull().default('MXN'),
 
