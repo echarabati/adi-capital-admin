@@ -25,7 +25,11 @@ export const metodoCascadaEnum = pgEnum('metodo_cascada', ['pref_primero', 'capi
 // =============================================================================
 
 /** Project lifecycle states */
-export const estadoProyectoEnum = pgEnum('estado_proyecto', ['activo', 'cerrado', 'en_desarrollo']);
+export const estadoProyectoEnum = pgEnum('estado_proyecto', [
+  'inversion_abierta',
+  'inversion_cerrada',
+  'concluido',
+]);
 
 // =============================================================================
 // Admin Fee Enums

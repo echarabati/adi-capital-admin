@@ -1,6 +1,6 @@
 {
-  "id": "282af7f9-88eb-47d8-94f5-5b9ccffb2f92",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "979f9077-2a6d-434c-9cae-3b6614b0b2ed",
+  "prevId": "282af7f9-88eb-47d8-94f5-5b9ccffb2f92",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1906,6 +1906,39 @@
           "columns": ["user_id", "fondo_id"]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.migration_test": {
+      "name": "migration_test",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "test_field": {
+          "name": "test_field",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

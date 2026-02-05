@@ -13,7 +13,11 @@ import { z } from 'zod';
 // =============================================================================
 
 export const METODO_CASCADA_OPTIONS = ['pref_primero', 'capital_primero'] as const;
-export const ESTADO_PROYECTO_OPTIONS = ['activo', 'cerrado', 'en_desarrollo'] as const;
+export const ESTADO_PROYECTO_OPTIONS = [
+  'inversion_abierta',
+  'inversion_cerrada',
+  'concluido',
+] as const;
 
 // =============================================================================
 // Schemas

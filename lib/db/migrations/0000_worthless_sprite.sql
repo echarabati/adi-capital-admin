@@ -2,7 +2,7 @@ CREATE TYPE "public"."base_admin_fee" AS ENUM('compromiso', 'aportado');--> stat
 CREATE TYPE "public"."concepto" AS ENUM('APO', 'APO-D', 'DIS', 'DEV', 'FEE', 'INV', 'INV-D', 'RET', 'GAS', 'GASP', 'APS', 'RPS', 'PRS', 'DPRS', 'TRA', 'CAM', 'ERR', 'TSI');--> statement-breakpoint
 CREATE TYPE "public"."estado_call" AS ENUM('pendiente', 'parcial', 'completo');--> statement-breakpoint
 CREATE TYPE "public"."estado_movimiento" AS ENUM('borrador', 'confirmado', 'cancelado');--> statement-breakpoint
-CREATE TYPE "public"."estado_proyecto" AS ENUM('activo', 'cerrado', 'en_desarrollo');--> statement-breakpoint
+CREATE TYPE "public"."estado_proyecto" AS ENUM('inversion_abierta', 'inversion_cerrada', 'concluido');--> statement-breakpoint
 CREATE TYPE "public"."metodo_admin_fee" AS ENUM('capital_call_independiente', 'incluido_en_capital_call');--> statement-breakpoint
 CREATE TYPE "public"."metodo_cascada" AS ENUM('pref_primero', 'capital_primero');--> statement-breakpoint
 CREATE TYPE "public"."moneda" AS ENUM('MXN', 'USD', 'EUR', 'ILS');--> statement-breakpoint
@@ -105,7 +105,7 @@ CREATE TABLE "proyectos" (
 	"fondo_id" uuid NOT NULL,
 	"nombre" text NOT NULL,
 	"descripcion" text,
-	"estado" "estado_proyecto" DEFAULT 'activo' NOT NULL,
+	"estado" "estado_proyecto" DEFAULT 'inversion_abierta' NOT NULL,
 	"metodo_cascada" "metodo_cascada",
 	"success_fee_pct" numeric(5, 2),
 	"inversion_recibida" numeric(18, 2) DEFAULT '0',

@@ -21,7 +21,7 @@ import { isSuperAdmin } from '@/src/config/roles';
 export type ProyectoListItem = {
   id: string;
   nombre: string;
-  estado: 'activo' | 'cerrado' | 'en_desarrollo';
+  estado: 'inversion_abierta' | 'inversion_cerrada' | 'concluido';
   successFeePct: string | null;
   inversionRecibida: string;
   inversionistasCount: number;
@@ -32,7 +32,7 @@ export type ProyectoDetail = {
   fondoId: string;
   nombre: string;
   descripcion: string | null;
-  estado: 'activo' | 'cerrado' | 'en_desarrollo';
+  estado: 'inversion_abierta' | 'inversion_cerrada' | 'concluido';
   metodoCascada: string | null;
   successFeePct: string | null;
   inversionRecibida: string;

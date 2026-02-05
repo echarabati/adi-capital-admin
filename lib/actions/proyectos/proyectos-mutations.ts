@@ -209,3 +209,89 @@ export async function updateProyecto(id: string, input: unknown): Promise<Proyec
     return { error: 'No pudimos guardar los cambios. Intenta de nuevo.' };
   }
 }
+
+// =============================================================================
+// Update Proyecto Estado
+// =============================================================================
+
+type EstadoProyecto = 'inversion_abierta' | 'inversion_cerrada' | 'concluido';
+
+/** Valid state transitions per BR-008 */
+const VALID_TRANSITIONS: Record<EstadoProyecto, EstadoProyecto[]> = {
+  inversion_abierta: ['inversion_cerrada'],
+  inversion_cerrada: ['concluido', 'inversion_abierta'], // Can reopen
+  concluido: [], // Terminal state
+};
+
+/**
+ * Update project state with transition validation.
+ *
+ * RBAC: admin_fondo+ with fund access
+ * BR-008: Valid transitions only
+ *
+ * @param id - Project UUID
+ * @param nuevoEstado - New state
+ * @returns Result with success or error
+ */
+export async function updateProyectoEstado(
+  id: string,
+  nuevoEstado: EstadoProyecto
+): Promise<ProyectoMutationResult> {
+  // 1. Auth check
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { error: 'Debes iniciar sesión' };
+  }
+
+  // 2. Get existing project
+  const [existing] = await db
+    .select({
+      id: proyectos.id,
+      fondoId: proyectos.fondoId,
+      estado: proyectos.estado,
+    })
+    .from(proyectos)
+    .where(eq(proyectos.id, id))
+    .limit(1);
+
+  if (!existing) {
+    return { error: 'Proyecto no encontrado' };
+  }
+
+  // 3. RBAC check
+  const hasAccess = await checkFundAccess(session.user.id, session.user.role, existing.fondoId);
+  if (!hasAccess) {
+    return { error: 'No tienes permiso para cambiar el estado de este proyecto' };
+  }
+
+  // 4. Validate transition (BR-008)
+  const currentEstado = existing.estado as EstadoProyecto;
+  const allowedTransitions = VALID_TRANSITIONS[currentEstado] || [];
+
+  if (!allowedTransitions.includes(nuevoEstado)) {
+    return {
+      error: `No se puede cambiar de "${currentEstado}" a "${nuevoEstado}". Transiciones válidas: ${allowedTransitions.join(', ') || 'ninguna'}`,
+    };
+  }
+
+  try {
+    // 5. Update estado
+    await db
+      .update(proyectos)
+      .set({
+        estado: nuevoEstado,
+        modifiedAt: new Date(),
+        modifiedBy: session.user.id,
+      })
+      .where(eq(proyectos.id, id));
+
+    // 6. Revalidate cache
+    revalidatePath(`/fondos/${existing.fondoId}/proyectos`);
+    revalidatePath(`/fondos/${existing.fondoId}/proyectos/${id}`);
+
+    return { success: true, data: { id } };
+  } catch (error) {
+    console.error('[updateProyectoEstado]', error);
+    return { error: 'No pudimos cambiar el estado. Intenta de nuevo.' };
+  }
+}

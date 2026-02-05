@@ -41,7 +41,7 @@ export const proyectos = pgTable(
     descripcion: text('descripcion'),
 
     /** Project lifecycle state */
-    estado: estadoProyectoEnum('estado').notNull().default('activo'),
+    estado: estadoProyectoEnum('estado').notNull().default('inversion_abierta'),
 
     /** Cascade method override (null = inherit from fund) */
     metodoCascada: metodoCascadaEnum('metodo_cascada'),

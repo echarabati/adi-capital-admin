@@ -28,7 +28,7 @@ interface ProyectosTableProps {
   userRole?: string;
 }
 
-type EstadoFilter = 'all' | 'activo' | 'cerrado' | 'en_desarrollo';
+type EstadoFilter = 'all' | 'inversion_abierta' | 'inversion_cerrada' | 'concluido';
 
 type ProyectoForEdit = {
   id: string;
@@ -40,9 +40,9 @@ type ProyectoForEdit = {
 
 // Estado badge colors
 const estadoConfig: Record<string, { label: string; color: string }> = {
-  activo: { label: 'Activo', color: '#10b981' },
-  cerrado: { label: 'Cerrado', color: '#6b7280' },
-  en_desarrollo: { label: 'En Desarrollo', color: '#3b82f6' },
+  inversion_abierta: { label: 'Inversión Abierta', color: '#10b981' },
+  inversion_cerrada: { label: 'Inversión Cerrada', color: '#f59e0b' },
+  concluido: { label: 'Concluido', color: '#6b7280' },
 };
 
 // =============================================================================
@@ -104,7 +104,7 @@ export function ProyectosTable({ proyectos, fondoId, userRole }: ProyectosTableP
       header: 'Estado',
       sortable: true,
       accessor: (proyecto) => {
-        const config = estadoConfig[proyecto.estado] || estadoConfig.activo;
+        const config = estadoConfig[proyecto.estado] || estadoConfig.inversion_abierta;
         return (
           <span
             className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium"
@@ -195,9 +195,9 @@ export function ProyectosTable({ proyectos, fondoId, userRole }: ProyectosTableP
             className="border-input bg-background text-foreground focus:ring-ring w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:ring-offset-2"
           >
             <option value="all">Todos</option>
-            <option value="activo">Activo</option>
-            <option value="cerrado">Cerrado</option>
-            <option value="en_desarrollo">En Desarrollo</option>
+            <option value="inversion_abierta">Inversión Abierta</option>
+            <option value="inversion_cerrada">Inversión Cerrada</option>
+            <option value="concluido">Concluido</option>
           </select>
         </div>
 

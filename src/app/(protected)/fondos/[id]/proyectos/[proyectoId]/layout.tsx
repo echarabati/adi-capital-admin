@@ -3,7 +3,7 @@
  *
  * Layout with header and tabs for project detail pages.
  *
- * @see PROJ-003
+ * @see PROJ-003, PROJ-005
  */
 
 import { redirect, notFound } from 'next/navigation';
@@ -11,13 +11,8 @@ import Link from 'next/link';
 import { auth } from '@/lib/auth';
 import { getProyectoById } from '@/lib/actions/proyectos/proyectos-queries';
 import { FolderOpen, LayoutGrid, DollarSign, ArrowLeftRight, FileText } from 'lucide-react';
-
-// Estado badge colors
-const estadoConfig: Record<string, { label: string; color: string }> = {
-  activo: { label: 'Activo', color: '#10b981' },
-  cerrado: { label: 'Cerrado', color: '#6b7280' },
-  en_desarrollo: { label: 'En Desarrollo', color: '#3b82f6' },
-};
+import { isSuperAdmin, hasRoleOrHigher, ROLES } from '@/src/config/roles';
+import { EstadoSelector } from './EstadoSelector';
 
 // Tab definitions
 const tabs = [
@@ -47,7 +42,9 @@ export default async function ProyectoLayout({ children, params }: ProyectoLayou
     notFound();
   }
 
-  const estadoInfo = estadoConfig[proyecto.estado] || estadoConfig.activo;
+  const userRole = session.user.role;
+  const canManage =
+    isSuperAdmin(userRole ?? '') || hasRoleOrHigher(userRole ?? '', ROLES.ADMIN_FONDO);
 
   return (
     <div className="space-y-6">
@@ -59,12 +56,11 @@ export default async function ProyectoLayout({ children, params }: ProyectoLayou
         <div>
           <h1 className="text-foreground text-xl font-semibold">{proyecto.nombre}</h1>
           <div className="flex items-center gap-2">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium"
-              style={{ backgroundColor: `${estadoInfo.color}20`, color: estadoInfo.color }}
-            >
-              {estadoInfo.label}
-            </span>
+            <EstadoSelector
+              proyectoId={proyectoId}
+              currentEstado={proyecto.estado}
+              canManage={canManage}
+            />
             <span className="text-muted-foreground text-sm">
               {proyecto.inversionistasCount} inversionista
               {proyecto.inversionistasCount !== 1 ? 's' : ''}
