@@ -21,6 +21,7 @@ import {
   CONCEPTO_LABELS,
   isSociosConcepto,
   requiresPorcentaje,
+  requiresTipoCambio,
 } from '@/lib/validations/movimientos/movimientos-validation';
 import { createMovimiento } from '@/lib/actions/movimientos/movimientos-mutations';
 import type { InversionSelectorItem } from '@/lib/actions/inversiones/inversiones-queries';
@@ -92,8 +93,8 @@ export function MovimientoFormSheet({
     return m / tc;
   }, [monto, moneda, tipoCambio]);
 
-  // Needs tipo_cambio if MXN
-  const needsTipoCambio = moneda !== 'USD';
+  // Needs tipo_cambio if MXN or if concepto requires it (CAM - MOV-010)
+  const needsTipoCambio = moneda !== 'USD' || (concepto ? requiresTipoCambio(concepto) : false);
 
   // APO conceptos require inversión
   const needsInversion =

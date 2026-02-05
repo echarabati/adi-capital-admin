@@ -305,3 +305,35 @@ export const PORCENTAJE_CONCEPTOS = ['PRS', 'DPRS'] as const;
 export function requiresPorcentaje(concepto: Concepto): boolean {
   return (PORCENTAJE_CONCEPTOS as readonly string[]).includes(concepto);
 }
+
+// =============================================================================
+// Admin Conceptos Helpers
+// =============================================================================
+
+/**
+ * Conceptos for administrative operations
+ * @see MOV-010, BR-029
+ */
+export const ADMIN_CONCEPTOS = ['TRA', 'CAM', 'ERR', 'TSI'] as const;
+
+/**
+ * Check if a concepto is an Admin concepto
+ * @see MOV-010
+ */
+export function isAdminConcepto(concepto: Concepto): boolean {
+  return (ADMIN_CONCEPTOS as readonly string[]).includes(concepto);
+}
+
+/**
+ * Conceptos that require tipo_cambio field
+ * CAM (Cambio Moneda) always requires exchange rate
+ */
+export const TIPO_CAMBIO_REQUIRED_CONCEPTOS = ['CAM'] as const;
+
+/**
+ * Check if a concepto requires tipo_cambio field (regardless of currency)
+ * @see MOV-010
+ */
+export function requiresTipoCambio(concepto: Concepto): boolean {
+  return (TIPO_CAMBIO_REQUIRED_CONCEPTOS as readonly string[]).includes(concepto);
+}

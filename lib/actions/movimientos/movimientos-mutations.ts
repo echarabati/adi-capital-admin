@@ -18,6 +18,7 @@ import {
   createMovimientoSchema,
   CreateMovimientoInput,
   isSociosConcepto,
+  requiresTipoCambio,
 } from '@/lib/validations/movimientos/movimientos-validation';
 
 // =============================================================================
@@ -97,6 +98,13 @@ export async function createMovimiento(input: CreateMovimientoInput): Promise<Mu
 
       if (!inversionista.esFundador) {
         return { error: 'Solo fundadores pueden recibir este tipo de movimiento' };
+      }
+    }
+
+    // Validate CAM concepto requires tipoCambio (MOV-010, BR-050)
+    if (requiresTipoCambio(data.concepto)) {
+      if (!data.tipoCambio) {
+        return { error: 'Tipo de cambio es requerido para cambio de moneda' };
       }
     }
 
