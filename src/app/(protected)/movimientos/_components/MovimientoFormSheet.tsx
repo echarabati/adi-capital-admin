@@ -100,6 +100,12 @@ export function MovimientoFormSheet({
   const isGas = concepto === 'GAS';
   const isGasp = concepto === 'GASP';
   const isGasto = isGas || isGasp;
+  // INV conceptos require proyecto
+  const isInv = concepto === 'INV';
+  const isInvD = concepto === 'INV-D';
+  const isRet = concepto === 'RET';
+  const needsProyecto = isGasp || isInv || isInvD || isRet;
+  const needsFechaEfectiva = isApoD || isInvD;
 
   function handleClose() {
     resetForm();
@@ -257,8 +263,8 @@ export function MovimientoFormSheet({
                 />
               )}
 
-              {/* Proyecto Selector (for GASP only) */}
-              {isGasp && (
+              {/* Proyecto Selector (for GASP/INV/INV-D/RET) */}
+              {needsProyecto && (
                 <div>
                   <label className="text-foreground mb-1.5 block text-sm font-medium">
                     Proyecto <span className="text-rose-500">*</span>
@@ -279,13 +285,13 @@ export function MovimientoFormSheet({
                       ))}
                   </select>
                   <p className="text-muted-foreground mt-1 text-xs">
-                    GASP requiere especificar a qué proyecto corresponde el gasto
+                    Este concepto requiere especificar el proyecto
                   </p>
                 </div>
               )}
 
-              {/* Fecha Efectiva (for APO-D only) */}
-              {isApoD && (
+              {/* Fecha Efectiva (for APO-D/INV-D) */}
+              {needsFechaEfectiva && (
                 <div>
                   <label className="text-foreground mb-1.5 block text-sm font-medium">
                     Fecha Efectiva <span className="text-rose-500">*</span>

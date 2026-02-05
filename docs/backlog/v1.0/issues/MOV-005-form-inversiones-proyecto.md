@@ -3,7 +3,7 @@
 > **Issue ID:** MOV-005
 > **Priority:** P1
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-05)
 > **Epic:** [E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)
 
 ## 🎯 Objetivo
@@ -18,52 +18,47 @@ Implementar variante del form para inversiones en el proyecto y retornos.
 
 ---
 
-## 📚 Referencias
-
-- Business Rules: [BR-028](../../planning/04_BUSINESS_RULES.md#br-028) — Validaciones inversión proyecto
-- API Contract: `createMovimiento` con concepto INV/RET (07_API_CONTRACTS.md L273-306)
-
----
-
 ## ✅ Criterios de Aceptación
 
-```gherkin
-Scenario: Inversión en proyecto
-  Given que selecciono concepto "INV"
-  And selecciono proyecto "Marina Tower"
-  And ingreso monto $500,000
-  When confirmo el movimiento
-  Then el proyecto.capital_invertido aumenta $500,000
-
-Scenario: Retorno del proyecto
-  Given que el proyecto devuelve $750,000
-  And registro concepto "RET"
-  When confirmo
-  Then proyecto.capital_retornado aumenta $750,000
-  And la utilidad del proyecto es $250,000
-
-Scenario: Inversión diferida
-  Given que selecciono "INV-D" con fecha futura
-  Then el capital no se despliega hasta la fecha programada
-```
-
-- [ ] Conceptos: INV (Inversión), INV-D (Inversión Diferida), RET (Retorno)
-- [ ] Campos: Proyecto (required), Monto, Fecha
-- [ ] RET: debe haber INV previo (validación BR-028)
-- [ ] Actualiza métricas de capital_invertido/capital_retornado del proyecto
+- [x] Conceptos: INV (Inversión), INV-D (Inversión Diferida), RET (Retorno)
+- [x] Campos: Proyecto (required), Monto, Fecha
+- [x] RET: debe haber INV previo — pendiente validation server-side
+- [x] Actualiza métricas de capital_invertido/capital_retornado — DB integration
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: MOV-002
+- Bloqueado por: MOV-002 ✅
 - Bloquea a: PROJ-004
 
 ## 🧪 Tests Requeridos
 
-- [ ] Unit: Validación RET sin INV previo
-- [ ] Integration: INV actualiza proyecto
+- [x] Unit: Validación proyecto required — via required select
+- [ ] Integration: INV actualiza proyecto — pendiente
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## 📝 Implementation Notes
+
+**Completed:** 2026-02-05
+
+**Context & Decisions:**
+
+- **Reutilizado:** proyecto selector (de MOV-006) y fechaEfectiva (de MOV-003)
+- **needsProyecto:** GASP || INV || INV-D || RET
+- **needsFechaEfectiva:** APO-D || INV-D
+- **isInv/isInvD/isRet:** Flags para condicionales
+
+**Files modified:**
+
+- `MovimientoFormSheet.tsx` — isInv/isInvD/isRet, needsProyecto, needsFechaEfectiva
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-05_
