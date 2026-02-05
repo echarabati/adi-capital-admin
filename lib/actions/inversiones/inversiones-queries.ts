@@ -244,6 +244,82 @@ export async function getInversionistasByFondo(
 }
 
 // =============================================================================
+// Get Inversiones for Selector (MovimientoForm)
+// =============================================================================
+
+export type InversionSelectorItem = {
+  id: string;
+  inversionistaId: string;
+  inversionistaNombre: string;
+  proyectoId: string;
+  proyectoNombre: string;
+  compromiso: string;
+  capitalAportado: string;
+};
+
+/**
+ * Get all inversiones for a fondo (used in MovimientoForm selector).
+ * Groups by proyecto for display.
+ *
+ * RBAC:
+ * - super_admin: Any fondo
+ * - admin_fondo/agente: Only assigned fondos
+ *
+ * @param fondoId - Fund UUID
+ * @returns List of inversiones with proyecto and inversionista names
+ * @see MOV-003
+ */
+export async function getInversionesForSelector(fondoId: string): Promise<InversionSelectorItem[]> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error('Debes iniciar sesión');
+  }
+
+  const userId = session.user.id;
+  const userRole = session.user.role;
+
+  // Check fund access for non-super_admin
+  if (!isSuperAdmin(userRole)) {
+    const [access] = await db
+      .select({ fondoId: userFondos.fondoId })
+      .from(userFondos)
+      .where(and(eq(userFondos.userId, userId), eq(userFondos.fondoId, fondoId)))
+      .limit(1);
+
+    if (!access) {
+      return [];
+    }
+  }
+
+  // Fetch all inversiones for this fondo
+  const result = await db
+    .select({
+      id: inversiones.id,
+      inversionistaId: inversiones.inversionistaId,
+      inversionistaNombre: inversionistas.nombre,
+      proyectoId: inversiones.proyectoId,
+      proyectoNombre: proyectos.nombre,
+      compromiso: inversiones.compromiso,
+      capitalAportado: inversiones.capitalAportado,
+    })
+    .from(inversiones)
+    .innerJoin(inversionistas, eq(inversiones.inversionistaId, inversionistas.id))
+    .innerJoin(proyectos, eq(inversiones.proyectoId, proyectos.id))
+    .where(eq(proyectos.fondoId, fondoId))
+    .orderBy(proyectos.nombre, inversionistas.nombre);
+
+  return result.map((inv) => ({
+    id: inv.id,
+    inversionistaId: inv.inversionistaId,
+    inversionistaNombre: inv.inversionistaNombre,
+    proyectoId: inv.proyectoId,
+    proyectoNombre: inv.proyectoNombre,
+    compromiso: inv.compromiso,
+    capitalAportado: inv.capitalAportado ?? '0',
+  }));
+}
+
+// =============================================================================
 // Inversion Detail (for detail page)
 // =============================================================================
 

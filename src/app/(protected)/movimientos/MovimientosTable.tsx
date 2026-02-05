@@ -21,6 +21,7 @@ import {
   CONCEPTO_GROUPS,
 } from '@/lib/validations/movimientos/movimientos-validation';
 import { MovimientoFormSheet } from './_components/MovimientoFormSheet';
+import type { InversionSelectorItem } from '@/lib/actions/inversiones/inversiones-queries';
 
 // =============================================================================
 // Types
@@ -29,6 +30,7 @@ import { MovimientoFormSheet } from './_components/MovimientoFormSheet';
 interface MovimientosTableProps {
   movimientos: MovimientoListItem[];
   fondos: { id: string; nombre: string }[];
+  inversiones: InversionSelectorItem[];
   initialFilters?: {
     fondoId?: string;
     concepto?: string;
@@ -84,6 +86,7 @@ function getEstadoBadgeColor(estado: string): string {
 export function MovimientosTable({
   movimientos,
   fondos,
+  inversiones,
   initialFilters = {},
 }: MovimientosTableProps) {
   const [search, setSearch] = useState('');
@@ -366,6 +369,7 @@ export function MovimientosTable({
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
         fondos={fondos}
+        inversiones={inversiones}
         defaultFondoId={selectedFondoId || undefined}
       />
     </div>

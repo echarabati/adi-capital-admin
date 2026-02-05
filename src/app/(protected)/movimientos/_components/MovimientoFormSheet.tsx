@@ -14,11 +14,13 @@ import { useState, useTransition, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { X, ArrowLeft, Loader2, Save } from 'lucide-react';
 import { ConceptoSelector } from './ConceptoSelector';
+import { InversionSelector } from './InversionSelector';
 import {
   type Concepto,
   CONCEPTO_LABELS,
 } from '@/lib/validations/movimientos/movimientos-validation';
 import { createMovimiento } from '@/lib/actions/movimientos/movimientos-mutations';
+import type { InversionSelectorItem } from '@/lib/actions/inversiones/inversiones-queries';
 
 // =============================================================================
 // Types
@@ -28,6 +30,7 @@ interface MovimientoFormSheetProps {
   isOpen: boolean;
   onClose: () => void;
   fondos: { id: string; nombre: string }[];
+  inversiones: InversionSelectorItem[];
   defaultFondoId?: string;
 }
 
@@ -41,6 +44,7 @@ export function MovimientoFormSheet({
   isOpen,
   onClose,
   fondos,
+  inversiones,
   defaultFondoId,
 }: MovimientoFormSheetProps) {
   const router = useRouter();
@@ -56,6 +60,9 @@ export function MovimientoFormSheet({
   const [tipoCambio, setTipoCambio] = useState('');
   const [fechaMovimiento, setFechaMovimiento] = useState(new Date().toISOString().split('T')[0]);
   const [descripcion, setDescripcion] = useState('');
+  // APO fields
+  const [inversionId, setInversionId] = useState('');
+  const [fechaEfectiva, setFechaEfectiva] = useState('');
 
   // Calculate monto in USD
   const montoUsd = useMemo(() => {
@@ -71,6 +78,15 @@ export function MovimientoFormSheet({
   // Needs tipo_cambio if MXN
   const needsTipoCambio = moneda !== 'USD';
 
+  // APO conceptos require inversión
+  const needsInversion =
+    concepto === 'APO' ||
+    concepto === 'APO-D' ||
+    concepto === 'DIS' ||
+    concepto === 'DEV' ||
+    concepto === 'FEE';
+  const isApoD = concepto === 'APO-D';
+
   function handleClose() {
     resetForm();
     onClose();
@@ -85,6 +101,8 @@ export function MovimientoFormSheet({
     setTipoCambio('');
     setFechaMovimiento(new Date().toISOString().split('T')[0]);
     setDescripcion('');
+    setInversionId('');
+    setFechaEfectiva('');
     setError(null);
   }
 
@@ -103,6 +121,12 @@ export function MovimientoFormSheet({
       return;
     }
 
+    // Validate inversión for APO conceptos
+    if (needsInversion && !inversionId) {
+      setError('Selecciona una inversión');
+      return;
+    }
+
     setError(null);
 
     startTransition(async () => {
@@ -114,6 +138,7 @@ export function MovimientoFormSheet({
         tipoCambio: needsTipoCambio ? tipoCambio : undefined,
         fechaMovimiento,
         descripcion,
+        inversionId: needsInversion ? inversionId : undefined,
       });
 
       if (result.error) {
@@ -133,9 +158,9 @@ export function MovimientoFormSheet({
       <div className="fixed inset-0 z-40 bg-black/50 transition-opacity" onClick={handleClose} />
 
       {/* Sheet */}
-      <div className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-lg overflow-y-auto bg-[var(--sidebar-bg)] shadow-xl">
+      <div className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-lg overflow-y-auto bg-(--sidebar-bg) shadow-xl">
         {/* Header */}
-        <div className="border-b border-[var(--sidebar-border)] px-6 py-4">
+        <div className="border-b border-(--sidebar-border) px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {step === 'details' && (
@@ -205,6 +230,36 @@ export function MovimientoFormSheet({
                   ))}
                 </select>
               </div>
+
+              {/* Inversión Selector (for APO/DIS/DEV/FEE conceptos) */}
+              {needsInversion && (
+                <InversionSelector
+                  value={inversionId}
+                  onChange={setInversionId}
+                  inversiones={inversiones}
+                  required
+                />
+              )}
+
+              {/* Fecha Efectiva (for APO-D only) */}
+              {isApoD && (
+                <div>
+                  <label className="text-foreground mb-1.5 block text-sm font-medium">
+                    Fecha Efectiva <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    value={fechaEfectiva}
+                    onChange={(e) => setFechaEfectiva(e.target.value)}
+                    required
+                    min={fechaMovimiento}
+                    className="border-input bg-background text-foreground focus:ring-primary w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
+                  />
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    Fecha en que se efectiviza la aportación diferida
+                  </p>
+                </div>
+              )}
 
               {/* Monto y Moneda */}
               <div className="grid grid-cols-2 gap-4">

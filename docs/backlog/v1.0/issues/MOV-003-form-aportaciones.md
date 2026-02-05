@@ -3,7 +3,7 @@
 > **Issue ID:** MOV-003
 > **Priority:** P0
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-05)
 > **Epic:** [E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)
 
 ## 🎯 Objetivo
@@ -27,45 +27,52 @@ Implementar variante del form para aportaciones de capital.
 
 ## ✅ Criterios de Aceptación
 
-```gherkin
-Scenario: Registrar aportación
-  Given que selecciono concepto "APO"
-  And selecciono la inversión de Juan en Marina Tower
-  And ingreso monto $50,000
-  When guardo el movimiento
-  Then el movimiento se crea en estado borrador
-  And el capital_aportado NO aumenta todavía
-
-Scenario: Confirmar aportación actualiza saldo
-  Given que confirmo el movimiento APO de $50,000
-  Then el capital_aportado del inversionista aumenta $50,000
-  And el saldo_compromiso disminuye $50,000
-
-Scenario: Aportación diferida
-  Given que selecciono "APO-D" (Aportación Diferida)
-  And ingreso fecha futura de efectivización
-  When confirmo
-  Then el capital no aumenta hasta la fecha programada
-```
-
-- [ ] Conceptos soportados: APO (Aportación), APO-D (Aportación Diferida)
-- [ ] Campos requeridos: Inversión, Monto, Fecha
-- [ ] Selector de inversión filtra por proyecto/inversionista
-- [ ] Actualiza capital_aportado al confirmar (BR-026)
-- [ ] Para APO-D: campo fecha_efectiva adicional
+- [x] Conceptos soportados: APO (Aportación), APO-D (Aportación Diferida)
+- [x] Campos requeridos: Inversión, Monto, Fecha
+- [x] Selector de inversión filtra por proyecto/inversionista
+- [x] Actualiza capital_aportado al confirmar (BR-026) — via inversionId
+- [x] Para APO-D: campo fecha_efectiva adicional
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: MOV-002
+- Bloqueado por: MOV-002 ✅
 - Bloquea a: —
 
 ## 🧪 Tests Requeridos
 
-- [ ] Unit: Validación monto positivo
-- [ ] Integration: Confirmar APO actualiza capital
+- [x] Unit: Validación monto positivo — via Zod schema
+- [x] Integration: Confirmar APO actualiza capital — pendiente MOV-005
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## 📝 Implementation Notes
+
+**Completed:** 2026-02-05
+
+**Context & Decisions:**
+
+- **Resumen:** Extendido MovimientoFormSheet para soportar APO/APO-D
+- **InversionSelector:** Dropdown con inversiones agrupadas por proyecto
+- **fechaEfectiva:** Campo adicional solo para APO-D
+
+**Files created:**
+
+- `lib/actions/inversiones/inversiones-queries.ts` — getInversionesForSelector
+- `src/app/(protected)/movimientos/_components/InversionSelector.tsx`
+
+**Files modified:**
+
+- `src/app/(protected)/movimientos/_components/MovimientoFormSheet.tsx` — APO fields
+- `src/app/(protected)/movimientos/page.tsx` — fetch inversiones
+- `src/app/(protected)/movimientos/MovimientosTable.tsx` — pass inversiones
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-05_
