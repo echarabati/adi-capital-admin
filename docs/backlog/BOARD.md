@@ -7,13 +7,12 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 31 |
-| ✅ Done | 27 |
+| 📅 To Do | 30 |
+| ✅ Done | 28 |
 
 ### 📅 To Do
 
-**[E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)** (11)
-- [MOV-001: Lista de movimientos filtrable](v1.0/issues/MOV-001-lista-movimientos.md) 🔴
+**[E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)** (10)
 - [MOV-002: CMP-002 MovimientoForm base](v1.0/issues/MOV-002-movimiento-form-base.md) 🔴
 - [MOV-003: Form Aportaciones (APO/APO-D)](v1.0/issues/MOV-003-form-aportaciones.md) 🔴
 - [MOV-004: Form Distribuciones (DIS/DEV/FEE)](v1.0/issues/MOV-004-form-distribuciones.md) 🔴
@@ -55,7 +54,7 @@
 
 
 <details>
-<summary>✅ Done (27)</summary>
+<summary>✅ Done (28)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
@@ -73,6 +72,7 @@
 - [INVE-004: Compromiso Progress Bar](v1.0/issues/INVE-004-compromiso-progress.md)
 - [INVE-005: CRUD Calendario pagos](v1.0/issues/INVE-005-calendario-pagos.md) 🟡
 - [INVE-006: Registrar pago de capital call](v1.0/issues/INVE-006-registrar-pago.md) 🟡
+- [MOV-001: Lista de movimientos filtrable](v1.0/issues/MOV-001-lista-movimientos.md) 🔴
 - [PROJ-001: Lista de proyectos](v1.0/issues/PROJ-001-lista-proyectos.md) 🟡
 - [PROJ-002: Crear/Editar proyecto](v1.0/issues/PROJ-002-crear-editar-proyecto.md) 🟡
 - [PROJ-003: Detalle de proyecto con tabs](v1.0/issues/PROJ-003-detalle-proyecto.md) 🟡

@@ -109,6 +109,7 @@
 | /inversionistas/[id]/inversiones | `src/app/(protected)/inversionistas/[id]/inversiones/page.tsx` |
 | /inversionistas/[id]/movimientos | `src/app/(protected)/inversionistas/[id]/movimientos/page.tsx` |
 | /login | `src/app/(auth)/login/page.tsx` |
+| /movimientos | `src/app/(protected)/movimientos/page.tsx` |
 | /offline | `src/app/offline/page.tsx` |
 | /privacy | `src/app/(legal)/privacy/page.tsx` |
 | /register | `src/app/(auth)/register/page.tsx` |
@@ -361,10 +362,10 @@
 | Metric | Value |
 |--------|-------|
 | Dependencies | 32 |
-| Page Routes | 30 |
+| Page Routes | 31 |
 | API Routes | 8 |
 | Components & Utils | 117 |
-| **Total items** | **187** |
+| **Total items** | **188** |
 
 ---
 
