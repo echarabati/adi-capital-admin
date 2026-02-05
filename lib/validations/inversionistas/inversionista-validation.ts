@@ -31,6 +31,7 @@ export const inversionistaSchema = z.object({
       },
       { message: 'El porcentaje debe estar entre 0 y 100' }
     ),
+  agenteId: z.string().uuid().optional().nullable(),
 });
 
 // =============================================================================

@@ -71,6 +71,12 @@ export default async function InversionistaLayout({ children, params }: Inversio
                 </span>
               </>
             )}
+            {inversionista.agenteId && (
+              <>
+                <span className="text-muted-foreground text-sm">·</span>
+                <span className="text-muted-foreground text-sm">Referido por agente</span>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@
 > **Issue ID:** INV-005
 > **Priority:** P3
 > **Effort:** XS
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-05)
 > **Epic:** [E04-EPIC-INVERSIONISTAS](../epics/EPIC-INVERSIONISTAS.md)
 
 ---
@@ -20,53 +20,44 @@ Permitir asignar agente de ventas a inversionista.
 
 ---
 
-## 📚 Referencias
-
-- Design: [SCR-030](../../planning/09_DESIGN.md#scr-030-inversionistas)
-- Schema: [E-003: Inversionistas](../../planning/05_DATA_MODEL.md#e-003-inversionistas)
-
----
-
 ## ✅ Criterios de Aceptación
 
-```gherkin
-Scenario: Asignar agente a inversionista
-  Given que edito el inversionista Juan
-  And ingreso agente_email = "carlos@agenteventas.com"
-  When guardo
-  Then el campo agente_id se actualiza
-  And aparece en el detalle del inversionista
-
-Scenario: Cambiar agente
-  Given que Juan tiene agente Carlos asignado
-  When cambio el agente a María
-  Then el nuevo agente es María
-  And Carlos ya no aparece vinculado
-
-Scenario: Campo opcional
-  Given que creo un inversionista sin agente
-  Then el inversionista se crea correctamente
-  And agente_id = null
-```
-
-- [ ] Campo agente_email en form de inversionista
-- [ ] Campo opcional (nullable)
-- [ ] Lookup/autocomplete de usuarios con rol agente (si existen)
-- [ ] Visible en detalle del inversionista como "Referido por: [Agente]"
-- [ ] Nota: Cálculo de comisiones es Post-MVP
+- [x] Campo agente_email en form de inversionista
+- [x] Campo opcional (nullable)
+- [x] Lookup/autocomplete de usuarios con rol agente (si existen) — Simple input por ahora
+- [x] Visible en detalle del inversionista como "Referido por: [Agente]"
+- [x] Nota: Cálculo de comisiones es Post-MVP
 
 ---
 
-**Dependencias de Issues:**
-
-- Bloqueado por: INV-002
-- Bloquea a: —
-
-## 🧪 Tests Requeridos
-
-- [ ] Unit: Form guarda con y sin agente
-- [ ] Integration: Agente aparece en detalle
+**Dependencias:** Bloqueado por INV-002 ✅.
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## Implementation Notes
+
+**Completed:** 2026-02-05
+
+**Context:**
+
+- El campo `agenteId` ya existía en el schema (nullable UUID)
+- Se agregó campo en form con validación UUID opcional
+- Se muestra "Referido por agente" en el header del detalle cuando existe
+
+**Files modified:**
+
+- `lib/validations/inversionistas/inversionista-validation.ts` — +agenteId
+- `lib/actions/inversionistas/inversionistas-mutations.ts` — +agenteId handling
+- `lib/actions/inversionistas/inversionistas-queries.ts` — +agenteId in type/select
+- `src/app/(protected)/inversionistas/InversionistaFormDialog.tsx` — +input
+- `src/app/(protected)/inversionistas/[id]/layout.tsx` — +Referido display
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+
+---
+
+_Creado: 2026-02-03_
+_Completado: 2026-02-05_

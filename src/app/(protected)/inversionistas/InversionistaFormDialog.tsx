@@ -49,6 +49,7 @@ interface InversionistaFormDialogProps {
     telefono: string | null;
     esFundador: boolean;
     porcentajePropiedad: string | null;
+    agenteId: string | null;
     fondos: { id: string; nombre: string }[];
   };
 }
@@ -82,6 +83,7 @@ export function InversionistaFormDialog({
       telefono: '',
       esFundador: false,
       porcentajePropiedad: '',
+      agenteId: '',
       fondoIds: [],
     },
   });
@@ -98,6 +100,7 @@ export function InversionistaFormDialog({
         telefono: inversionista.telefono || '',
         esFundador: inversionista.esFundador,
         porcentajePropiedad: inversionista.porcentajePropiedad || '',
+        agenteId: inversionista.agenteId || '',
         fondoIds: inversionista.fondos.map((f) => f.id),
       });
     } else if (mode === 'create' && open) {
@@ -107,6 +110,7 @@ export function InversionistaFormDialog({
         telefono: '',
         esFundador: false,
         porcentajePropiedad: '',
+        agenteId: '',
         fondoIds: [],
       });
     }
@@ -197,6 +201,22 @@ export function InversionistaFormDialog({
               placeholder="+52 55 1234 5678"
               disabled={isSubmitting}
             />
+          </div>
+
+          {/* Referido Por (Agente) */}
+          <div className="space-y-1.5">
+            <label htmlFor="agenteId" className="text-sm font-medium">
+              Referido Por (ID Agente)
+            </label>
+            <Input
+              id="agenteId"
+              {...register('agenteId')}
+              placeholder="UUID del agente (opcional)"
+              disabled={isSubmitting}
+            />
+            <p className="text-muted-foreground text-xs">
+              ID del usuario que refirió a este inversionista
+            </p>
           </div>
 
           {/* Fondos Multi-select */}

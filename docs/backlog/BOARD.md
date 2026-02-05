@@ -7,13 +7,10 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 38 |
-| ✅ Done | 20 |
+| 📅 To Do | 37 |
+| ✅ Done | 21 |
 
 ### 📅 To Do
-
-**[E04-EPIC-INVERSIONISTAS](../epics/EPIC-INVERSIONISTAS.md)** (1)
-- [INV-005: Asignar agente](v1.0/issues/INV-005-asignar-agente.md)
 
 **[E05-EPIC-INVERSIONES](../epics/EPIC-INVERSIONES.md)** (6)
 - [INVE-001: Lista inversiones](v1.0/issues/INVE-001-lista-inversiones.md) 🟡
@@ -66,7 +63,7 @@
 
 
 <details>
-<summary>✅ Done (20)</summary>
+<summary>✅ Done (21)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
@@ -77,6 +74,7 @@
 - [INV-002: Crear/Editar inversionista](v1.0/issues/INV-002-crear-editar-inversionista.md) 🟡
 - [INV-003: Detalle de inversionista](v1.0/issues/INV-003-detalle-inversionista.md) 🟡
 - [INV-004: Marcar como fundador](v1.0/issues/INV-004-marcar-fundador.md)
+- [INV-005: Asignar agente](v1.0/issues/INV-005-asignar-agente.md)
 - [PROJ-001: Lista de proyectos](v1.0/issues/PROJ-001-lista-proyectos.md) 🟡
 - [PROJ-002: Crear/Editar proyecto](v1.0/issues/PROJ-002-crear-editar-proyecto.md) 🟡
 - [PROJ-003: Detalle de proyecto con tabs](v1.0/issues/PROJ-003-detalle-proyecto.md) 🟡

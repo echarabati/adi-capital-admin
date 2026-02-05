@@ -98,6 +98,7 @@ export async function createInversionista(input: unknown): Promise<Inversionista
         notas: inversionistaData.notas,
         esFundador: inversionistaData.esFundador,
         porcentajePropiedad: inversionistaData.porcentajePropiedad,
+        agenteId: inversionistaData.agenteId,
         createdBy: session.user.id,
         modifiedBy: session.user.id,
       })
