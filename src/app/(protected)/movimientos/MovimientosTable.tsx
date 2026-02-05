@@ -25,6 +25,7 @@ import {
   CONCEPTO_GROUPS,
 } from '@/lib/validations/movimientos/movimientos-validation';
 import { MovimientoFormSheet } from './_components/MovimientoFormSheet';
+import { MovimientoDetailSheet } from './_components/MovimientoDetailSheet';
 import type { InversionSelectorItem } from '@/lib/actions/inversiones/inversiones-queries';
 
 // =============================================================================
@@ -101,7 +102,15 @@ export function MovimientosTable({
   const [selectedEstado, setSelectedEstado] = useState(initialFilters.estado || '');
   const [showFilters, setShowFilters] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedMovimiento, setSelectedMovimiento] = useState<MovimientoListItem | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  // Row click handler for detail view
+  function handleRowClick(mov: MovimientoListItem) {
+    setSelectedMovimiento(mov);
+    setIsDetailOpen(true);
+  }
 
   // Action handlers
   function handleConfirm(id: string) {
@@ -440,6 +449,16 @@ export function MovimientosTable({
         inversiones={inversiones}
         proyectos={proyectos}
         defaultFondoId={selectedFondoId || undefined}
+      />
+
+      {/* Detail Sheet */}
+      <MovimientoDetailSheet
+        movimiento={selectedMovimiento}
+        isOpen={isDetailOpen}
+        onClose={() => {
+          setIsDetailOpen(false);
+          setSelectedMovimiento(null);
+        }}
       />
     </div>
   );
