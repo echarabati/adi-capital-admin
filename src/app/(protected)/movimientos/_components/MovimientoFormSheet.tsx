@@ -31,6 +31,7 @@ interface MovimientoFormSheetProps {
   onClose: () => void;
   fondos: { id: string; nombre: string }[];
   inversiones: InversionSelectorItem[];
+  proyectos: { id: string; nombre: string; fondoId: string }[];
   defaultFondoId?: string;
 }
 
@@ -45,6 +46,7 @@ export function MovimientoFormSheet({
   onClose,
   fondos,
   inversiones,
+  proyectos,
   defaultFondoId,
 }: MovimientoFormSheetProps) {
   const router = useRouter();
@@ -67,6 +69,8 @@ export function MovimientoFormSheet({
   const [tipoDistribucion, setTipoDistribucion] = useState<
     'a_pref' | 'a_capital' | 'a_utilidad' | ''
   >('');
+  // GASP fields
+  const [proyectoId, setProyectoId] = useState('');
 
   // Calculate monto in USD
   const montoUsd = useMemo(() => {
@@ -93,6 +97,9 @@ export function MovimientoFormSheet({
   const isDis = concepto === 'DIS';
   const isDev = concepto === 'DEV';
   const isFee = concepto === 'FEE';
+  const isGas = concepto === 'GAS';
+  const isGasp = concepto === 'GASP';
+  const isGasto = isGas || isGasp;
 
   function handleClose() {
     resetForm();
@@ -111,6 +118,7 @@ export function MovimientoFormSheet({
     setInversionId('');
     setFechaEfectiva('');
     setTipoDistribucion('');
+    setProyectoId('');
     setError(null);
   }
 
@@ -249,6 +257,33 @@ export function MovimientoFormSheet({
                 />
               )}
 
+              {/* Proyecto Selector (for GASP only) */}
+              {isGasp && (
+                <div>
+                  <label className="text-foreground mb-1.5 block text-sm font-medium">
+                    Proyecto <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    value={proyectoId}
+                    onChange={(e) => setProyectoId(e.target.value)}
+                    required
+                    className="border-input bg-background text-foreground focus:ring-primary w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
+                  >
+                    <option value="">Selecciona un proyecto</option>
+                    {proyectos
+                      .filter((p) => p.fondoId === fondoId)
+                      .map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.nombre}
+                        </option>
+                      ))}
+                  </select>
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    GASP requiere especificar a qué proyecto corresponde el gasto
+                  </p>
+                </div>
+              )}
+
               {/* Fecha Efectiva (for APO-D only) */}
               {isApoD && (
                 <div>
@@ -375,14 +410,20 @@ export function MovimientoFormSheet({
               <div>
                 <label className="text-foreground mb-1.5 block text-sm font-medium">
                   {isDev ? 'Justificación' : 'Descripción'}
-                  {isDev && <span className="text-rose-500">*</span>}
+                  {(isDev || isGasto) && <span className="text-rose-500">*</span>}
                 </label>
                 <textarea
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}
                   rows={3}
-                  required={isDev}
-                  placeholder={isDev ? 'Motivo de la devolución...' : 'Notas adicionales...'}
+                  required={isDev || isGasto}
+                  placeholder={
+                    isDev
+                      ? 'Motivo de la devolución...'
+                      : isGasto
+                        ? 'Detalle del gasto...'
+                        : 'Notas adicionales...'
+                  }
                   className="border-input bg-background text-foreground focus:ring-primary w-full resize-none rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                 />
                 {isDev && (

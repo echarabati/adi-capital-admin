@@ -31,6 +31,7 @@ interface MovimientosTableProps {
   movimientos: MovimientoListItem[];
   fondos: { id: string; nombre: string }[];
   inversiones: InversionSelectorItem[];
+  proyectos: { id: string; nombre: string; fondoId: string }[];
   initialFilters?: {
     fondoId?: string;
     concepto?: string;
@@ -87,6 +88,7 @@ export function MovimientosTable({
   movimientos,
   fondos,
   inversiones,
+  proyectos,
   initialFilters = {},
 }: MovimientosTableProps) {
   const [search, setSearch] = useState('');
@@ -370,6 +372,7 @@ export function MovimientosTable({
         onClose={() => setIsFormOpen(false)}
         fondos={fondos}
         inversiones={inversiones}
+        proyectos={proyectos}
         defaultFondoId={selectedFondoId || undefined}
       />
     </div>

@@ -20,6 +20,7 @@ import { isSuperAdmin } from '@/src/config/roles';
 
 export type ProyectoListItem = {
   id: string;
+  fondoId: string;
   nombre: string;
   estado: 'inversion_abierta' | 'inversion_cerrada' | 'concluido';
   successFeePct: string | null;
@@ -81,6 +82,7 @@ export async function getProyectosByFondo(fondoId: string): Promise<ProyectoList
   const proyectosList = await db
     .select({
       id: proyectos.id,
+      fondoId: proyectos.fondoId,
       nombre: proyectos.nombre,
       estado: proyectos.estado,
       successFeePct: proyectos.successFeePct,
@@ -97,6 +99,7 @@ export async function getProyectosByFondo(fondoId: string): Promise<ProyectoList
 
   return proyectosList.map((p) => ({
     id: p.id,
+    fondoId: p.fondoId,
     nombre: p.nombre,
     estado: p.estado,
     successFeePct: p.successFeePct,
