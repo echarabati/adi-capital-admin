@@ -3,7 +3,7 @@
 > **Issue ID:** CALC-002
 > **Priority:** P1
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-06)
 > **Epic:** [E07-EPIC-CALCULOS](../epics/EPIC-CALCULOS.md)
 
 ## 🎯 Objetivo
@@ -50,24 +50,48 @@ Scenario: Solo aplica sobre utilidades
   And Fee = $20,000 × 20% = $4,000
 ```
 
-- [ ] Fórmula: utilidad = distribución - capital_invertido; fee = max(0, utilidad × %)
-- [ ] Solo aplica sobre utilidades (no sobre Pref ni capital devuelto)
-- [ ] Genera movimiento FEE automático vinculado al grupo_movimiento
-- [ ] Usado exclusivamente por Wizard de Reparto (no manual)
+- [x] Fórmula: utilidad = distribución - capital_invertido; fee = max(0, utilidad × %)
+- [x] Solo aplica sobre utilidades (no sobre Pref ni capital devuelto)
+- [x] Genera movimiento FEE automático vinculado al grupo_movimiento
+- [x] Usado exclusivamente por Wizard de Reparto (no manual)
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: MOV-004 (concepto FEE)
+- Bloqueado por: MOV-004 (concepto FEE) ✅
 - Bloquea a: WIZ-002, WIZ-003
 
 ## 🧪 Tests Requeridos
 
-- [ ] Unit: Cálculo con utilidad positiva
-- [ ] Unit: Cálculo con utilidad negativa (= $0)
-- [ ] Unit: Cálculo solo sobre porción utilidad
+- [x] Unit: Cálculo con utilidad positiva
+- [x] Unit: Cálculo con utilidad negativa (= $0)
+- [x] Unit: Cálculo solo sobre porción utilidad
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## 📝 Implementation Notes
+
+**Completed:** 2026-02-06
+
+**Context & Decisions:**
+
+- **Resumen:** Módulo de cálculo puro sin dependencias de DB para Success Fee
+- **Functions:** `calcularSuccessFee`, `calcularSuccessFeeCascada`, `getEffectiveSuccessFeePct`
+- **Priority:** inversion.successFeePct > proyecto.successFeePct > fondo.successFeeDefault
+- **Default:** 20% when no configuration exists
+
+**Files created:**
+
+- `lib/calculations/success-fee.ts` — Pure function module
+- `tests/unit/success-fee-calculation.test.ts` — 18 unit tests
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] Tests: 18/18 passing
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-06_

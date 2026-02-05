@@ -8,7 +8,7 @@
  * @see SCHEMA-001
  */
 
-import { pgTable, text, uuid, decimal, index, unique } from 'drizzle-orm/pg-core';
+import { pgTable, text, uuid, decimal, index, unique, timestamp } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { auditFields } from '@/lib/db/helpers/audit-fields';
 import { tipoAdminFeeEnum, baseAdminFeeEnum, metodoAdminFeeEnum } from './enums';
@@ -77,6 +77,9 @@ export const inversiones = pgTable(
 
     /** Cached: Paid preferred return (SUM DIS to Pref) */
     prefPagado: decimal('pref_pagado', { precision: 18, scale: 2 }).default('0'),
+
+    /** Date through which Pref has been calculated (cron job tracking) */
+    prefAcumuladoHasta: timestamp('pref_acumulado_hasta', { mode: 'date', withTimezone: true }),
 
     /** Notes about this investment */
     notas: text('notas'),

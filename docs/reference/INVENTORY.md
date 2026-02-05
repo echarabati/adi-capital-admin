@@ -127,6 +127,7 @@
 | /api/auth/[...nextauth] | `src/app/api/auth/[...nextauth]/route.ts` |
 | /api/auth/forgot-password | `src/app/api/auth/forgot-password/route.ts` |
 | /api/auth/reset-password | `src/app/api/auth/reset-password/route.ts` |
+| /api/cron/pref | `src/app/api/cron/pref/route.ts` |
 | /api/email/test | `src/app/api/email/test/route.ts` |
 | /api/health | `src/app/api/health/route.ts` |
 | /api/invites/accept | `src/app/api/invites/accept/route.ts` |
@@ -363,9 +364,9 @@
 |--------|-------|
 | Dependencies | 32 |
 | Page Routes | 31 |
-| API Routes | 8 |
+| API Routes | 9 |
 | Components & Utils | 117 |
-| **Total items** | **188** |
+| **Total items** | **189** |
 
 ---
 

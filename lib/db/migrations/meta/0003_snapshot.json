@@ -1,6 +1,6 @@
 {
-  "id": "78246a70-1c26-4ff6-a502-c8467190d44c",
-  "prevId": "bd844af5-120d-4e41-b4e1-6a4313a23a7e",
+  "id": "865bc3e5-9251-4b6f-9d58-6ca0d6ca0ce2",
+  "prevId": "78246a70-1c26-4ff6-a502-c8467190d44c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -809,6 +809,12 @@
           "notNull": false,
           "default": false
         },
+        "porcentaje_propiedad": {
+          "name": "porcentaje_propiedad",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "agente_id": {
           "name": "agente_id",
           "type": "uuid",
@@ -1052,6 +1058,12 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'0'"
+        },
+        "pref_acumulado_hasta": {
+          "name": "pref_acumulado_hasta",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
         },
         "notas": {
           "name": "notas",

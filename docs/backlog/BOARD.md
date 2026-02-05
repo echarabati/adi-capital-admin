@@ -7,15 +7,12 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 20 |
-| ✅ Done | 39 |
+| 📅 To Do | 17 |
+| ✅ Done | 42 |
 
 ### 📅 To Do
 
-**[E07-EPIC-CALCULOS](../epics/EPIC-CALCULOS.md)** (4)
-- [CALC-001: Cron Pref diario](v1.0/issues/CALC-001-cron-pref.md) 🟡
-- [CALC-002: Cálculo Success Fee](v1.0/issues/CALC-002-success-fee.md) 🟡
-- [CALC-003: Cálculo Saldo Compromiso](v1.0/issues/CALC-003-saldo-compromiso.md) 🟡
+**[E07-EPIC-CALCULOS](../epics/EPIC-CALCULOS.md)** (1)
 - [CALC-004: Recálculo al cancelar movimiento](v1.0/issues/CALC-004-recalculo-cancelacion.md) 🟡
 
 **[E08-EPIC-WIZARD](../epics/EPIC-WIZARD.md)** (5)
@@ -42,8 +39,11 @@
 
 
 <details>
-<summary>✅ Done (39)</summary>
+<summary>✅ Done (42)</summary>
 
+- [CALC-001: Cron Pref diario](v1.0/issues/CALC-001-cron-pref.md) 🟡
+- [CALC-002: Cálculo Success Fee](v1.0/issues/CALC-002-success-fee.md) 🟡
+- [CALC-003: Cálculo Saldo Compromiso](v1.0/issues/CALC-003-saldo-compromiso.md) 🟡
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
 - [FOND-003: Detalle de fondo con tabs](v1.0/issues/FOND-003-detalle-fondo.md) 🟡

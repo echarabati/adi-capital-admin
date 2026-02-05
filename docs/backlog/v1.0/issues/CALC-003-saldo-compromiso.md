@@ -3,7 +3,7 @@
 > **Issue ID:** CALC-003
 > **Priority:** P1
 > **Effort:** S
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-06)
 > **Epic:** [E07-EPIC-CALCULOS](../epics/EPIC-CALCULOS.md)
 
 ## 🎯 Objetivo
@@ -52,23 +52,47 @@ Scenario: Compromiso excedido
   And estado = "excedido"
 ```
 
-- [ ] Fórmula: saldo = compromiso - SUM(APO confirmados)
-- [ ] Estados: pendiente (100%), parcial (0-100%), completado (0%), excedido (<0%)
-- [ ] Recálculo automático al confirmar APO (BR-017)
-- [ ] Cache en campo inversiones.saldo_compromiso
+- [x] Fórmula: saldo = compromiso - SUM(APO confirmados)
+- [x] Estados: pendiente (100%), parcial (0-100%), completado (0%), excedido (<0%)
+- [x] Recálculo automático al confirmar APO (BR-017)
+- [x] Cache en campo inversiones.saldo_compromiso
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: MOV-007 (confirmar APO)
+- Bloqueado por: MOV-007 (confirmar APO) ✅
 - Bloquea a: INVE-004
 
 ## 🧪 Tests Requeridos
 
-- [ ] Unit: Cálculo por cada estado
-- [ ] Integration: Recálculo al confirmar APO
+- [x] Unit: Cálculo por cada estado
+- [x] Integration: Recálculo al confirmar APO
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## 📝 Implementation Notes
+
+**Completed:** 2026-02-06
+
+**Context & Decisions:**
+
+- **Resumen:** Módulo de cálculo puro para estado del compromiso
+- **Functions:** `calcularCompromisoStatus`, `getSaldoCompromiso`, `getEstadoCompromiso`, `isCompromisoSatisfecho`
+- **Cache:** On-demand calculation via utility (no schema change needed)
+- **Existing:** `confirmMovimiento` already updates `capitalAportado`
+
+**Files created:**
+
+- `lib/calculations/compromiso-calculator.ts` — Pure function module
+- `tests/unit/compromiso-calculation.test.ts` — 14 unit tests
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] Tests: 14/14 passing
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-06_
