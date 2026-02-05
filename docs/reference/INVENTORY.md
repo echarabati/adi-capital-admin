@@ -62,7 +62,7 @@
 | `pnpm test` | `vitest run` |
 | `pnpm test:watch` | `vitest` |
 | `pnpm test:coverage` | `vitest run --coverage` |
-| `pnpm test:e2e` | `tsx scripts/e2e-isolated.ts` |
+| `pnpm test:e2e` | `tsx scripts/e2e/e2e-isolated.ts` |
 | `pnpm test:e2e:ui` | `playwright test --ui` |
 | `pnpm verify` | `pnpm lint && pnpm typecheck && pnpm test` |
 | `pnpm env:check` | `node -e "require('./lib/env.ts')" 2>/dev/null |...` |
