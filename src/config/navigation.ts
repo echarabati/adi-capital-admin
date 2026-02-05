@@ -1,4 +1,4 @@
-import { Home, Settings, Building2, type LucideIcon } from 'lucide-react';
+import { Home, Settings, Building2, Users, type LucideIcon } from 'lucide-react';
 
 /**
  * Navigation Configuration
@@ -31,6 +31,11 @@ export const navigation: NavItem[] = [
     name: 'Fondos',
     href: '/fondos',
     icon: Building2,
+  },
+  {
+    name: 'Inversionistas',
+    href: '/inversionistas',
+    icon: Users,
   },
   {
     name: 'Configuración',

@@ -7,16 +7,12 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 43 |
-| ✅ Done | 16 |
+| 📅 To Do | 41 |
+| ✅ Done | 17 |
 
 ### 📅 To Do
 
-**[E02-EPIC-FONDOS](../epics/EPIC-FONDOS.md)** (1)
-- [FOND-004: CRUD Cuentas Bancarias](v1.0/issues/FOND-004-cuentas-bancarias.md) 🟡
-
-**[E04-EPIC-INVERSIONISTAS](../epics/EPIC-INVERSIONISTAS.md)** (5)
-- [INV-001: Lista de inversionistas](v1.0/issues/INV-001-lista-inversionistas.md) 🟡
+**[E04-EPIC-INVERSIONISTAS](../epics/EPIC-INVERSIONISTAS.md)** (4)
 - [INV-002: Crear/Editar inversionista](v1.0/issues/INV-002-crear-editar-inversionista.md) 🟡
 - [INV-003: Detalle de inversionista](v1.0/issues/INV-003-detalle-inversionista.md) 🟡
 - [INV-004: Marcar como fundador](v1.0/issues/INV-004-marcar-fundador.md)
@@ -73,13 +69,14 @@
 
 
 <details>
-<summary>✅ Done (16)</summary>
+<summary>✅ Done (17)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
 - [FOND-003: Detalle de fondo con tabs](v1.0/issues/FOND-003-detalle-fondo.md) 🟡
 - [FOND-004: CRUD Cuentas Bancarias](v1.0/issues/FOND-004-crud-cuentas-bancarias.md) 🟡
 - [FOND-005: CRUD Beneficiarios](v1.0/issues/FOND-005-beneficiarios.md) 🟡
+- [INV-001: Lista de inversionistas](v1.0/issues/INV-001-lista-inversionistas.md) 🟡
 - [PROJ-001: Lista de proyectos](v1.0/issues/PROJ-001-lista-proyectos.md) 🟡
 - [PROJ-002: Crear/Editar proyecto](v1.0/issues/PROJ-002-crear-editar-proyecto.md) 🟡
 - [PROJ-003: Detalle de proyecto con tabs](v1.0/issues/PROJ-003-detalle-proyecto.md) 🟡

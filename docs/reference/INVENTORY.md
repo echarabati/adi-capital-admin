@@ -100,6 +100,7 @@
 | /fondos/[id]/proyectos/[proyectoId]/inversiones | `src/app/(protected)/fondos/[id]/proyectos/[proyectoId]/inversiones/page.tsx` |
 | /fondos/[id]/proyectos/[proyectoId]/movimientos | `src/app/(protected)/fondos/[id]/proyectos/[proyectoId]/movimientos/page.tsx` |
 | /forgot-password | `src/app/(auth)/forgot-password/page.tsx` |
+| /inversionistas | `src/app/(protected)/inversionistas/page.tsx` |
 | /login | `src/app/(auth)/login/page.tsx` |
 | /offline | `src/app/offline/page.tsx` |
 | /privacy | `src/app/(legal)/privacy/page.tsx` |
@@ -353,10 +354,10 @@
 | Metric | Value |
 |--------|-------|
 | Dependencies | 32 |
-| Page Routes | 22 |
+| Page Routes | 23 |
 | API Routes | 8 |
 | Components & Utils | 117 |
-| **Total items** | **179** |
+| **Total items** | **180** |
 
 ---
 
