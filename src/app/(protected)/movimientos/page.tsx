@@ -13,6 +13,7 @@ import { getMovimientos } from '@/lib/actions/movimientos/movimientos-queries';
 import { getFondos } from '@/lib/actions/fondos/fondos-queries';
 import { getInversionesForSelector } from '@/lib/actions/inversiones/inversiones-queries';
 import { getProyectosByFondo } from '@/lib/actions/proyectos/proyectos-queries';
+import { getFundadores } from '@/lib/actions/inversionistas/inversionistas-queries';
 import { MovimientosTable } from './MovimientosTable';
 
 interface PageProps {
@@ -41,10 +42,11 @@ export default async function MovimientosPage({ searchParams }: PageProps) {
     getFondos(),
   ]);
 
-  // Fetch inversiones and proyectos for all accessible fondos (for selectors)
-  const [inversionesArrays, proyectosArrays] = await Promise.all([
+  // Fetch inversiones, proyectos, and fundadores for all accessible fondos
+  const [inversionesArrays, proyectosArrays, fundadoresArrays] = await Promise.all([
     Promise.all(fondos.map((f) => getInversionesForSelector(f.id))),
     Promise.all(fondos.map((f) => getProyectosByFondo(f.id))),
+    Promise.all(fondos.map((f) => getFundadores(f.id))),
   ]);
   const inversiones = inversionesArrays.flat();
   const proyectos = proyectosArrays.flat().map((p) => ({
@@ -52,6 +54,7 @@ export default async function MovimientosPage({ searchParams }: PageProps) {
     nombre: p.nombre,
     fondoId: p.fondoId,
   }));
+  const fundadores = fundadoresArrays.flat();
 
   return (
     <MovimientosTable
@@ -59,6 +62,7 @@ export default async function MovimientosPage({ searchParams }: PageProps) {
       fondos={fondos.map((f) => ({ id: f.id, nombre: f.nombre }))}
       inversiones={inversiones}
       proyectos={proyectos}
+      fundadores={fundadores}
       initialFilters={{
         fondoId: params.fondoId,
         concepto: params.concepto,

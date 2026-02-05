@@ -213,7 +213,7 @@ export const CONCEPTO_CONFIG: Record<Concepto, ConceptoConfig> = {
   APS: {
     label: 'Aportación Socio',
     category: 'Socios',
-    requiresInversionista: false,
+    requiresInversionista: true,
     requiresProyecto: false,
     requiresInversion: false,
     color: 'cyan',
@@ -221,7 +221,7 @@ export const CONCEPTO_CONFIG: Record<Concepto, ConceptoConfig> = {
   RPS: {
     label: 'Retiro Socio',
     category: 'Socios',
-    requiresInversionista: false,
+    requiresInversionista: true,
     requiresProyecto: false,
     requiresInversion: false,
     color: 'cyan',
@@ -229,7 +229,7 @@ export const CONCEPTO_CONFIG: Record<Concepto, ConceptoConfig> = {
   PRS: {
     label: 'Préstamo Socio',
     category: 'Socios',
-    requiresInversionista: false,
+    requiresInversionista: true,
     requiresProyecto: false,
     requiresInversion: false,
     color: 'cyan',
@@ -237,7 +237,7 @@ export const CONCEPTO_CONFIG: Record<Concepto, ConceptoConfig> = {
   DPRS: {
     label: 'Devolución Préstamo',
     category: 'Socios',
-    requiresInversionista: false,
+    requiresInversionista: true,
     requiresProyecto: false,
     requiresInversion: false,
     color: 'cyan',
@@ -275,3 +275,33 @@ export const CONCEPTO_CONFIG: Record<Concepto, ConceptoConfig> = {
     color: 'gray',
   },
 };
+
+// =============================================================================
+// Socios Conceptos Helpers
+// =============================================================================
+
+/**
+ * Conceptos that are exclusive to founders/partners
+ * @see MOV-009, BR-012
+ */
+export const SOCIOS_CONCEPTOS = ['APS', 'RPS', 'PRS', 'DPRS'] as const;
+
+/**
+ * Check if a concepto is a Socios concepto (requires founder)
+ * @see MOV-009
+ */
+export function isSociosConcepto(concepto: Concepto): boolean {
+  return (SOCIOS_CONCEPTOS as readonly string[]).includes(concepto);
+}
+
+/**
+ * Conceptos that require porcentaje field
+ */
+export const PORCENTAJE_CONCEPTOS = ['PRS', 'DPRS'] as const;
+
+/**
+ * Check if a concepto requires porcentaje field
+ */
+export function requiresPorcentaje(concepto: Concepto): boolean {
+  return (PORCENTAJE_CONCEPTOS as readonly string[]).includes(concepto);
+}

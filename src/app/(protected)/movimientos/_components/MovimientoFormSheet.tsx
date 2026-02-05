@@ -15,12 +15,16 @@ import { useRouter } from 'next/navigation';
 import { X, ArrowLeft, Loader2, Save } from 'lucide-react';
 import { ConceptoSelector } from './ConceptoSelector';
 import { InversionSelector } from './InversionSelector';
+import { FundadorSelector } from './FundadorSelector';
 import {
   type Concepto,
   CONCEPTO_LABELS,
+  isSociosConcepto,
+  requiresPorcentaje,
 } from '@/lib/validations/movimientos/movimientos-validation';
 import { createMovimiento } from '@/lib/actions/movimientos/movimientos-mutations';
 import type { InversionSelectorItem } from '@/lib/actions/inversiones/inversiones-queries';
+import type { FundadorSelectorItem } from '@/lib/actions/inversionistas/inversionistas-queries';
 
 // =============================================================================
 // Types
@@ -32,6 +36,7 @@ interface MovimientoFormSheetProps {
   fondos: { id: string; nombre: string }[];
   inversiones: InversionSelectorItem[];
   proyectos: { id: string; nombre: string; fondoId: string }[];
+  fundadores: FundadorSelectorItem[];
   defaultFondoId?: string;
 }
 
@@ -47,6 +52,7 @@ export function MovimientoFormSheet({
   fondos,
   inversiones,
   proyectos,
+  fundadores,
   defaultFondoId,
 }: MovimientoFormSheetProps) {
   const router = useRouter();
@@ -71,6 +77,9 @@ export function MovimientoFormSheet({
   >('');
   // GASP fields
   const [proyectoId, setProyectoId] = useState('');
+  // Socios fields (MOV-009)
+  const [inversionistaId, setInversionistaId] = useState('');
+  const [porcentaje, setPorcentaje] = useState('');
 
   // Calculate monto in USD
   const montoUsd = useMemo(() => {
@@ -100,6 +109,9 @@ export function MovimientoFormSheet({
   const isGas = concepto === 'GAS';
   const isGasp = concepto === 'GASP';
   const isGasto = isGas || isGasp;
+  // Socios conceptos (MOV-009)
+  const isSocios = concepto ? isSociosConcepto(concepto) : false;
+  const needsPorcentaje = concepto ? requiresPorcentaje(concepto) : false;
   // INV conceptos require proyecto
   const isInv = concepto === 'INV';
   const isInvD = concepto === 'INV-D';
@@ -125,6 +137,8 @@ export function MovimientoFormSheet({
     setFechaEfectiva('');
     setTipoDistribucion('');
     setProyectoId('');
+    setInversionistaId('');
+    setPorcentaje('');
     setError(null);
   }
 
@@ -149,6 +163,12 @@ export function MovimientoFormSheet({
       return;
     }
 
+    // Validate fundador for Socios conceptos (MOV-009)
+    if (isSocios && !inversionistaId) {
+      setError('Selecciona un fundador');
+      return;
+    }
+
     setError(null);
 
     startTransition(async () => {
@@ -161,6 +181,7 @@ export function MovimientoFormSheet({
         fechaMovimiento,
         descripcion,
         inversionId: needsInversion ? inversionId : undefined,
+        inversionistaId: isSocios ? inversionistaId : undefined,
       });
 
       if (result.error) {
@@ -261,6 +282,38 @@ export function MovimientoFormSheet({
                   inversiones={inversiones}
                   required
                 />
+              )}
+
+              {/* Fundador Selector (for Socios conceptos: APS/RPS/PRS/DPRS) - MOV-009 */}
+              {isSocios && (
+                <FundadorSelector
+                  value={inversionistaId}
+                  onChange={setInversionistaId}
+                  fundadores={fundadores}
+                  required
+                />
+              )}
+
+              {/* Porcentaje (for PRS/DPRS) - MOV-009 */}
+              {needsPorcentaje && (
+                <div>
+                  <label className="text-foreground mb-1.5 block text-sm font-medium">
+                    Porcentaje (%)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max="100"
+                    value={porcentaje}
+                    onChange={(e) => setPorcentaje(e.target.value)}
+                    placeholder="0.00"
+                    className="border-input bg-background text-foreground focus:ring-primary w-full rounded-lg border px-3 py-2 text-sm tabular-nums focus:ring-2 focus:outline-none"
+                  />
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    Porcentaje de participación (opcional)
+                  </p>
+                </div>
               )}
 
               {/* Proyecto Selector (for GASP/INV/INV-D/RET) */}

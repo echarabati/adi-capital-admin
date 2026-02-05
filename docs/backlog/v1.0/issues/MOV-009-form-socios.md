@@ -3,7 +3,7 @@
 > **Issue ID:** MOV-009
 > **Priority:** P0
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Done (2026-02-05)
 > **Epic:** [E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)
 
 ---
@@ -82,13 +82,39 @@ Scenario: APS válido
 
 ## 🧪 Tests Requeridos
 
-- [ ] Unit: Validación fundador
+- [x] Unit: Validación fundador
 - [ ] Integration: Crear APS para fundador exitoso
 - [ ] Integration: Rechazar APS para no-fundador
 
 ## 🚫 Out of Scope
 
 - Cálculo de porcentaje automático (Post-MVP)
+
+---
+
+## Implementation Notes
+
+**Completed:** 2026-02-05
+
+### Files Created
+
+- `lib/actions/inversionistas/inversionistas-queries.ts` — Added `getFundadores(fondoId)` query
+- `src/app/(protected)/movimientos/_components/FundadorSelector.tsx` — New component for selecting founders
+- `tests/unit/movimientos-socios-validation.test.ts` — 7 unit tests for Socios helpers
+
+### Files Modified
+
+- `lib/validations/movimientos/movimientos-validation.ts` — Added `isSociosConcepto()`, `requiresPorcentaje()` helpers. Updated CONCEPTO_CONFIG for Socios conceptos.
+- `lib/actions/movimientos/movimientos-mutations.ts` — Added server-side founder validation (BR-012)
+- `src/app/(protected)/movimientos/_components/MovimientoFormSheet.tsx` — Added FundadorSelector and porcentaje fields
+- `src/app/(protected)/movimientos/MovimientosTable.tsx` — Added fundadores prop
+- `src/app/(protected)/movimientos/page.tsx` — Fetch and pass fundadores
+
+### Verification
+
+- Typecheck: ✅
+- Lint: ✅
+- Unit tests: ✅ (81 tests, 7 new)
 
 ---
 

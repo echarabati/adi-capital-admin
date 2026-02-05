@@ -27,6 +27,7 @@ import {
 import { MovimientoFormSheet } from './_components/MovimientoFormSheet';
 import { MovimientoDetailSheet } from './_components/MovimientoDetailSheet';
 import type { InversionSelectorItem } from '@/lib/actions/inversiones/inversiones-queries';
+import type { FundadorSelectorItem } from '@/lib/actions/inversionistas/inversionistas-queries';
 
 // =============================================================================
 // Types
@@ -37,6 +38,7 @@ interface MovimientosTableProps {
   fondos: { id: string; nombre: string }[];
   inversiones: InversionSelectorItem[];
   proyectos: { id: string; nombre: string; fondoId: string }[];
+  fundadores: FundadorSelectorItem[];
   initialFilters?: {
     fondoId?: string;
     concepto?: string;
@@ -94,6 +96,7 @@ export function MovimientosTable({
   fondos,
   inversiones,
   proyectos,
+  fundadores,
   initialFilters = {},
 }: MovimientosTableProps) {
   const [search, setSearch] = useState('');
@@ -431,6 +434,7 @@ export function MovimientosTable({
           alwaysShowPagination={true}
           emptyMessage="No hay movimientos registrados"
           className="rounded-none border-0 shadow-none"
+          onRowClick={handleRowClick}
         />
       </div>
 
@@ -448,6 +452,7 @@ export function MovimientosTable({
         fondos={fondos}
         inversiones={inversiones}
         proyectos={proyectos}
+        fundadores={fundadores}
         defaultFondoId={selectedFondoId || undefined}
       />
 

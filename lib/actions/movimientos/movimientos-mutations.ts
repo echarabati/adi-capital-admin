@@ -12,11 +12,12 @@ import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db/drizzle';
-import { movimientos, fondos, userFondos } from '@/lib/db/schema';
+import { movimientos, fondos, userFondos, inversionistas } from '@/lib/db/schema';
 import { isSuperAdmin, hasRoleOrHigher, ROLES } from '@/src/config/roles';
 import {
   createMovimientoSchema,
   CreateMovimientoInput,
+  isSociosConcepto,
 } from '@/lib/validations/movimientos/movimientos-validation';
 
 // =============================================================================
@@ -75,6 +76,28 @@ export async function createMovimiento(input: CreateMovimientoInput): Promise<Mu
 
     if (!fondo) {
       return { error: 'Fondo no encontrado' };
+    }
+
+    // Validate Socios conceptos require founder (BR-012, MOV-009)
+    if (isSociosConcepto(data.concepto)) {
+      if (!data.inversionistaId) {
+        return { error: 'Debes seleccionar un fundador para este tipo de movimiento' };
+      }
+
+      // Verify inversionista is a founder
+      const [inversionista] = await db
+        .select({ id: inversionistas.id, esFundador: inversionistas.esFundador })
+        .from(inversionistas)
+        .where(eq(inversionistas.id, data.inversionistaId))
+        .limit(1);
+
+      if (!inversionista) {
+        return { error: 'Inversionista no encontrado' };
+      }
+
+      if (!inversionista.esFundador) {
+        return { error: 'Solo fundadores pueden recibir este tipo de movimiento' };
+      }
     }
 
     // Calculate monto_usd if different currency and tipoCambio provided

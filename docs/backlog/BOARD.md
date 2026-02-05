@@ -7,13 +7,12 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 23 |
-| ✅ Done | 35 |
+| 📅 To Do | 22 |
+| ✅ Done | 36 |
 
 ### 📅 To Do
 
-**[E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)** (3)
-- [MOV-009: Form Movimientos Socios (APS/RPS/PRS/DPRS)](v1.0/issues/MOV-009-form-socios.md) 🔴
+**[E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)** (2)
 - [MOV-010: Form Movimientos Admin (TRA/CAM/ERR/TSI)](v1.0/issues/MOV-010-form-admin.md) 🔴
 - [TEST-002: E2E Movimientos Flow](v1.0/issues/TEST-002-e2e-movimientos.md) 🔴
 
@@ -47,7 +46,7 @@
 
 
 <details>
-<summary>✅ Done (35)</summary>
+<summary>✅ Done (36)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
@@ -73,6 +72,7 @@
 - [MOV-006: Form Gastos (GAS/GASP)](v1.0/issues/MOV-006-form-gastos.md) 🟡
 - [MOV-007: Confirmar/Cancelar movimiento](v1.0/issues/MOV-007-confirmar-cancelar.md) 🔴
 - [MOV-008: Detalle de movimiento](v1.0/issues/MOV-008-detalle-movimiento.md)
+- [MOV-009: Form Movimientos Socios (APS/RPS/PRS/DPRS)](v1.0/issues/MOV-009-form-socios.md) 🔴
 - [PROJ-001: Lista de proyectos](v1.0/issues/PROJ-001-lista-proyectos.md) 🟡
 - [PROJ-002: Crear/Editar proyecto](v1.0/issues/PROJ-002-crear-editar-proyecto.md) 🟡
 - [PROJ-003: Detalle de proyecto con tabs](v1.0/issues/PROJ-003-detalle-proyecto.md) 🟡

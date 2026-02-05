@@ -235,3 +235,59 @@ export async function getInversionistaById(id: string): Promise<InversionistaLis
     fondos: invFondos,
   };
 }
+
+// =============================================================================
+// Get Fundadores (Founders) for a Fondo
+// =============================================================================
+
+/**
+ * Fundador selector item for movements form
+ */
+export type FundadorSelectorItem = {
+  id: string;
+  nombre: string;
+  porcentajePropiedad: string | null;
+};
+
+/**
+ * Get all founders (esFundador=true) that belong to a specific fondo.
+ *
+ * @param fondoId - Fund UUID to filter by
+ * @returns List of fundadores for the given fondo
+ * @see MOV-009
+ */
+export async function getFundadores(fondoId: string): Promise<FundadorSelectorItem[]> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error('Debes iniciar sesión');
+  }
+
+  // Get inversionistas in this fondo who are founders
+  const inversionistaIdsInFondo = await db
+    .selectDistinct({ inversionistaId: inversionistasFondos.inversionistaId })
+    .from(inversionistasFondos)
+    .where(eq(inversionistasFondos.fondoId, fondoId));
+
+  const inversionistaIds = inversionistaIdsInFondo.map((i) => i.inversionistaId);
+
+  if (inversionistaIds.length === 0) {
+    return [];
+  }
+
+  // Filter by esFundador = true
+  const result = await db
+    .select({
+      id: inversionistas.id,
+      nombre: inversionistas.nombre,
+      porcentajePropiedad: inversionistas.porcentajePropiedad,
+    })
+    .from(inversionistas)
+    .where(and(inArray(inversionistas.id, inversionistaIds), eq(inversionistas.esFundador, true)))
+    .orderBy(inversionistas.nombre);
+
+  return result.map((inv) => ({
+    id: inv.id,
+    nombre: inv.nombre,
+    porcentajePropiedad: inv.porcentajePropiedad ?? null,
+  }));
+}
