@@ -193,7 +193,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                   scope: 'openid email profile',
                 },
               },
-              profile(profile) {
+              async profile(profile) {
+                // Save image to DB for existing users (defensive sync)
+                if (profile.email && profile.picture) {
+                  const existingUser = await db.query.users.findFirst({
+                    where: eq(users.email, profile.email),
+                  });
+                  if (existingUser) {
+                    await db
+                      .update(users)
+                      .set({ image: profile.picture })
+                      .where(eq(users.id, existingUser.id));
+                    logger.info(`[Auth Google] Updated image for ${profile.email}`);
+                  }
+                }
                 return {
                   id: profile.sub,
                   name: profile.name,
@@ -314,6 +327,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.role = session.role;
       }
 
+      // Read FRESH image from DB every request (key fix for avatar sync)
+      if (token.id && isDatabaseConfigured()) {
+        const dbUser = await db.query.users.findFirst({
+          where: eq(users.id, token.id as string),
+          columns: { image: true, role: true },
+        });
+        if (dbUser) {
+          token.picture = dbUser.image || token.picture;
+          token.role = dbUser.role || token.role;
+        }
+      }
+
       return token;
     },
 
@@ -346,14 +371,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return true;
       }
 
-      // For OAuth providers, check/set role and sync profile data
+      // For OAuth providers, sync profile data
       if (account?.provider !== 'credentials' && user.email) {
         const existingUser = await db.query.users.findFirst({
           where: eq(users.email, user.email),
         });
 
         if (existingUser) {
-          // Build update object for missing fields
           const updates: { name?: string; image?: string } = {};
 
           // Sync Name if missing
@@ -361,15 +385,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             updates.name = profile.name as string;
           }
 
-          // Sync Image if missing
-          // Get image from OAuth profile (Google: picture, GitHub: avatar_url)
-          // Note: Google Workspace orgs may restrict profile photos from being shared
-          const profileImage =
+          // Try to get image from multiple sources
+          let oauthImage =
             (profile as { picture?: string })?.picture ||
-            (profile as { avatar_url?: string })?.avatar_url;
+            (profile as { avatar_url?: string })?.avatar_url ||
+            user.image;
 
-          if (!existingUser.image && profileImage) {
-            updates.image = profileImage;
+          // FALLBACK: Fetch directly from Google API if no image
+          if (!oauthImage && account?.provider === 'google' && account?.access_token) {
+            try {
+              logger.info('[Auth] Fetching userinfo from Google API...');
+              const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+                headers: {
+                  Authorization: `Bearer ${account.access_token}`,
+                },
+              });
+              if (response.ok) {
+                const userInfo = await response.json();
+                oauthImage = userInfo.picture;
+              }
+            } catch (error) {
+              logger.error('[Auth] Failed to fetch Google userinfo:', error);
+            }
+          }
+
+          // Update DB if image changed (not just if missing)
+          if (oauthImage && oauthImage !== existingUser.image) {
+            updates.image = oauthImage;
           }
 
           // Apply updates if any
@@ -424,6 +466,47 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           userId: user.id,
           email: user.email,
         });
+      }
+    },
+
+    /**
+     * Link account event - Sync OAuth profile image when linking
+     */
+    async linkAccount(message: {
+      user: User | AdapterUser;
+      account: Account;
+      profile: User | AdapterUser;
+    }) {
+      const { user, account, profile } = message;
+      // Skip if no database
+      if (!isDatabaseConfigured()) {
+        return;
+      }
+
+      let profileImage =
+        (profile as { picture?: string })?.picture ||
+        (profile as { avatar_url?: string })?.avatar_url;
+
+      // Fallback to Google API
+      if (!profileImage && account.provider === 'google' && account.access_token) {
+        try {
+          const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+            headers: {
+              Authorization: `Bearer ${account.access_token}`,
+            },
+          });
+          if (response.ok) {
+            const userInfo = await response.json();
+            profileImage = userInfo.picture;
+          }
+        } catch (error) {
+          logger.error('[Auth] Failed to fetch Google userinfo:', error);
+        }
+      }
+
+      if (profileImage && user.id) {
+        logger.info(`[Auth] Updating user ${user.email} with image from ${account.provider}`);
+        await db.update(users).set({ image: profileImage }).where(eq(users.id, user.id));
       }
     },
   },
