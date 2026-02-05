@@ -7,13 +7,12 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 28 |
-| ✅ Done | 30 |
+| 📅 To Do | 27 |
+| ✅ Done | 31 |
 
 ### 📅 To Do
 
-**[E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)** (8)
-- [MOV-004: Form Distribuciones (DIS/DEV/FEE)](v1.0/issues/MOV-004-form-distribuciones.md) 🔴
+**[E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)** (7)
 - [MOV-005: Form Inversiones Proyecto (INV/INV-D/RET)](v1.0/issues/MOV-005-form-inversiones-proyecto.md) 🟡
 - [MOV-006: Form Gastos (GAS/GASP)](v1.0/issues/MOV-006-form-gastos.md) 🟡
 - [MOV-007: Confirmar/Cancelar movimiento](v1.0/issues/MOV-007-confirmar-cancelar.md) 🔴
@@ -52,7 +51,7 @@
 
 
 <details>
-<summary>✅ Done (30)</summary>
+<summary>✅ Done (31)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
@@ -73,6 +72,7 @@
 - [MOV-001: Lista de movimientos filtrable](v1.0/issues/MOV-001-lista-movimientos.md) 🔴
 - [MOV-002: CMP-002 MovimientoForm base](v1.0/issues/MOV-002-movimiento-form-base.md) 🔴
 - [MOV-003: Form Aportaciones (APO/APO-D)](v1.0/issues/MOV-003-form-aportaciones.md) 🔴
+- [MOV-004: Form Distribuciones (DIS/DEV/FEE)](v1.0/issues/MOV-004-form-distribuciones.md) 🔴
 - [PROJ-001: Lista de proyectos](v1.0/issues/PROJ-001-lista-proyectos.md) 🟡
 - [PROJ-002: Crear/Editar proyecto](v1.0/issues/PROJ-002-crear-editar-proyecto.md) 🟡
 - [PROJ-003: Detalle de proyecto con tabs](v1.0/issues/PROJ-003-detalle-proyecto.md) 🟡

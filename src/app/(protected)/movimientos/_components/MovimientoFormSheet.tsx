@@ -63,6 +63,10 @@ export function MovimientoFormSheet({
   // APO fields
   const [inversionId, setInversionId] = useState('');
   const [fechaEfectiva, setFechaEfectiva] = useState('');
+  // DIS fields
+  const [tipoDistribucion, setTipoDistribucion] = useState<
+    'a_pref' | 'a_capital' | 'a_utilidad' | ''
+  >('');
 
   // Calculate monto in USD
   const montoUsd = useMemo(() => {
@@ -86,6 +90,9 @@ export function MovimientoFormSheet({
     concepto === 'DEV' ||
     concepto === 'FEE';
   const isApoD = concepto === 'APO-D';
+  const isDis = concepto === 'DIS';
+  const isDev = concepto === 'DEV';
+  const isFee = concepto === 'FEE';
 
   function handleClose() {
     resetForm();
@@ -103,6 +110,7 @@ export function MovimientoFormSheet({
     setDescripcion('');
     setInversionId('');
     setFechaEfectiva('');
+    setTipoDistribucion('');
     setError(null);
   }
 
@@ -261,6 +269,37 @@ export function MovimientoFormSheet({
                 </div>
               )}
 
+              {/* Tipo Distribución (for DIS only) */}
+              {isDis && (
+                <div>
+                  <label className="text-foreground mb-1.5 block text-sm font-medium">
+                    Tipo de Distribución <span className="text-rose-500">*</span>
+                  </label>
+                  <select
+                    value={tipoDistribucion}
+                    onChange={(e) =>
+                      setTipoDistribucion(e.target.value as 'a_pref' | 'a_capital' | 'a_utilidad')
+                    }
+                    required
+                    className="border-input bg-background text-foreground focus:ring-primary w-full rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
+                  >
+                    <option value="">Selecciona tipo</option>
+                    <option value="a_pref">A Preferente (reduce pref_acumulado)</option>
+                    <option value="a_capital">A Capital (devuelve capital)</option>
+                    <option value="a_utilidad">A Utilidad (reparte ganancia)</option>
+                  </select>
+                </div>
+              )}
+
+              {/* FEE Note */}
+              {isFee && (
+                <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-3">
+                  <p className="text-sm text-amber-600 dark:text-amber-400">
+                    ⚠️ Los movimientos FEE se generan automáticamente desde el Wizard de Reparto.
+                  </p>
+                </div>
+              )}
+
               {/* Monto y Moneda */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -335,15 +374,22 @@ export function MovimientoFormSheet({
               {/* Descripción */}
               <div>
                 <label className="text-foreground mb-1.5 block text-sm font-medium">
-                  Descripción
+                  {isDev ? 'Justificación' : 'Descripción'}
+                  {isDev && <span className="text-rose-500">*</span>}
                 </label>
                 <textarea
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}
                   rows={3}
-                  placeholder="Notas adicionales..."
+                  required={isDev}
+                  placeholder={isDev ? 'Motivo de la devolución...' : 'Notas adicionales...'}
                   className="border-input bg-background text-foreground focus:ring-primary w-full resize-none rounded-lg border px-3 py-2 text-sm focus:ring-2 focus:outline-none"
                 />
+                {isDev && (
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    Obligatorio: explica el motivo de la devolución
+                  </p>
+                )}
               </div>
 
               {/* Error */}

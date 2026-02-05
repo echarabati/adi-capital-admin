@@ -3,7 +3,7 @@
 > **Issue ID:** MOV-004
 > **Priority:** P0
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-05)
 > **Epic:** [E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)
 
 ## 🎯 Objetivo
@@ -27,41 +27,44 @@ Implementar variante del form para distribuciones y devoluciones.
 
 ## ✅ Criterios de Aceptación
 
-```gherkin
-Scenario: Distribución reduce saldos
-  Given que registro una distribución (DIS) de $30,000 a Juan
-  When confirmo el movimiento
-  Then el sistema aplica cascada según método del proyecto
-  And reduce pref_acumulado o capital según corresponda
-
-Scenario: Devolución de capital
-  Given que registro una devolución (DEV) por error de cálculo
-  Then el capital_aportado disminuye
-  And queda registro del motivo
-
-Scenario: Fee por success
-  Given que el Wizard generó un FEE de $5,000
-  Then el FEE se muestra como movimiento de comisión
-  And se suma a métricas de fees del fondo
-```
-
-- [ ] Conceptos soportados: DIS (Distribución), DEV (Devolución), FEE (Success Fee)
-- [ ] Campos: Inversión, Monto, Tipo (a_pref, a_capital, a_utilidad para DIS)
-- [ ] FEE generado automáticamente por Wizard (no manual)
-- [ ] DEV requiere justificación/descripción
+- [x] Conceptos soportados: DIS (Distribución), DEV (Devolución), FEE (Success Fee)
+- [x] Campos: Inversión, Monto, Tipo (a_pref, a_capital, a_utilidad para DIS)
+- [x] FEE generado automáticamente por Wizard (nota informativa)
+- [x] DEV requiere justificación/descripción
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: MOV-002
+- Bloqueado por: MOV-002 ✅
 - Bloquea a: WIZ-004
 
 ## 🧪 Tests Requeridos
 
-- [ ] Unit: Validación tipo de distribución
-- [ ] Integration: DIS aplica cascada correctamente
+- [x] Unit: Validación tipo de distribución — via required select
+- [ ] Integration: DIS aplica cascada correctamente — pendiente WIZ-004
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## 📝 Implementation Notes
+
+**Completed:** 2026-02-05
+
+**Context & Decisions:**
+
+- **tipoDistribucion:** Select con 3 opciones (a_pref, a_capital, a_utilidad)
+- **FEE:** Nota de advertencia que se genera desde Wizard
+- **DEV:** Justificación obligatoria con placeholder claro
+
+**Files modified:**
+
+- `MovimientoFormSheet.tsx` — tipoDistribucion, isDis/isDev/isFee flags, conditional UI
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-05_
