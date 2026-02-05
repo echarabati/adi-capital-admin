@@ -5,17 +5,19 @@
  *
  * Client component for displaying the list of investors.
  * Uses DataTable with search and fondo filter.
+ * Includes create/edit dialogs.
  *
- * @see INV-001
+ * @see INV-001, INV-002
  */
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { User } from 'lucide-react';
+import { User, Plus, Pencil } from 'lucide-react';
 import { DataTable } from '@/components/ui/DataTable';
 import { TableColumn } from '@/components/ui/Table';
 import { TableSearch } from '@/components/ui/TableExtras';
 import { InversionistaListItem } from '@/lib/actions/inversionistas/inversionistas-queries';
+import { InversionistaFormDialog } from './InversionistaFormDialog';
 
 // =============================================================================
 // Types
@@ -39,6 +41,8 @@ export function InversionistasTable({
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [selectedFondoId, setSelectedFondoId] = useState(initialFondoId || '');
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [editInversionista, setEditInversionista] = useState<InversionistaListItem | null>(null);
 
   // Apply client-side filters
   const filteredInversionistas = useMemo(() => {
@@ -118,6 +122,24 @@ export function InversionistasTable({
           <span className="text-muted-foreground text-xs">—</span>
         ),
     },
+    // Actions column
+    {
+      id: 'actions',
+      header: '',
+      className: 'w-12',
+      accessor: (inv) => (
+        <button
+          className="hover:bg-secondary rounded-lg p-1.5 transition-colors"
+          title="Editar"
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditInversionista(inv);
+          }}
+        >
+          <Pencil className="text-muted-foreground h-4 w-4" />
+        </button>
+      ),
+    },
   ];
 
   return (
@@ -158,6 +180,15 @@ export function InversionistasTable({
         </div>
 
         <div className="flex-1" />
+
+        {/* Create Button */}
+        <button
+          onClick={() => setIsCreateOpen(true)}
+          className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+        >
+          <Plus className="h-4 w-4" />
+          Nuevo Inversionista
+        </button>
       </div>
 
       {/* Table */}
@@ -181,6 +212,25 @@ export function InversionistasTable({
           onRowClick={handleRowClick}
         />
       </div>
+
+      {/* Create Dialog */}
+      <InversionistaFormDialog
+        mode="create"
+        open={isCreateOpen}
+        onOpenChange={setIsCreateOpen}
+        fondos={fondos}
+      />
+
+      {/* Edit Dialog */}
+      {editInversionista && (
+        <InversionistaFormDialog
+          mode="edit"
+          open={true}
+          onOpenChange={(open) => !open && setEditInversionista(null)}
+          fondos={fondos}
+          inversionista={editInversionista}
+        />
+      )}
     </div>
   );
 }
