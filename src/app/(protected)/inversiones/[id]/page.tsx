@@ -9,6 +9,7 @@
 
 import { getInversionById } from '@/lib/actions/inversiones/inversiones-queries';
 import { notFound } from 'next/navigation';
+import { CompromisoProgress } from './_components/CompromisoProgress';
 
 interface InversionPageProps {
   params: Promise<{ id: string }>;
@@ -42,21 +43,11 @@ export default async function InversionPage({ params }: InversionPageProps) {
 
   return (
     <div className="space-y-6">
-      {/* CompromisoProgress Placeholder (INVE-004) */}
-      <div
-        className="rounded-xl border p-6"
-        style={{
-          backgroundColor: 'var(--sidebar-bg)',
-          borderColor: 'var(--sidebar-border)',
-        }}
-      >
-        <h3 className="text-foreground mb-4 font-semibold">Estado del Compromiso</h3>
-        <div className="bg-secondary/50 flex h-24 items-center justify-center rounded-lg">
-          <p className="text-muted-foreground text-sm">
-            📊 Componente de progreso pendiente (INVE-004)
-          </p>
-        </div>
-      </div>
+      {/* CompromisoProgress (INVE-004) */}
+      <CompromisoProgress
+        compromiso={inversion.compromiso}
+        capitalAportado={inversion.capitalAportado}
+      />
 
       {/* Configuration Section */}
       <div className="grid gap-6 lg:grid-cols-2">

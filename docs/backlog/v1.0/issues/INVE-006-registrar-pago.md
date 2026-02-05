@@ -3,7 +3,7 @@
 > **Issue ID:** INVE-006
 > **Priority:** P1
 > **Effort:** S
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-05)
 > **Epic:** [E05-EPIC-INVERSIONES](../epics/EPIC-INVERSIONES.md)
 
 ## 🎯 Objetivo
@@ -55,17 +55,17 @@ Scenario: Generar APO automático
   And el APO queda en estado borrador
 ```
 
-- [ ] Botón "Registrar Pago" en cada capital call
-- [ ] Dialog: Monto a pagar (max: monto_esperado - monto_pagado)
-- [ ] Actualiza monto_pagado y estado (pendiente/parcial/completo)
-- [ ] Checkbox opcional: "Generar movimiento APO"
-- [ ] Validación: monto ≤ saldo pendiente
+- [x] Botón "Registrar Pago" en cada capital call
+- [x] Dialog: Monto a pagar (max: monto_esperado - monto_pagado)
+- [x] Actualiza monto_pagado y estado (pendiente/parcial/completo)
+- [x] Checkbox opcional: "Generar movimiento APO"
+- [x] Validación: monto ≤ saldo pendiente
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: INVE-005
+- Bloqueado por: INVE-005 ✅
 - Bloquea a: —
 
 ## 🧪 Tests Requeridos
@@ -76,4 +76,32 @@ Scenario: Generar APO automático
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## 📝 Implementation Notes
+
+### Archivos Creados
+
+- `calendario-pagos-mutations.ts` — Agregado `registrarPagoCapitalCall`
+- `calendario-pagos-validation.ts` — Agregado `registrarPagoSchema`
+- `PagoDialog.tsx` — Dialog con monto, validación máximo, checkbox APO
+
+### Archivos Modificados
+
+- `CalendarioTable.tsx` — Agregado botón $ (pay), inversionistaId prop
+- `calendario/page.tsx` — Fetch inversion para inversionistaId
+
+### Decisiones
+
+- APO se genera con estado 'borrador', moneda 'MXN' default
+- Botón pagar solo visible si estado != 'completo'
+- Validación cliente + servidor para monto máximo
+
+### Verificación
+
+```
+✅ pnpm typecheck
+✅ pnpm lint
+```
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-05_
