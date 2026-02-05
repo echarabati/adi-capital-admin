@@ -7,13 +7,12 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 36 |
-| ✅ Done | 22 |
+| 📅 To Do | 35 |
+| ✅ Done | 23 |
 
 ### 📅 To Do
 
-**[E05-EPIC-INVERSIONES](../epics/EPIC-INVERSIONES.md)** (5)
-- [INVE-002: Crear inversión con config fees](v1.0/issues/INVE-002-crear-inversion.md) 🟡
+**[E05-EPIC-INVERSIONES](../epics/EPIC-INVERSIONES.md)** (4)
 - [INVE-003: Detalle de inversión](v1.0/issues/INVE-003-detalle-inversion.md) 🟡
 - [INVE-004: Compromiso Progress Bar](v1.0/issues/INVE-004-compromiso-progress.md)
 - [INVE-005: CRUD Calendario pagos](v1.0/issues/INVE-005-calendario-pagos.md) 🟡
@@ -62,7 +61,7 @@
 
 
 <details>
-<summary>✅ Done (22)</summary>
+<summary>✅ Done (23)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
@@ -75,6 +74,7 @@
 - [INV-004: Marcar como fundador](v1.0/issues/INV-004-marcar-fundador.md)
 - [INV-005: Asignar agente](v1.0/issues/INV-005-asignar-agente.md)
 - [INVE-001: Lista inversiones](v1.0/issues/INVE-001-lista-inversiones.md) 🟡
+- [INVE-002: Crear inversión con config fees](v1.0/issues/INVE-002-crear-inversion.md) 🟡
 - [PROJ-001: Lista de proyectos](v1.0/issues/PROJ-001-lista-proyectos.md) 🟡
 - [PROJ-002: Crear/Editar proyecto](v1.0/issues/PROJ-002-crear-editar-proyecto.md) 🟡
 - [PROJ-003: Detalle de proyecto con tabs](v1.0/issues/PROJ-003-detalle-proyecto.md) 🟡

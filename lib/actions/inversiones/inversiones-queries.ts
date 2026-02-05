@@ -11,7 +11,13 @@
 import { eq, and } from 'drizzle-orm';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db/drizzle';
-import { inversiones, inversionistas, proyectos, userFondos } from '@/lib/db/schema';
+import {
+  inversiones,
+  inversionistas,
+  inversionistasFondos,
+  proyectos,
+  userFondos,
+} from '@/lib/db/schema';
 import { isSuperAdmin } from '@/src/config/roles';
 
 // =============================================================================
@@ -29,6 +35,11 @@ export type InversionListItem = {
   compromiso: string;
   capitalAportado: string;
   estado: InversionEstado;
+};
+
+export type InversionistaDropdownItem = {
+  id: string;
+  nombre: string;
 };
 
 // =============================================================================
@@ -198,4 +209,36 @@ export async function getInversionesByInversionista(
     capitalAportado: inv.capitalAportado ?? '0',
     estado: calculateEstado(inv.compromiso, inv.capitalAportado ?? '0'),
   }));
+}
+
+// =============================================================================
+// Get Inversionistas by Fondo (for dropdown)
+// =============================================================================
+
+/**
+ * Get inversionistas that belong to a specific fondo.
+ * Used for dropdown selectors when creating inversiones.
+ *
+ * @param fondoId - Fund UUID
+ * @returns List of inversionistas (id, nombre) for dropdown
+ */
+export async function getInversionistasByFondo(
+  fondoId: string
+): Promise<InversionistaDropdownItem[]> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error('Debes iniciar sesión');
+  }
+
+  const result = await db
+    .select({
+      id: inversionistas.id,
+      nombre: inversionistas.nombre,
+    })
+    .from(inversionistasFondos)
+    .innerJoin(inversionistas, eq(inversionistasFondos.inversionistaId, inversionistas.id))
+    .where(eq(inversionistasFondos.fondoId, fondoId))
+    .orderBy(inversionistas.nombre);
+
+  return result;
 }

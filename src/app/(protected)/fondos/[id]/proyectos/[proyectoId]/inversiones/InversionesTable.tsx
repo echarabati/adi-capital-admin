@@ -6,16 +6,22 @@
  * Table for displaying investments in a project context.
  * Shows investor name, commitment, contributed, and status.
  *
- * @see INVE-001
+ * @see INVE-001, INVE-002
  */
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { User } from 'lucide-react';
+import { Plus, User } from 'lucide-react';
 import { DataTable } from '@/components/ui/DataTable';
 import { TableColumn } from '@/components/ui/Table';
 import { TableSearch } from '@/components/ui/TableExtras';
-import { InversionListItem, InversionEstado } from '@/lib/actions/inversiones/inversiones-queries';
+import { Button } from '@/components/ui/button';
+import {
+  InversionListItem,
+  InversionEstado,
+  InversionistaDropdownItem,
+} from '@/lib/actions/inversiones/inversiones-queries';
+import { InversionFormDialog } from './InversionFormDialog';
 
 // =============================================================================
 // Types
@@ -24,6 +30,8 @@ import { InversionListItem, InversionEstado } from '@/lib/actions/inversiones/in
 interface InversionesTableProps {
   inversiones: InversionListItem[];
   fondoId: string;
+  proyectoId: string;
+  inversionistas: InversionistaDropdownItem[];
 }
 
 // Estado badge configuration
@@ -52,9 +60,15 @@ function formatCurrency(value: string | number): string {
 // Component
 // =============================================================================
 
-export function InversionesTable({ inversiones, fondoId }: InversionesTableProps) {
+export function InversionesTable({
+  inversiones,
+  fondoId,
+  proyectoId,
+  inversionistas,
+}: InversionesTableProps) {
   const router = useRouter();
   const [search, setSearch] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Filter by inversionista name
   const filteredInversiones = useMemo(() => {
@@ -143,7 +157,10 @@ export function InversionesTable({ inversiones, fondoId }: InversionesTableProps
           />
         </div>
         <div className="flex-1" />
-        {/* Add button will be added in INVE-002 */}
+        <Button onClick={() => setIsDialogOpen(true)} className="gap-2">
+          <Plus className="h-4 w-4" />
+          <span className="hidden sm:inline">Nueva Inversión</span>
+        </Button>
       </div>
 
       {/* Table */}
@@ -167,6 +184,14 @@ export function InversionesTable({ inversiones, fondoId }: InversionesTableProps
           onRowClick={handleRowClick}
         />
       </div>
+
+      {/* Create Dialog */}
+      <InversionFormDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        proyectoId={proyectoId}
+        inversionistas={inversionistas}
+      />
     </div>
   );
 }
