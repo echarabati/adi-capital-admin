@@ -20,6 +20,7 @@ import {
   ESTADO_LABELS,
   CONCEPTO_GROUPS,
 } from '@/lib/validations/movimientos/movimientos-validation';
+import { MovimientoFormSheet } from './_components/MovimientoFormSheet';
 
 // =============================================================================
 // Types
@@ -90,6 +91,7 @@ export function MovimientosTable({
   const [selectedConcepto, setSelectedConcepto] = useState(initialFilters.concepto || '');
   const [selectedEstado, setSelectedEstado] = useState(initialFilters.estado || '');
   const [showFilters, setShowFilters] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   // Apply client-side filters
   const filteredMovimientos = useMemo(() => {
@@ -261,11 +263,10 @@ export function MovimientosTable({
 
         <div className="flex-1" />
 
-        {/* Create Button (placeholder for MOV-002) */}
+        {/* Create Button */}
         <button
-          disabled
-          className="bg-primary text-primary-foreground flex cursor-not-allowed items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium opacity-50"
-          title="Próximamente (MOV-002)"
+          onClick={() => setIsFormOpen(true)}
+          className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium"
         >
           <Plus className="h-4 w-4" />
           Nuevo Movimiento
@@ -359,6 +360,14 @@ export function MovimientosTable({
           Mostrando {filteredMovimientos.length} de {movimientos.length} movimientos
         </span>
       </div>
+
+      {/* Form Sheet */}
+      <MovimientoFormSheet
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        fondos={fondos}
+        defaultFondoId={selectedFondoId || undefined}
+      />
     </div>
   );
 }
