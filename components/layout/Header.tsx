@@ -7,7 +7,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Sun, Moon, Monitor, UserCircle, LogOut, Download } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils/cn';
-import { MobileMenuDropdown } from './MobileMenu';
+import { MobileDrawer } from './MobileDrawer';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { usePwaInstall } from '@/lib/pwa/usePwaInstall';
 import { Avatar } from '@/components/ui/Avatar';
@@ -21,6 +21,7 @@ interface HeaderProps {
     email?: string | null;
     image?: string | null;
   };
+  userRole?: string;
 }
 
 type Theme = 'light' | 'midnight' | 'dark';
@@ -31,7 +32,7 @@ const themes: { value: Theme; label: string; icon: typeof Sun }[] = [
   { value: 'dark', label: 'Oscuro', icon: Monitor },
 ];
 
-export function Header({ user }: HeaderProps) {
+export function Header({ user, userRole }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
   const { canInstall, isInstalled, promptInstall } = usePwaInstall();
@@ -48,9 +49,9 @@ export function Header({ user }: HeaderProps) {
     >
       {/* Left: Mobile menu + Nav Controls + Breadcrumb */}
       <div className="flex flex-1 items-center gap-1 overflow-hidden lg:gap-4">
-        {/* Mobile menu (hidden on desktop) */}
+        {/* Mobile drawer (hidden on desktop) */}
         <div className="shrink-0 lg:hidden">
-          <MobileMenuDropdown />
+          <MobileDrawer userRole={userRole} />
         </div>
 
         {/* Navigation Controls (Always visible) */}

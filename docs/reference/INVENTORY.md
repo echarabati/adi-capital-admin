@@ -180,7 +180,7 @@
 |------|--------|
 | DashboardLayout | `@/components/layout/DashboardLayout` |
 | Header | `@/components/layout/Header` |
-| MobileMenu | `@/components/layout/MobileMenu` |
+| MobileDrawer | `@/components/layout/MobileDrawer` |
 | NavigationControls | `@/components/layout/NavigationControls` |
 | Sidebar | `@/components/layout/Sidebar` |
 

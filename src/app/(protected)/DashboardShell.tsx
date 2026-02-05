@@ -19,7 +19,7 @@ interface DashboardShellProps {
 export function DashboardShell({ children, user }: DashboardShellProps) {
   return (
     <div className="bg-background min-h-screen">
-      <Header user={user} />
+      <Header user={user} userRole={user.role} />
 
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
