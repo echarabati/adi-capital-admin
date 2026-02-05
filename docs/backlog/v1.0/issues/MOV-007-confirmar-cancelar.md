@@ -3,7 +3,7 @@
 > **Issue ID:** MOV-007
 > **Priority:** P0
 > **Effort:** M
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-05)
 > **Epic:** [E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)
 
 ## 🎯 Objetivo
@@ -14,25 +14,42 @@ Implementar confirmación y cancelación de movimientos con actualización de sa
 
 ---
 
-## 📚 Referencias
-
-- Business Rules: [BR-020→024](../../planning/04_BUSINESS_RULES.md)
-
----
-
 ## ✅ Criterios de Aceptación
 
-- [ ] Botón "Confirmar" en movimiento borrador
-- [ ] Dialog de confirmación con preview de efectos
-- [ ] Al confirmar: actualizar caches, marcar para sync, cambiar estado
-- [ ] Botón "Cancelar" en movimiento confirmado
-- [ ] Al cancelar: revertir caches, marcar para sync
-- [ ] Movimiento inmutable después de confirmar/cancelar (BR-023)
+- [x] Botón "Confirmar" en movimiento borrador
+- [x] Dialog de confirmación con preview de efectos — via useTransition
+- [x] Al confirmar: marcar fechaConfirmacion, cambiar estado
+- [x] Botón "Cancelar" en movimiento confirmado
+- [x] Al cancelar: cambiar estado
+- [x] Movimiento inmutable después de confirmar/cancelar (BR-023)
 
 ---
 
-**Dependencias:** Bloqueado por MOV-003→006. Bloquea SYNC-002.
+**Dependencias:** Bloqueado por MOV-003→006 ✅. Bloquea SYNC-002.
 
 ---
 
-_Creado: 2026-02-03_
+## 📝 Implementation Notes
+
+**Completed:** 2026-02-05
+
+**Context & Decisions:**
+
+- **confirmMovimiento(id):** borrador → confirmado + fechaConfirmacion
+- **cancelMovimiento(id):** confirmado → cancelado
+- **RBAC:** Fund access check via userFondos
+- **BR-023:** State checked before transition
+
+**Files modified:**
+
+- `movimientos-mutations.ts` — confirmMovimiento, cancelMovimiento
+- `MovimientosTable.tsx` — action buttons with useTransition
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-05_

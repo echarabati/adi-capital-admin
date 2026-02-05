@@ -6,15 +6,19 @@
  * Client component for displaying the list of financial movements.
  * Uses DataTable with multiple filters: concepto, estado, fecha, fondo.
  *
- * @see MOV-001
+ * @see MOV-001, MOV-007
  */
 
-import { useState, useMemo } from 'react';
-import { Plus, Filter, X } from 'lucide-react';
+import { useState, useMemo, useTransition } from 'react';
+import { Plus, Filter, X, Check, XCircle } from 'lucide-react';
 import { DataTable } from '@/components/ui/DataTable';
 import { TableColumn } from '@/components/ui/Table';
 import { TableSearch } from '@/components/ui/TableExtras';
 import { MovimientoListItem } from '@/lib/actions/movimientos/movimientos-queries';
+import {
+  confirmMovimiento,
+  cancelMovimiento,
+} from '@/lib/actions/movimientos/movimientos-mutations';
 import {
   CONCEPTO_LABELS,
   ESTADO_LABELS,
@@ -97,6 +101,26 @@ export function MovimientosTable({
   const [selectedEstado, setSelectedEstado] = useState(initialFilters.estado || '');
   const [showFilters, setShowFilters] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  // Action handlers
+  function handleConfirm(id: string) {
+    startTransition(async () => {
+      const result = await confirmMovimiento(id);
+      if (result.error) {
+        console.error('Error confirming:', result.error);
+      }
+    });
+  }
+
+  function handleCancel(id: string) {
+    startTransition(async () => {
+      const result = await cancelMovimiento(id);
+      if (result.error) {
+        console.error('Error cancelling:', result.error);
+      }
+    });
+  }
 
   // Apply client-side filters
   const filteredMovimientos = useMemo(() => {
@@ -212,6 +236,48 @@ export function MovimientosTable({
           {!mov.inversionista && !mov.proyecto && <span>—</span>}
         </div>
       ),
+    },
+    {
+      id: 'acciones',
+      header: 'Acciones',
+      className: 'w-28',
+      accessor: (mov) => {
+        const isBorrador = mov.estado === 'borrador';
+        const isConfirmado = mov.estado === 'confirmado';
+
+        if (!isBorrador && !isConfirmado) {
+          return <span className="text-muted-foreground text-xs">—</span>;
+        }
+
+        return (
+          <div className="flex gap-1">
+            {isBorrador && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleConfirm(mov.id);
+                }}
+                disabled={isPending}
+                className="rounded bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-600 transition-colors hover:bg-emerald-500/20 disabled:opacity-50"
+              >
+                <Check className="h-3 w-3" />
+              </button>
+            )}
+            {isConfirmado && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCancel(mov.id);
+                }}
+                disabled={isPending}
+                className="rounded bg-rose-500/10 px-2 py-1 text-xs font-medium text-rose-600 transition-colors hover:bg-rose-500/20 disabled:opacity-50"
+              >
+                <XCircle className="h-3 w-3" />
+              </button>
+            )}
+          </div>
+        );
+      },
     },
   ];
 

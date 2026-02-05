@@ -5,14 +5,14 @@
  *
  * Server actions for creating and updating movimientos.
  *
- * @see MOV-002
+ * @see MOV-002, MOV-007
  */
 
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db/drizzle';
-import { movimientos, fondos } from '@/lib/db/schema';
+import { movimientos, fondos, userFondos } from '@/lib/db/schema';
 import { isSuperAdmin, hasRoleOrHigher, ROLES } from '@/src/config/roles';
 import {
   createMovimientoSchema,
@@ -118,5 +118,164 @@ export async function createMovimiento(input: CreateMovimientoInput): Promise<Mu
   } catch (error) {
     console.error('[createMovimiento]', error);
     return { error: 'No pudimos crear el movimiento. Intenta de nuevo.' };
+  }
+}
+
+// =============================================================================
+// Confirm Movimiento
+// =============================================================================
+
+/**
+ * Confirm a draft movimiento.
+ *
+ * Transitions estado: borrador → confirmado
+ * Once confirmed, movimiento is immutable (BR-023).
+ *
+ * @param id - Movimiento UUID
+ * @returns Success/error result
+ */
+export async function confirmMovimiento(id: string): Promise<MutationResult> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { error: 'Debes iniciar sesión' };
+  }
+
+  const userId = session.user.id;
+  const userRole = session.user.role;
+
+  // Check permissions
+  if (!isSuperAdmin(userRole) && !hasRoleOrHigher(userRole, ROLES.ADMIN_FONDO)) {
+    return { error: 'No tienes permiso para confirmar movimientos' };
+  }
+
+  try {
+    // Fetch movimiento
+    const [mov] = await db
+      .select({
+        id: movimientos.id,
+        fondoId: movimientos.fondoId,
+        estado: movimientos.estado,
+      })
+      .from(movimientos)
+      .where(eq(movimientos.id, id))
+      .limit(1);
+
+    if (!mov) {
+      return { error: 'Movimiento no encontrado' };
+    }
+
+    // Check fund access for non-super_admin
+    if (!isSuperAdmin(userRole)) {
+      const [access] = await db
+        .select({ fondoId: userFondos.fondoId })
+        .from(userFondos)
+        .where(and(eq(userFondos.userId, userId), eq(userFondos.fondoId, mov.fondoId)))
+        .limit(1);
+
+      if (!access) {
+        return { error: 'No tienes acceso a este fondo' };
+      }
+    }
+
+    // Check estado is borrador (BR-023)
+    if (mov.estado !== 'borrador') {
+      return { error: 'Solo se pueden confirmar movimientos en borrador' };
+    }
+
+    // Update estado
+    await db
+      .update(movimientos)
+      .set({
+        estado: 'confirmado',
+        fechaConfirmacion: new Date(),
+        modifiedBy: userId,
+      })
+      .where(eq(movimientos.id, id));
+
+    revalidatePath('/movimientos', 'page');
+
+    return { success: true, data: { id } };
+  } catch (error) {
+    console.error('[confirmMovimiento]', error);
+    return { error: 'No pudimos confirmar el movimiento. Intenta de nuevo.' };
+  }
+}
+
+// =============================================================================
+// Cancel Movimiento
+// =============================================================================
+
+/**
+ * Cancel a confirmed movimiento.
+ *
+ * Transitions estado: confirmado → cancelado
+ * Once cancelled, movimiento is immutable (BR-023).
+ *
+ * @param id - Movimiento UUID
+ * @returns Success/error result
+ */
+export async function cancelMovimiento(id: string): Promise<MutationResult> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { error: 'Debes iniciar sesión' };
+  }
+
+  const userId = session.user.id;
+  const userRole = session.user.role;
+
+  // Check permissions
+  if (!isSuperAdmin(userRole) && !hasRoleOrHigher(userRole, ROLES.ADMIN_FONDO)) {
+    return { error: 'No tienes permiso para cancelar movimientos' };
+  }
+
+  try {
+    // Fetch movimiento
+    const [mov] = await db
+      .select({
+        id: movimientos.id,
+        fondoId: movimientos.fondoId,
+        estado: movimientos.estado,
+      })
+      .from(movimientos)
+      .where(eq(movimientos.id, id))
+      .limit(1);
+
+    if (!mov) {
+      return { error: 'Movimiento no encontrado' };
+    }
+
+    // Check fund access for non-super_admin
+    if (!isSuperAdmin(userRole)) {
+      const [access] = await db
+        .select({ fondoId: userFondos.fondoId })
+        .from(userFondos)
+        .where(and(eq(userFondos.userId, userId), eq(userFondos.fondoId, mov.fondoId)))
+        .limit(1);
+
+      if (!access) {
+        return { error: 'No tienes acceso a este fondo' };
+      }
+    }
+
+    // Check estado is confirmado (BR-023)
+    if (mov.estado !== 'confirmado') {
+      return { error: 'Solo se pueden cancelar movimientos confirmados' };
+    }
+
+    // Update estado
+    await db
+      .update(movimientos)
+      .set({
+        estado: 'cancelado',
+        modifiedBy: userId,
+      })
+      .where(eq(movimientos.id, id));
+
+    revalidatePath('/movimientos', 'page');
+
+    return { success: true, data: { id } };
+  } catch (error) {
+    console.error('[cancelMovimiento]', error);
+    return { error: 'No pudimos cancelar el movimiento. Intenta de nuevo.' };
   }
 }
