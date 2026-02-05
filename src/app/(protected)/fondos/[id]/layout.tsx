@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { auth } from '@/lib/auth';
 import { getFondoById } from '@/lib/actions/fondos/fondos-queries';
 import { Building2, FolderOpen, CreditCard, Users } from 'lucide-react';
+import { BreadcrumbSetter } from '@/components/common/BreadcrumbSetter';
 
 // Currency badge colors
 const currencyColors: Record<string, string> = {
@@ -51,6 +52,8 @@ export default async function FondoLayout({ children, params }: FondoLayoutProps
 
   return (
     <div className="space-y-6">
+      {/* Register fondo name for breadcrumb */}
+      <BreadcrumbSetter segment={id} label={fondo.nombre} />
       {/* Header */}
       <div className="flex items-center gap-4">
         <div className="bg-primary/20 text-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-xl">

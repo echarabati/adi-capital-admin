@@ -13,6 +13,7 @@ import { getProyectoById } from '@/lib/actions/proyectos/proyectos-queries';
 import { FolderOpen, LayoutGrid, DollarSign, ArrowLeftRight, FileText } from 'lucide-react';
 import { isSuperAdmin, hasRoleOrHigher, ROLES } from '@/src/config/roles';
 import { EstadoSelector } from './EstadoSelector';
+import { BreadcrumbSetter } from '@/components/common/BreadcrumbSetter';
 
 // Tab definitions
 const tabs = [
@@ -48,6 +49,8 @@ export default async function ProyectoLayout({ children, params }: ProyectoLayou
 
   return (
     <div className="space-y-6">
+      {/* Register proyecto name for breadcrumb */}
+      <BreadcrumbSetter segment={proyectoId} label={proyecto.nombre} />
       {/* Header */}
       <div className="flex items-center gap-4">
         <div className="bg-primary/20 text-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-xl">
