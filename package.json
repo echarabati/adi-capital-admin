@@ -29,7 +29,7 @@
     "db:seed:admin": "tsx --require dotenv/config lib/db/seeds/admin.ts dotenv_config_path=.env.local",
     "prepare": "husky",
     "pwa:check": "echo 'Starting Lighthouse PWA audit...' && npx lighthouse http://localhost:3000 --only-categories=pwa --output=html --output-path=./lighthouse-pwa.html && echo 'Report saved to lighthouse-pwa.html'",
-    "setup:e2e": "tsx scripts/tools/setup-e2e.ts",
+    "setup:e2e": "tsx scripts/e2e/setup-e2e.ts",
     "lighthouse": "lhci autorun",
     "lighthouse:collect": "lhci collect --url=http://localhost:3000",
     "lighthouse:assert": "lhci assert",

@@ -74,7 +74,7 @@
 | `pnpm db:seed:admin` | `tsx --require dotenv/config lib/db/seeds/admin....` |
 | `pnpm prepare` | `husky` |
 | `pnpm pwa:check` | `echo 'Starting Lighthouse PWA audit...' && npx ...` |
-| `pnpm setup:e2e` | `tsx scripts/tools/setup-e2e.ts` |
+| `pnpm setup:e2e` | `tsx scripts/e2e/setup-e2e.ts` |
 | `pnpm lighthouse` | `lhci autorun` |
 | `pnpm lighthouse:collect` | `lhci collect --url=http://localhost:3000` |
 | `pnpm lighthouse:assert` | `lhci assert` |
