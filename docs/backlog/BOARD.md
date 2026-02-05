@@ -7,13 +7,10 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 21 |
-| ✅ Done | 38 |
+| 📅 To Do | 20 |
+| ✅ Done | 39 |
 
 ### 📅 To Do
-
-**[E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)** (1)
-- [TEST-003: E2E Movimientos Form & Filters](v1.0/issues/TEST-003-e2e-movimientos-form.md) 🟡
 
 **[E07-EPIC-CALCULOS](../epics/EPIC-CALCULOS.md)** (4)
 - [CALC-001: Cron Pref diario](v1.0/issues/CALC-001-cron-pref.md) 🟡
@@ -45,7 +42,7 @@
 
 
 <details>
-<summary>✅ Done (38)</summary>
+<summary>✅ Done (39)</summary>
 
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
@@ -84,6 +81,7 @@
 - [SCHEMA-004: Corregir drift en Proyectos y Fondos](v1.0/issues/SCHEMA-004-proyectos-campos-faltantes.md) 🔴
 - [TEST-001: E2E Auth + RBAC](v1.0/issues/TEST-001-e2e-auth-rbac.md) 🔴
 - [TEST-002: E2E Movimientos Flow](v1.0/issues/TEST-002-e2e-movimientos.md) 🔴
+- [TEST-003: E2E Movimientos Form & Filters](v1.0/issues/TEST-003-e2e-movimientos-form.md) 🟡
 - [TEST-004: E2E Fondos y Proyectos](v1.0/issues/TEST-004-e2e-fondos-proyectos.md) 🟡
 </details>
 

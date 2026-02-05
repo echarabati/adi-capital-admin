@@ -3,7 +3,7 @@
 > **Issue ID:** TEST-003
 > **Priority:** P1
 > **Effort:** M (3 pts)
-> **Status:** 📋 Backlog
+> **Status:** ✅ Done (2026-02-05)
 > **Epic:** [E06-EPIC-MOVIMIENTOS](../epics/EPIC-MOVIMIENTOS.md)
 
 ## 🎯 Objetivo
