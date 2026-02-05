@@ -242,3 +242,119 @@ export async function getInversionistasByFondo(
 
   return result;
 }
+
+// =============================================================================
+// Inversion Detail (for detail page)
+// =============================================================================
+
+export type InversionDetail = {
+  id: string;
+  inversionistaId: string;
+  inversionistaNombre: string;
+  proyectoId: string;
+  proyectoNombre: string;
+  fondoId: string;
+  fondoNombre: string;
+  compromiso: string;
+  capitalAportado: string;
+  prefAcumulado: string;
+  prefPagado: string;
+  prefRate: string | null;
+  successFeePct: string | null;
+  adminFeeTipo: string | null;
+  adminFeePct: string | null;
+  adminFeeBase: string | null;
+  adminFeeMetodo: string | null;
+  notas: string | null;
+  estado: InversionEstado;
+};
+
+/**
+ * Get a single inversion by ID with full details for the detail page.
+ *
+ * RBAC:
+ * - super_admin: Any inversion
+ * - admin_fondo/agente: Only inversiones in assigned funds
+ *
+ * @param id - Inversion UUID
+ * @returns Full inversion detail or null if not found/no access
+ */
+export async function getInversionById(id: string): Promise<InversionDetail | null> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error('Debes iniciar sesión');
+  }
+
+  const userId = session.user.id;
+  const userRole = session.user.role;
+
+  // Fetch inversion with related data
+  const [result] = await db
+    .select({
+      id: inversiones.id,
+      inversionistaId: inversiones.inversionistaId,
+      inversionistaNombre: inversionistas.nombre,
+      proyectoId: inversiones.proyectoId,
+      proyectoNombre: proyectos.nombre,
+      fondoId: proyectos.fondoId,
+      compromiso: inversiones.compromiso,
+      capitalAportado: inversiones.capitalAportado,
+      prefAcumulado: inversiones.prefAcumulado,
+      prefPagado: inversiones.prefPagado,
+      prefRate: inversiones.prefRate,
+      successFeePct: inversiones.successFeePct,
+      adminFeeTipo: inversiones.adminFeeTipo,
+      adminFeePct: inversiones.adminFeePct,
+      adminFeeBase: inversiones.adminFeeBase,
+      adminFeeMetodo: inversiones.adminFeeMetodo,
+      notas: inversiones.notas,
+    })
+    .from(inversiones)
+    .innerJoin(inversionistas, eq(inversiones.inversionistaId, inversionistas.id))
+    .innerJoin(proyectos, eq(inversiones.proyectoId, proyectos.id))
+    .where(eq(inversiones.id, id))
+    .limit(1);
+
+  if (!result) return null;
+
+  // RBAC check: user must have access to the fund
+  if (!isSuperAdmin(userRole)) {
+    const [access] = await db
+      .select({ fondoId: userFondos.fondoId })
+      .from(userFondos)
+      .where(and(eq(userFondos.userId, userId), eq(userFondos.fondoId, result.fondoId)))
+      .limit(1);
+
+    if (!access) return null;
+  }
+
+  // Get fondo name
+  const { fondos } = await import('@/lib/db/schema');
+  const [fondoData] = await db
+    .select({ nombre: fondos.nombre })
+    .from(fondos)
+    .where(eq(fondos.id, result.fondoId))
+    .limit(1);
+
+  return {
+    id: result.id,
+    inversionistaId: result.inversionistaId,
+    inversionistaNombre: result.inversionistaNombre,
+    proyectoId: result.proyectoId,
+    proyectoNombre: result.proyectoNombre,
+    fondoId: result.fondoId,
+    fondoNombre: fondoData?.nombre ?? '',
+    compromiso: result.compromiso,
+    capitalAportado: result.capitalAportado ?? '0',
+    prefAcumulado: result.prefAcumulado ?? '0',
+    prefPagado: result.prefPagado ?? '0',
+    prefRate: result.prefRate,
+    successFeePct: result.successFeePct,
+    adminFeeTipo: result.adminFeeTipo,
+    adminFeePct: result.adminFeePct,
+    adminFeeBase: result.adminFeeBase,
+    adminFeeMetodo: result.adminFeeMetodo,
+    notas: result.notas,
+    estado: calculateEstado(result.compromiso, result.capitalAportado ?? '0'),
+  };
+}
