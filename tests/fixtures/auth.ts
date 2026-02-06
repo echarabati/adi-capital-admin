@@ -1,4 +1,4 @@
-import { users, passwordResetTokens } from '@/lib/db/schema';
+import { users, passwordResetTokens, auditLog } from '@/lib/db/schema';
 import { db } from '@/lib/db/drizzle';
 import { hashPassword } from '@/lib/auth/utils';
 import { hashToken } from '@/lib/auth/password-reset';
@@ -62,7 +62,8 @@ export async function createPasswordResetToken(userId: string) {
 export async function cleanupTestUser(userId: string) {
   if (!userId) return;
   try {
-    // Cascade usually handles this, but manual cleanup is safer
+    // Delete related records before user (FK constraints)
+    await db.delete(auditLog).where(eq(auditLog.userId, userId));
     await db.delete(passwordResetTokens).where(eq(passwordResetTokens.userId, userId));
     await db.delete(users).where(eq(users.id, userId));
   } catch (error) {
