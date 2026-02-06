@@ -30,6 +30,7 @@ Crear página con wizard de 4 pasos para distribución de capital.
 - [ ] Step 2: Ingresar monto total
 - [ ] Step 3: Preview cálculo (placeholder WIZ-004)
 - [ ] Step 4: Confirmación
+- [ ] Al crear DIS: capturar `destino` (a_pref/a_capital/a_utilidad) — ver INFRA-010
 
 ---
 

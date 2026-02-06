@@ -12,8 +12,11 @@ import { eq, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db/drizzle';
-import { movimientos, fondos, userFondos, inversionistas } from '@/lib/db/schema';
+import { movimientos, fondos, userFondos, inversionistas, inversiones } from '@/lib/db/schema';
 import { isSuperAdmin, hasRoleOrHigher, ROLES } from '@/src/config/roles';
+import { calcularReversal } from '@/lib/calculations/reversal-calculator';
+import { logAuditEvent } from '@/lib/actions/audit/audit-log';
+import { AUDIT_ACTIONS } from '@/lib/db/schema';
 import {
   createMovimientoSchema,
   CreateMovimientoInput,
@@ -260,12 +263,16 @@ export async function cancelMovimiento(id: string): Promise<MutationResult> {
   }
 
   try {
-    // Fetch movimiento
+    // Fetch movimiento with full details for reversal calculation
     const [mov] = await db
       .select({
         id: movimientos.id,
         fondoId: movimientos.fondoId,
         estado: movimientos.estado,
+        concepto: movimientos.concepto,
+        monto: movimientos.monto,
+        inversionId: movimientos.inversionId,
+        destino: movimientos.destino,
       })
       .from(movimientos)
       .where(eq(movimientos.id, id))
@@ -293,7 +300,47 @@ export async function cancelMovimiento(id: string): Promise<MutationResult> {
       return { error: 'Solo se pueden cancelar movimientos confirmados' };
     }
 
-    // Update estado
+    // Calculate reversal deltas for investment fields (CALC-004, INFRA-010)
+    const monto = parseFloat(mov.monto || '0');
+    const reversal = calcularReversal(
+      mov.concepto,
+      monto,
+      mov.destino as 'a_pref' | 'a_capital' | 'a_utilidad' | null
+    );
+
+    // Apply reversals to investment if applicable
+    if (reversal.afectsInversion && mov.inversionId) {
+      // Get current investment values
+      const [inv] = await db
+        .select({
+          id: inversiones.id,
+          capitalAportado: inversiones.capitalAportado,
+          prefPagado: inversiones.prefPagado,
+        })
+        .from(inversiones)
+        .where(eq(inversiones.id, mov.inversionId))
+        .limit(1);
+
+      if (inv) {
+        const currentCapital = parseFloat(inv.capitalAportado || '0');
+        const currentPrefPagado = parseFloat(inv.prefPagado || '0');
+
+        // Apply deltas
+        const newCapital = currentCapital + reversal.capitalAportadoDelta;
+        const newPrefPagado = currentPrefPagado + reversal.prefPagadoDelta;
+
+        await db
+          .update(inversiones)
+          .set({
+            capitalAportado: newCapital.toFixed(2),
+            prefPagado: newPrefPagado.toFixed(2),
+            modifiedBy: userId,
+          })
+          .where(eq(inversiones.id, mov.inversionId));
+      }
+    }
+
+    // Update movimiento estado to cancelado
     await db
       .update(movimientos)
       .set({
@@ -302,7 +349,24 @@ export async function cancelMovimiento(id: string): Promise<MutationResult> {
       })
       .where(eq(movimientos.id, id));
 
+    // Log audit event (INFRA-010)
+    await logAuditEvent({
+      entityType: 'movimientos',
+      entityId: id,
+      action: AUDIT_ACTIONS.CANCEL,
+      userId,
+      metadata: {
+        previousEstado: 'confirmado',
+        concepto: mov.concepto,
+        monto: mov.monto,
+        reversalApplied: reversal.afectsInversion,
+      },
+    });
+
     revalidatePath('/movimientos', 'page');
+    if (mov.inversionId) {
+      revalidatePath(`/inversiones/${mov.inversionId}`, 'page');
+    }
 
     return { success: true, data: { id } };
   } catch (error) {

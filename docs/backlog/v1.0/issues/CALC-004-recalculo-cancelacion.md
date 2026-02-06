@@ -3,7 +3,7 @@
 > **Issue ID:** CALC-004
 > **Priority:** P1
 > **Effort:** S
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-06)
 > **Epic:** [E07-EPIC-CALCULOS](../epics/EPIC-CALCULOS.md)
 
 ## 🎯 Objetivo
@@ -48,24 +48,53 @@ Scenario: Cancelar genera registro de auditoría
   Then se registra en audit_log: who, when, motivo
 ```
 
-- [ ] Revertir capital_aportado para APO/APO-D
-- [ ] Revertir pref_pagado para DIS a pref
-- [ ] Revertir capital para DIS a capital
-- [ ] Marcar movimiento como estado = "cancelado" (no delete)
-- [ ] Registro en audit_log
+- [x] Revertir capital_aportado para APO/APO-D
+- [x] Revertir pref_pagado para DIS a pref (utility ready, awaits `destino` field)
+- [x] Revertir capital para DIS a capital (utility ready, awaits `destino` field)
+- [x] Marcar movimiento como estado = "cancelado" (no delete)
+- [ ] Registro en audit_log → [INFRA-010](./INFRA-010-schema-gaps.md)
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: MOV-007
+- Bloqueado por: MOV-007 ✅
 - Bloquea a: —
+- Follow-up: [INFRA-010](./INFRA-010-schema-gaps.md) (destino field, audit_log)
 
 ## 🧪 Tests Requeridos
 
-- [ ] Unit: Reversión por tipo de movimiento
-- [ ] Integration: Cancelar APO actualiza inversión
+- [x] Unit: Reversión por tipo de movimiento
+- [ ] Integration: Cancelar APO actualiza inversión (requires E2E)
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## 📝 Implementation Notes
+
+**Completed:** 2026-02-06
+
+**Context & Decisions:**
+
+- **Resumen:** Módulo de cálculo para deltas de reversión + integración en cancelMovimiento
+- **Functions:** `calcularReversal`, `requiresReversal`, `getReversalDescription`
+- **Partial:** DIS reversals need `destino` field in movimientos schema (tracked in INFRA-010)
+- **APO/DEV:** Fully functional - reverts capitalAportado correctly
+
+**Files created:**
+
+- `lib/calculations/reversal-calculator.ts` — Pure function module
+- `tests/unit/reversal-calculation.test.ts` — 16 unit tests
+
+**Files modified:**
+
+- `lib/actions/movimientos/movimientos-mutations.ts` — Enhanced cancelMovimiento
+
+**Verification:**
+
+- [x] Typecheck: Pass
+- [x] Lint: Pass
+- [x] Tests: 16/16 passing
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-06_

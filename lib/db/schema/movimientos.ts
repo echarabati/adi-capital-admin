@@ -11,7 +11,7 @@
 import { pgTable, text, uuid, decimal, boolean, timestamp, index } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { auditFields } from '@/lib/db/helpers/audit-fields';
-import { conceptoEnum, estadoMovimientoEnum, monedaEnum } from './enums';
+import { conceptoEnum, estadoMovimientoEnum, monedaEnum, destinoEnum } from './enums';
 import { fondos } from './fondos';
 import { proyectos } from './proyectos';
 import { inversionistas } from './inversionistas';
@@ -79,6 +79,9 @@ export const movimientos = pgTable(
 
     /** Amount converted to USD (cached) */
     montoUsd: decimal('monto_usd', { precision: 18, scale: 2 }),
+
+    /** Distribution destination (for DIS movements only) */
+    destino: destinoEnum('destino'),
 
     // =========================================================================
     // State & Dates

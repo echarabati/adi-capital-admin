@@ -88,6 +88,9 @@ export const estadoMovimientoEnum = pgEnum('estado_movimiento', [
   'cancelado',
 ]);
 
+/** Distribution destination for DIS movements */
+export const destinoEnum = pgEnum('destino', ['a_pref', 'a_capital', 'a_utilidad']);
+
 /** Capital call payment states */
 export const estadoCallEnum = pgEnum('estado_call', ['pendiente', 'parcial', 'completo']);
 

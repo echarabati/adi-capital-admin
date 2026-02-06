@@ -7,13 +7,10 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 17 |
-| ✅ Done | 42 |
+| 📅 To Do | 16 |
+| ✅ Done | 44 |
 
 ### 📅 To Do
-
-**[E07-EPIC-CALCULOS](../epics/EPIC-CALCULOS.md)** (1)
-- [CALC-004: Recálculo al cancelar movimiento](v1.0/issues/CALC-004-recalculo-cancelacion.md) 🟡
 
 **[E08-EPIC-WIZARD](../epics/EPIC-WIZARD.md)** (5)
 - [TEST-003: E2E Wizard Reparto](v1.0/issues/TEST-003-e2e-wizard.md) 🔴
@@ -39,16 +36,18 @@
 
 
 <details>
-<summary>✅ Done (42)</summary>
+<summary>✅ Done (44)</summary>
 
 - [CALC-001: Cron Pref diario](v1.0/issues/CALC-001-cron-pref.md) 🟡
 - [CALC-002: Cálculo Success Fee](v1.0/issues/CALC-002-success-fee.md) 🟡
 - [CALC-003: Cálculo Saldo Compromiso](v1.0/issues/CALC-003-saldo-compromiso.md) 🟡
+- [CALC-004: Recálculo al cancelar movimiento](v1.0/issues/CALC-004-recalculo-cancelacion.md) 🟡
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
 - [FOND-003: Detalle de fondo con tabs](v1.0/issues/FOND-003-detalle-fondo.md) 🟡
 - [FOND-004: CRUD Cuentas Bancarias](v1.0/issues/FOND-004-crud-cuentas-bancarias.md) 🟡
 - [FOND-005: CRUD Beneficiarios](v1.0/issues/FOND-005-beneficiarios.md) 🟡
+- [INFRA-010: Schema gaps - destino y audit_log](v1.0/issues/INFRA-010-schema-gaps.md)
 - [INV-001: Lista de inversionistas](v1.0/issues/INV-001-lista-inversionistas.md) 🟡
 - [INV-002: Crear/Editar inversionista](v1.0/issues/INV-002-crear-editar-inversionista.md) 🟡
 - [INV-003: Detalle de inversionista](v1.0/issues/INV-003-detalle-inversionista.md) 🟡

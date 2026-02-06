@@ -2,7 +2,7 @@
 
 > **Auto-generated** — Run `pnpm generate:inventory` to update
 > **Regla:** SIEMPRE consultar antes de crear algo nuevo.
-> **Last updated:** 2026-02-05
+> **Last updated:** 2026-02-06
 
 ---
 
@@ -302,6 +302,7 @@
 | Name | Import |
 |------|--------|
 | audit | `@/lib/db/schema/audit` |
+| audit-log | `@/lib/db/schema/audit-log` |
 | beneficiarios | `@/lib/db/schema/beneficiarios` |
 | calendario-pagos | `@/lib/db/schema/calendario-pagos` |
 | cuentas-bancarias | `@/lib/db/schema/cuentas-bancarias` |
@@ -365,8 +366,8 @@
 | Dependencies | 32 |
 | Page Routes | 31 |
 | API Routes | 9 |
-| Components & Utils | 117 |
-| **Total items** | **189** |
+| Components & Utils | 118 |
+| **Total items** | **190** |
 
 ---
 
