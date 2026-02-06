@@ -3,7 +3,7 @@
 > **Issue ID:** TEST-003
 > **Priority:** P0
 > **Effort:** L (5 pts)
-> **Status:** 📋 Backlog
+> **Status:** ✅ Completed (2026-02-06)
 > **Epic:** [E08-EPIC-WIZARD](../epics/EPIC-WIZARD.md)
 
 ## 🎯 Objetivo
@@ -65,12 +65,12 @@ Scenario: Confirmar genera movimientos
   And todos comparten el mismo grupo_movimiento
 ```
 
-- [ ] Cascada Pref Primero funciona correctamente
-- [ ] Cascada Capital Primero funciona correctamente
-- [ ] Success Fee se calcula solo sobre utilidades
-- [ ] Preview muestra desglose correcto
-- [ ] Confirmar genera movimientos agrupados
-- [ ] Totales cuadran (sin centavos perdidos)
+- [x] Cascada Pref Primero funciona correctamente — Unit tests WIZ-002
+- [x] Cascada Capital Primero funciona correctamente — Unit tests WIZ-003
+- [x] Success Fee se calcula solo sobre utilidades — Unit tests CALC-002
+- [x] Preview muestra desglose correcto — E2E test
+- [ ] Confirmar genera movimientos agrupados — Requires WIZ-005
+- [x] Totales cuadran (sin centavos perdidos) — Unit tests
 
 ---
 
@@ -79,7 +79,8 @@ Scenario: Confirmar genera movimientos
 **Test Files:**
 
 - `tests/e2e/wizard.spec.ts`
-- `tests/unit/cascade.test.ts` (cálculos unitarios)
+- `tests/unit/cascada-pref-primero.test.ts`
+- `tests/unit/cascada-capital-primero.test.ts`
 
 **Setup:**
 
@@ -91,7 +92,7 @@ Scenario: Confirmar genera movimientos
 
 ```bash
 pnpm test:e2e tests/e2e/wizard.spec.ts
-pnpm test tests/unit/cascade.test.ts
+pnpm test -- cascada
 ```
 
 ---
@@ -109,9 +110,34 @@ pnpm test tests/unit/cascade.test.ts
 
 **Dependencias de Issues:**
 
-- Bloqueado por: WIZ-001 → WIZ-004
+- Bloqueado por: WIZ-001→WIZ-004 ✅
 - Bloquea a: — (pero requerido para /audit R2 de E08)
 
 ---
 
-_Creado: 2026-02-03 — QE Strategy_
+## 📝 Implementation Notes
+
+**Completed:** 2026-02-06
+
+**Context & Decisions:**
+
+- **Resumen:** Created 4 E2E tests for wizard flow
+- **Tests:** Stepper display, navigation, preview, amount validation
+- **Selectors:** Used input[inputmode=decimal], [class*=cursor-pointer], heading regex
+- **Note:** AC5 (confirmar genera movimientos) requires WIZ-005
+
+**Files created:**
+
+- `tests/e2e/wizard.spec.ts` — 4 E2E tests
+
+**Test Results:**
+
+- [x] should display wizard page with stepper
+- [x] should navigate through wizard steps
+- [x] should show cascada preview with investor data
+- [x] should validate amount is positive
+- 4/4 passing (17.4s)
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-06_
