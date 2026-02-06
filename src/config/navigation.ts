@@ -1,4 +1,12 @@
-import { Home, Settings, Building2, Users, ArrowRightLeft, type LucideIcon } from 'lucide-react';
+import {
+  Home,
+  Settings,
+  Building2,
+  Users,
+  ArrowRightLeft,
+  Wand2,
+  type LucideIcon,
+} from 'lucide-react';
 
 /**
  * Navigation Configuration
@@ -41,6 +49,11 @@ export const navigation: NavItem[] = [
     name: 'Movimientos',
     href: '/movimientos',
     icon: ArrowRightLeft,
+  },
+  {
+    name: 'Wizard de Reparto',
+    href: '/wizard',
+    icon: Wand2,
   },
   {
     name: 'Configuración',

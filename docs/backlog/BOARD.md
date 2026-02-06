@@ -7,17 +7,13 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 16 |
-| ✅ Done | 44 |
+| 📅 To Do | 12 |
+| ✅ Done | 48 |
 
 ### 📅 To Do
 
-**[E08-EPIC-WIZARD](../epics/EPIC-WIZARD.md)** (5)
+**[E08-EPIC-WIZARD](../epics/EPIC-WIZARD.md)** (1)
 - [TEST-003: E2E Wizard Reparto](v1.0/issues/TEST-003-e2e-wizard.md) 🔴
-- [WIZ-001: Página Wizard multi-step](v1.0/issues/WIZ-001-wizard-page.md) 🟡
-- [WIZ-002: Cálculo cascada pref_primero](v1.0/issues/WIZ-002-cascada-pref-primero.md) 🟡
-- [WIZ-003: Cálculo cascada capital_primero](v1.0/issues/WIZ-003-cascada-capital-primero.md) 🟡
-- [WIZ-004: CMP-004 CascadaPreview](v1.0/issues/WIZ-004-cascada-preview.md) 🟡
 
 **[E09-EPIC-INTEGRACIONES](../epics/EPIC-INTEGRACIONES.md)** (7)
 - [DRIVE-001: Drive API setup](v1.0/issues/DRIVE-001-drive-setup.md) 🟡
@@ -36,7 +32,7 @@
 
 
 <details>
-<summary>✅ Done (44)</summary>
+<summary>✅ Done (48)</summary>
 
 - [CALC-001: Cron Pref diario](v1.0/issues/CALC-001-cron-pref.md) 🟡
 - [CALC-002: Cálculo Success Fee](v1.0/issues/CALC-002-success-fee.md) 🟡
@@ -82,6 +78,10 @@
 - [TEST-002: E2E Movimientos Flow](v1.0/issues/TEST-002-e2e-movimientos.md) 🔴
 - [TEST-003: E2E Movimientos Form & Filters](v1.0/issues/TEST-003-e2e-movimientos-form.md) 🟡
 - [TEST-004: E2E Fondos y Proyectos](v1.0/issues/TEST-004-e2e-fondos-proyectos.md) 🟡
+- [WIZ-001: Página Wizard multi-step](v1.0/issues/WIZ-001-wizard-page.md) 🟡
+- [WIZ-002: Cálculo cascada pref_primero](v1.0/issues/WIZ-002-cascada-pref-primero.md) 🟡
+- [WIZ-003: Cálculo cascada capital_primero](v1.0/issues/WIZ-003-cascada-capital-primero.md) 🟡
+- [WIZ-004: CMP-004 CascadaPreview](v1.0/issues/WIZ-004-cascada-preview.md) 🟡
 </details>
 
 ---

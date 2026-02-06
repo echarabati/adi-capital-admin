@@ -117,6 +117,7 @@
 | /settings/profile | `src/app/(protected)/settings/profile/page.tsx` |
 | /settings/users | `src/app/(protected)/settings/users/page.tsx` |
 | /terms | `src/app/(legal)/terms/page.tsx` |
+| /wizard | `src/app/(protected)/wizard/page.tsx` |
 
 ---
 
@@ -364,10 +365,10 @@
 | Metric | Value |
 |--------|-------|
 | Dependencies | 32 |
-| Page Routes | 31 |
+| Page Routes | 32 |
 | API Routes | 9 |
 | Components & Utils | 118 |
-| **Total items** | **190** |
+| **Total items** | **191** |
 
 ---
 
