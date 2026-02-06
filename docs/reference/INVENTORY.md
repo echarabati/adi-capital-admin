@@ -220,7 +220,6 @@
 | Name | Import |
 |------|--------|
 | FundStatsCards | `@/components/dashboard/FundStatsCards` |
-| QuickActions | `@/components/dashboard/QuickActions` |
 | RecentMovementsTable | `@/components/dashboard/RecentMovementsTable` |
 
 ---
@@ -371,8 +370,8 @@
 | Dependencies | 32 |
 | Page Routes | 33 |
 | API Routes | 9 |
-| Components & Utils | 121 |
-| **Total items** | **195** |
+| Components & Utils | 120 |
+| **Total items** | **194** |
 
 ---
 
