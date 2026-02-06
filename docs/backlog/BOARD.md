@@ -7,8 +7,8 @@
 | Status | Count |
 |--------|-------|
 | 🚧 In Progress | 0 |
-| 📅 To Do | 11 |
-| ✅ Done | 49 |
+| 📅 To Do | 8 |
+| ✅ Done | 53 |
 
 ### 📅 To Do
 
@@ -21,20 +21,20 @@
 - [SYNC-002: Sync movimientos a Firestore](v1.0/issues/SYNC-002-sync-movimientos.md) 🟡
 - [SYNC-003: Sync noticias a Firestore](v1.0/issues/SYNC-003-sync-noticias.md)
 
-**[E10-EPIC-PANEL](../epics/EPIC-PANEL.md)** (4)
-- [DASH-001: Dashboard Overview](v1.0/issues/DASH-001-dashboard.md)
-- [DASH-002: CMP-007 FundSelector](v1.0/issues/DASH-002-fund-selector.md)
-- [NEWS-001: Lista de noticias](v1.0/issues/NEWS-001-lista-noticias.md)
+**[E10-EPIC-PANEL](../epics/EPIC-PANEL.md)** (1)
 - [NEWS-002: Publicar noticia + sync](v1.0/issues/NEWS-002-publicar-noticia.md)
 
 
 <details>
-<summary>✅ Done (49)</summary>
+<summary>✅ Done (53)</summary>
 
 - [CALC-001: Cron Pref diario](v1.0/issues/CALC-001-cron-pref.md) 🟡
 - [CALC-002: Cálculo Success Fee](v1.0/issues/CALC-002-success-fee.md) 🟡
 - [CALC-003: Cálculo Saldo Compromiso](v1.0/issues/CALC-003-saldo-compromiso.md) 🟡
 - [CALC-004: Recálculo al cancelar movimiento](v1.0/issues/CALC-004-recalculo-cancelacion.md) 🟡
+- [DASH-001: Dashboard Overview](v1.0/issues/DASH-001-dashboard.md)
+- [DASH-002: CMP-007 FundSelector](v1.0/issues/DASH-002-fund-selector.md)
+- [DASH-003: Dashboard Cleanup — Remove Starter Kit Mock Components](v1.0/issues/DASH-003-cleanup.md)
 - [FOND-001: Lista de fondos con RBAC](v1.0/issues/FOND-001-lista-fondos.md) 🔴
 - [FOND-002: Crear/Editar fondo](v1.0/issues/FOND-002-crear-editar-fondo.md) 🔴
 - [FOND-003: Detalle de fondo con tabs](v1.0/issues/FOND-003-detalle-fondo.md) 🟡
@@ -62,6 +62,7 @@
 - [MOV-008: Detalle de movimiento](v1.0/issues/MOV-008-detalle-movimiento.md)
 - [MOV-009: Form Movimientos Socios (APS/RPS/PRS/DPRS)](v1.0/issues/MOV-009-form-socios.md) 🔴
 - [MOV-010: Form Movimientos Admin (TRA/CAM/ERR/TSI)](v1.0/issues/MOV-010-form-admin.md) 🔴
+- [NEWS-001: Lista de noticias](v1.0/issues/NEWS-001-lista-noticias.md)
 - [PROJ-001: Lista de proyectos](v1.0/issues/PROJ-001-lista-proyectos.md) 🟡
 - [PROJ-002: Crear/Editar proyecto](v1.0/issues/PROJ-002-crear-editar-proyecto.md) 🟡
 - [PROJ-003: Detalle de proyecto con tabs](v1.0/issues/PROJ-003-detalle-proyecto.md) 🟡

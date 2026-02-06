@@ -5,6 +5,7 @@ import {
   Users,
   ArrowRightLeft,
   Wand2,
+  Newspaper,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -49,6 +50,11 @@ export const navigation: NavItem[] = [
     name: 'Movimientos',
     href: '/movimientos',
     icon: ArrowRightLeft,
+  },
+  {
+    name: 'Noticias',
+    href: '/noticias',
+    icon: Newspaper,
   },
   {
     name: 'Wizard de Reparto',

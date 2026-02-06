@@ -107,3 +107,10 @@ export const rolUsuarioEnum = pgEnum('rol_usuario', [
   'admin_fondo', // Access to assigned funds only
   'agente', // Limited access (Post-MVP)
 ]);
+
+// =============================================================================
+// News Enums (NEWS-001)
+// =============================================================================
+
+/** News publication states */
+export const estadoNoticiaEnum = pgEnum('estado_noticia', ['borrador', 'publicado']);

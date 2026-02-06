@@ -110,6 +110,7 @@
 | /inversionistas/[id]/movimientos | `src/app/(protected)/inversionistas/[id]/movimientos/page.tsx` |
 | /login | `src/app/(auth)/login/page.tsx` |
 | /movimientos | `src/app/(protected)/movimientos/page.tsx` |
+| /noticias | `src/app/(protected)/noticias/page.tsx` |
 | /offline | `src/app/offline/page.tsx` |
 | /privacy | `src/app/(legal)/privacy/page.tsx` |
 | /register | `src/app/(auth)/register/page.tsx` |
@@ -190,6 +191,7 @@
 | Name | Import |
 |------|--------|
 | DashboardLayout | `@/components/layout/DashboardLayout` |
+| FundSelector | `@/components/layout/FundSelector` |
 | Header | `@/components/layout/Header` |
 | MobileDrawer | `@/components/layout/MobileDrawer` |
 | NavigationControls | `@/components/layout/NavigationControls` |
@@ -217,9 +219,9 @@
 
 | Name | Import |
 |------|--------|
+| FundStatsCards | `@/components/dashboard/FundStatsCards` |
 | QuickActions | `@/components/dashboard/QuickActions` |
-| RecentUsersTable | `@/components/dashboard/RecentUsersTable` |
-| StatsCards | `@/components/dashboard/StatsCards` |
+| RecentMovementsTable | `@/components/dashboard/RecentMovementsTable` |
 
 ---
 
@@ -313,6 +315,7 @@
 | inversionistas | `@/lib/db/schema/inversionistas` |
 | invites | `@/lib/db/schema/invites` |
 | movimientos | `@/lib/db/schema/movimientos` |
+| noticias | `@/lib/db/schema/noticias` |
 | proyectos | `@/lib/db/schema/proyectos` |
 | user-fondos | `@/lib/db/schema/user-fondos` |
 | users | `@/lib/db/schema/users` |
@@ -344,6 +347,7 @@
 | Name | Import |
 |------|--------|
 | cn | `@/lib/utils/cn` |
+| fund-cookie | `@/lib/utils/fund-cookie` |
 | human-id | `@/lib/utils/human-id` |
 | human-id.test | `@/lib/utils/human-id.test` |
 
@@ -365,10 +369,10 @@
 | Metric | Value |
 |--------|-------|
 | Dependencies | 32 |
-| Page Routes | 32 |
+| Page Routes | 33 |
 | API Routes | 9 |
-| Components & Utils | 118 |
-| **Total items** | **191** |
+| Components & Utils | 121 |
+| **Total items** | **195** |
 
 ---
 

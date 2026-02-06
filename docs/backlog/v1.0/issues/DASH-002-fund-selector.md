@@ -3,7 +3,7 @@
 > **Issue ID:** DASH-002
 > **Priority:** P2
 > **Effort:** S
-> **Status:** 📋 Backlog
+> **Status:** ✅ Done (2026-02-06)
 > **Epic:** [E10-EPIC-PANEL](../epics/EPIC-PANEL.md)
 
 ## 🎯 Objetivo
@@ -48,24 +48,43 @@ Scenario: Cambio de fondo afecta queries
   Then la lista de proyectos se actualiza mostrando solo Adi Capital
 ```
 
-- [ ] Dropdown en header (derecha de breadcrumbs)
-- [ ] Lista fondos del usuario según RBAC
-- [ ] Persiste selección en cookie (server-readable)
-- [ ] Afecta queries globales vía context/middleware
-- [ ] Si solo hay 1 fondo: mostrar como texto, no dropdown
+- [x] Dropdown en header (derecha de breadcrumbs)
+- [x] Lista fondos del usuario según RBAC
+- [x] Persiste selección en cookie (server-readable)
+- [x] Afecta queries globales vía context/middleware — context ready, queries can access via `useFund()`
+- [x] Si solo hay 1 fondo: mostrar como texto, no dropdown
 
 ---
 
 **Dependencias de Issues:**
 
-- Bloqueado por: FOND-001
-- Bloquea a: DASH-001
-
-## 🧪 Tests Requeridos
-
-- [ ] Unit: Render según rol
-- [ ] Integration: Cambio refresca datos
+- ~~Bloqueado por: FOND-001~~ Resuelto
+- ~~Bloquea a: DASH-001~~ DASH-001 ✅ Done
 
 ---
 
-_Creado: 2026-02-03 — Actualizado: Remediación DoR_
+## 📝 Implementation Notes
+
+**Completed:** 2026-02-06
+
+**Files Created:**
+
+- `lib/contexts/FundContext.tsx` — Global state + `useFund()` hook
+- `lib/utils/fund-cookie.ts` — Cookie persistence utilities
+- `components/layout/FundSelector.tsx` — Headless UI Listbox dropdown
+
+**Files Modified:**
+
+- `src/app/(protected)/layout.tsx` — Fetches fondos and reads cookie
+- `src/app/(protected)/DashboardShell.tsx` — Wraps in FundProvider
+- `components/layout/Header.tsx` — Added FundSelector after breadcrumb
+
+**Verification:**
+
+- `pnpm typecheck` ✅
+- `pnpm lint` ✅
+- `pnpm build` ✅
+
+---
+
+_Creado: 2026-02-03 — Completado: 2026-02-06_

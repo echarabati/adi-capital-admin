@@ -12,6 +12,7 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { usePwaInstall } from '@/lib/pwa/usePwaInstall';
 import { Avatar } from '@/components/ui/Avatar';
 import { useMounted } from '@/lib/hooks/useMounted';
+import { FundSelector } from './FundSelector';
 
 import { NavigationControls } from './NavigationControls';
 
@@ -63,8 +64,14 @@ export function Header({ user, userRole }: HeaderProps) {
         </div>
       </div>
 
-      {/* Right: Actions */}
+      {/* Right: Fund Selector + Theme + User */}
       <div className="flex shrink-0 items-center gap-2 pl-2">
+        {/* Fund Selector (DASH-002) */}
+        <FundSelector />
+
+        {/* Separator */}
+        <div className="bg-border hidden h-6 w-px md:block" />
+
         {/* Desktop Theme Toggle (hidden on mobile) */}
         {mounted && (
           <Menu as="div" className="relative hidden md:block">
